@@ -29,7 +29,6 @@ Partial Class frmMain
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -71,6 +70,12 @@ Partial Class frmMain
         Me.ColumnHeader10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chartStock = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnAnalBetween = New System.Windows.Forms.Button()
+        Me.txtAnalStartDate = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtAnalEndDate = New System.Windows.Forms.TextBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -388,11 +393,6 @@ Partial Class frmMain
         Me.chartStock.Location = New System.Drawing.Point(531, 167)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
-        Series1.ChartArea = "ChartArea1"
-        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.chartStock.Series.Add(Series1)
         Me.chartStock.Size = New System.Drawing.Size(776, 621)
         Me.chartStock.TabIndex = 23
         Me.chartStock.Text = "Stock"
@@ -406,11 +406,69 @@ Partial Class frmMain
         Me.Button1.Text = "chart"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'btnAnalBetween
+        '
+        Me.btnAnalBetween.Location = New System.Drawing.Point(1211, 127)
+        Me.btnAnalBetween.Name = "btnAnalBetween"
+        Me.btnAnalBetween.Size = New System.Drawing.Size(96, 30)
+        Me.btnAnalBetween.TabIndex = 25
+        Me.btnAnalBetween.Text = "기간분석"
+        Me.btnAnalBetween.UseVisualStyleBackColor = True
+        '
+        'txtAnalStartDate
+        '
+        Me.txtAnalStartDate.Location = New System.Drawing.Point(936, 133)
+        Me.txtAnalStartDate.Name = "txtAnalStartDate"
+        Me.txtAnalStartDate.Size = New System.Drawing.Size(85, 21)
+        Me.txtAnalStartDate.TabIndex = 26
+        Me.txtAnalStartDate.Text = "20160101"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(853, 136)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(77, 12)
+        Me.Label8.TabIndex = 27
+        Me.Label8.Text = "분석시작날짜"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(1027, 136)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(77, 12)
+        Me.Label9.TabIndex = 29
+        Me.Label9.Text = "분석종료날짜"
+        '
+        'txtAnalEndDate
+        '
+        Me.txtAnalEndDate.Location = New System.Drawing.Point(1110, 133)
+        Me.txtAnalEndDate.Name = "txtAnalEndDate"
+        Me.txtAnalEndDate.Size = New System.Drawing.Size(85, 21)
+        Me.txtAnalEndDate.TabIndex = 28
+        Me.txtAnalEndDate.Text = "20160130"
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(742, 13)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(113, 30)
+        Me.Button2.TabIndex = 30
+        Me.Button2.Text = "Test"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1319, 800)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.txtAnalEndDate)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.txtAnalStartDate)
+        Me.Controls.Add(Me.btnAnalBetween)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.chartStock)
         Me.Controls.Add(Me.Label6)
@@ -498,4 +556,10 @@ Partial Class frmMain
     Friend WithEvents ColumnHeader10 As System.Windows.Forms.ColumnHeader
     Friend WithEvents chartStock As System.Windows.Forms.DataVisualization.Charting.Chart
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnAnalBetween As System.Windows.Forms.Button
+    Friend WithEvents txtAnalStartDate As System.Windows.Forms.TextBox
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents txtAnalEndDate As System.Windows.Forms.TextBox
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 End Class

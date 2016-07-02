@@ -104,6 +104,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="StockSellBuyInfoMain.vb" />
+    <Compile Include="StockSellBuyInfoSub.vb" />
+    <Compile Include="StoreClass.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmChart.resx">

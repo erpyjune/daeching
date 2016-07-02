@@ -15,4 +15,8 @@
         'Dim stockByCompValue() As StockDateCount
     End Structure
 
+    Function checkMonthDay(ByVal num As Integer)
+        Return Format(num, "00").ToString
+    End Function
+
 End Module
