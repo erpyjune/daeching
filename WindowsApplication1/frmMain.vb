@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Windows.Forms.DataVisualization.Charting.Chart
+'Imports System.String
 
 
 Public Class frmMain
@@ -9,7 +10,7 @@ Public Class frmMain
     Dim lRefreshCount As Long = 0
     Dim bLoginStatus As Boolean
     Dim bOnRecvTRdata As Boolean
-    Dim StockTable As New Hashtable()
+    Dim gStockCodeTable As New Hashtable()
     Dim gStockCompData As New Hashtable()
     Dim gHashScreenAndDate As New Hashtable()
     Dim gHashStockCompany As New Hashtable()
@@ -23,6 +24,52 @@ Public Class frmMain
 
         gStore = New StoreClass
         gBefStockSellBuyInfoSub = New StockSellBuyInfoSub
+
+        '// 종목 코드 로딩.
+        Call loadingStockCodeData()
+
+    End Sub
+    Private Sub loadingStockCodeData()
+        Dim strCodeFilePath As String
+        Dim TArr() As String
+        Dim strCode As String, strName As String
+
+        '// suggest test code
+        Dim HSource As New AutoCompleteStringCollection()
+        'HSource.AddRange(New String() {"음악", "음악감상", "음악감독", "음악대", "운동", "여행"})
+
+        strCodeFilePath = "F:\stock_code.txt"
+        Dim fileReader As System.IO.StreamReader
+        fileReader = My.Computer.FileSystem.OpenTextFileReader(strCodeFilePath)
+        Dim stringReader As String
+
+        While Not fileReader.EndOfStream
+            stringReader = ""
+            stringReader = fileReader.ReadLine()
+            If Trim(stringReader) = "" Then
+                MsgBox("exit while !!")
+                Exit While
+            End If
+
+            TArr = Split(Trim(stringReader), "|")
+            For i = LBound(TArr) To UBound(TArr)
+                If i = 0 Then
+                    strCode = Trim(TArr(i))
+                ElseIf i = 1 Then
+                    strName = Trim(TArr(i))
+                    gStockCodeTable.Add(strName, strCode)
+                    cmbStock.Items.Add(strName)
+                    HSource.Add(strName)
+                    '// ComboBox1.Items.Add("Tokyo")
+                End If
+            Next
+        End While
+
+        With txtSuggest
+            .AutoCompleteCustomSource = HSource
+            .AutoCompleteMode = AutoCompleteMode.SuggestAppend
+            .AutoCompleteSource = AutoCompleteSource.CustomSource
+        End With
 
     End Sub
 
@@ -563,6 +610,77 @@ Public Class frmMain
             lstMsg.TopIndex = lstMsg.Items.Count - 1
             lRefreshCount = lRefreshCount + 1
         End If
+
+    End Sub
+
+    Private Sub cmbStock_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbStock.KeyPress
+        'Dim index As Integer
+        'index = cmbStock.FindString(cmbStock.Text)
+        'cmbStock.SelectedIndex = index
+    End Sub
+
+    Private Sub cmbStock_KeyUp(sender As Object, e As KeyEventArgs) Handles cmbStock.KeyUp
+        'Dim intDo As Integer
+        'Dim intFor As Integer
+        'Dim strTmp As String
+        'Dim intLen As Integer
+        'Dim AutoCompt As Boolean = False
+
+        'If e.KeyCode = Keys.Back Then
+
+        'End If
+
+        'With cmbStock
+        '    If .Text = "" Then Exit Sub
+
+        '    intLen = .Text.Length
+        '    If -23391 <= Asc(.Text) And Asc(.Text) <= -23341 Then '미완성 한글일때(자음만 타이핑 한경우) 
+        '        Exit Sub
+        '    ElseIf Chr(64) < UCase(.Text) And UCase(.Text) < Chr(91) Then '알파벳일때 
+
+        '    Else    '완성한글일때
+        '        For intFor = 0 To .Items.Count  '총 리스트카운트까지 돈다 
+        '            strTmp = .List(intFor)
+        '            Do
+        '                If e.KeyCode = Keys.Back Then Exit Sub
+
+        '                If .Text = Left(strTmp, 1) And strTmp.Length <> 1 Then '입력한값이 리스트에 있으면 
+        '                    .Text = ""
+        '                    .Text = .List(intFor)
+        '                    '커서속에 숨겨진 타이핑 문자열을 제거하기 위해 커서제거 
+        '                    SendKeys("{RIGHT}", True)
+        '                    '실제 문자는 커서문자까지 늘어난 문자이므로 그것을 제거 
+        '                    .Text = Left(.Text, strTmp.Length)
+        '                    .SelStart = Len(.Text)
+        '                    AutoCompt = True
+        '                    Exit Sub
+        '                ElseIf .Text = .List(intFor) Then
+        '                    .Text = .List(intFor)
+        '                    AutoCompt = True
+        '                    Exit Sub
+        '                Else
+        '                    AutoCompt = False
+        '                    Exit Do
+        '                End If
+        '                intDo = intDo + 1
+        '            Loop Until intDo = .Items.Count
+        '        Next intFor
+        '    End If
+        'End With
+    End Sub
+
+    Private Sub cmbStock_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbStock.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub cmbStock_TextChanged(sender As Object, e As EventArgs) Handles cmbStock.TextChanged
+        'Dim index As Integer
+        'index = cmbStock.FindString(cmbStock.Text)
+        'cmbStock.SelectedIndex = index
+    End Sub
+
+    Private Sub txtSuggest_TextChanged(sender As Object, e As EventArgs) Handles txtSuggest.TextChanged
+        txtOut.Text = txtSuggest.Text
 
     End Sub
 End Class

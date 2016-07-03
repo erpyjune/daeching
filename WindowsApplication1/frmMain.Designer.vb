@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -83,6 +83,9 @@ Partial Class frmMain
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.btnTimer = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
+        Me.cmbStock = New System.Windows.Forms.ComboBox()
+        Me.txtSuggest = New System.Windows.Forms.TextBox()
+        Me.txtOut = New System.Windows.Forms.TextBox()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -99,7 +102,7 @@ Partial Class frmMain
         'KHOpenAPI
         '
         Me.KHOpenAPI.Enabled = True
-        Me.KHOpenAPI.Location = New System.Drawing.Point(12, 43)
+        Me.KHOpenAPI.Location = New System.Drawing.Point(553, 61)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
         Me.KHOpenAPI.Size = New System.Drawing.Size(66, 20)
@@ -399,10 +402,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend1)
         Me.chartStock.Location = New System.Drawing.Point(531, 172)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -525,11 +528,40 @@ Partial Class frmMain
         Me.Label10.TabIndex = 35
         Me.Label10.Text = "종목별 회원사보기1 차트"
         '
+        'cmbStock
+        '
+        Me.cmbStock.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.cmbStock.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList
+        Me.cmbStock.FormattingEnabled = True
+        Me.cmbStock.Location = New System.Drawing.Point(222, 107)
+        Me.cmbStock.Name = "cmbStock"
+        Me.cmbStock.Size = New System.Drawing.Size(145, 20)
+        Me.cmbStock.Sorted = True
+        Me.cmbStock.TabIndex = 36
+        '
+        'txtSuggest
+        '
+        Me.txtSuggest.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.txtSuggest.Location = New System.Drawing.Point(394, 105)
+        Me.txtSuggest.Name = "txtSuggest"
+        Me.txtSuggest.Size = New System.Drawing.Size(159, 21)
+        Me.txtSuggest.TabIndex = 37
+        '
+        'txtOut
+        '
+        Me.txtOut.Location = New System.Drawing.Point(575, 103)
+        Me.txtOut.Name = "txtOut"
+        Me.txtOut.Size = New System.Drawing.Size(120, 21)
+        Me.txtOut.TabIndex = 38
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.Controls.Add(Me.txtOut)
+        Me.Controls.Add(Me.txtSuggest)
+        Me.Controls.Add(Me.cmbStock)
         Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.btnTimer)
         Me.Controls.Add(Me.chkRefresh)
@@ -640,4 +672,7 @@ Partial Class frmMain
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents btnTimer As System.Windows.Forms.Button
     Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents cmbStock As System.Windows.Forms.ComboBox
+    Friend WithEvents txtSuggest As System.Windows.Forms.TextBox
+    Friend WithEvents txtOut As System.Windows.Forms.TextBox
 End Class
