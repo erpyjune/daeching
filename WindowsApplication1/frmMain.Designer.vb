@@ -26,9 +26,10 @@ Partial Class frmMain
     '코드 편집기를 사용하여 수정하지 마십시오.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -76,6 +77,12 @@ Partial Class frmMain
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtAnalEndDate = New System.Windows.Forms.TextBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.btnTodayCompany = New System.Windows.Forms.Button()
+        Me.chkRefresh = New System.Windows.Forms.CheckBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.btnTimer = New System.Windows.Forms.Button()
+        Me.Label10 = New System.Windows.Forms.Label()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -110,7 +117,7 @@ Partial Class frmMain
         'txtStockCode
         '
         Me.txtStockCode.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStockCode.Location = New System.Drawing.Point(46, 89)
+        Me.txtStockCode.Location = New System.Drawing.Point(94, 105)
         Me.txtStockCode.Name = "txtStockCode"
         Me.txtStockCode.Size = New System.Drawing.Size(91, 22)
         Me.txtStockCode.TabIndex = 2
@@ -119,9 +126,10 @@ Partial Class frmMain
         '
         'btnSearch
         '
-        Me.btnSearch.Location = New System.Drawing.Point(604, 17)
+        Me.btnSearch.Enabled = False
+        Me.btnSearch.Location = New System.Drawing.Point(553, 12)
         Me.btnSearch.Name = "btnSearch"
-        Me.btnSearch.Size = New System.Drawing.Size(95, 20)
+        Me.btnSearch.Size = New System.Drawing.Size(95, 27)
         Me.btnSearch.TabIndex = 3
         Me.btnSearch.Text = "조회"
         Me.btnSearch.UseVisualStyleBackColor = True
@@ -130,7 +138,7 @@ Partial Class frmMain
         '
         Me.lstView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.날짜, Me.증권사, Me.누적순매수, Me.매수, Me.매도})
         Me.lstView1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView1.Location = New System.Drawing.Point(12, 167)
+        Me.lstView1.Location = New System.Drawing.Point(12, 203)
         Me.lstView1.Name = "lstView1"
         Me.lstView1.Size = New System.Drawing.Size(513, 184)
         Me.lstView1.TabIndex = 4
@@ -166,26 +174,28 @@ Partial Class frmMain
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(9, 92)
+        Me.Label1.Location = New System.Drawing.Point(25, 109)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(29, 12)
+        Me.Label1.Size = New System.Drawing.Size(53, 12)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "종목"
+        Me.Label1.Text = "종목코드"
         '
         'btnCmd1
         '
+        Me.btnCmd1.Enabled = False
         Me.btnCmd1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd1.Location = New System.Drawing.Point(12, 132)
+        Me.btnCmd1.Location = New System.Drawing.Point(1094, 12)
         Me.btnCmd1.Name = "btnCmd1"
         Me.btnCmd1.Size = New System.Drawing.Size(86, 29)
         Me.btnCmd1.TabIndex = 6
-        Me.btnCmd1.Text = "차트/보기"
+        Me.btnCmd1.Text = "보기1"
         Me.btnCmd1.UseVisualStyleBackColor = True
         '
         'txtStartDate1
         '
+        Me.txtStartDate1.Enabled = False
         Me.txtStartDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate1.Location = New System.Drawing.Point(185, 137)
+        Me.txtStartDate1.Location = New System.Drawing.Point(1156, 48)
         Me.txtStartDate1.Name = "txtStartDate1"
         Me.txtStartDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtStartDate1.TabIndex = 7
@@ -194,8 +204,9 @@ Partial Class frmMain
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.Enabled = False
         Me.Label2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label2.Location = New System.Drawing.Point(126, 140)
+        Me.Label2.Location = New System.Drawing.Point(1097, 51)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(59, 13)
         Me.Label2.TabIndex = 8
@@ -204,8 +215,9 @@ Partial Class frmMain
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.Enabled = False
         Me.Label3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label3.Location = New System.Drawing.Point(297, 140)
+        Me.Label3.Location = New System.Drawing.Point(1253, 51)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(59, 13)
         Me.Label3.TabIndex = 10
@@ -213,8 +225,9 @@ Partial Class frmMain
         '
         'txtEndDate1
         '
+        Me.txtEndDate1.Enabled = False
         Me.txtEndDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate1.Location = New System.Drawing.Point(356, 137)
+        Me.txtEndDate1.Location = New System.Drawing.Point(1312, 48)
         Me.txtEndDate1.Name = "txtEndDate1"
         Me.txtEndDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate1.TabIndex = 9
@@ -224,7 +237,7 @@ Partial Class frmMain
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label4.Location = New System.Drawing.Point(297, 365)
+        Me.Label4.Location = New System.Drawing.Point(374, 404)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(59, 13)
         Me.Label4.TabIndex = 16
@@ -233,7 +246,7 @@ Partial Class frmMain
         'txtEndDate2
         '
         Me.txtEndDate2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate2.Location = New System.Drawing.Point(356, 362)
+        Me.txtEndDate2.Location = New System.Drawing.Point(433, 401)
         Me.txtEndDate2.Name = "txtEndDate2"
         Me.txtEndDate2.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate2.TabIndex = 15
@@ -242,7 +255,7 @@ Partial Class frmMain
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label5.Location = New System.Drawing.Point(126, 365)
+        Me.Label5.Location = New System.Drawing.Point(219, 404)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(59, 13)
         Me.Label5.TabIndex = 14
@@ -251,7 +264,7 @@ Partial Class frmMain
         'txtStartDate2
         '
         Me.txtStartDate2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate2.Location = New System.Drawing.Point(185, 362)
+        Me.txtStartDate2.Location = New System.Drawing.Point(278, 401)
         Me.txtStartDate2.Name = "txtStartDate2"
         Me.txtStartDate2.Size = New System.Drawing.Size(89, 22)
         Me.txtStartDate2.TabIndex = 13
@@ -259,18 +272,18 @@ Partial Class frmMain
         'btnCmd2
         '
         Me.btnCmd2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd2.Location = New System.Drawing.Point(12, 357)
+        Me.btnCmd2.Location = New System.Drawing.Point(12, 396)
         Me.btnCmd2.Name = "btnCmd2"
-        Me.btnCmd2.Size = New System.Drawing.Size(86, 29)
+        Me.btnCmd2.Size = New System.Drawing.Size(148, 29)
         Me.btnCmd2.TabIndex = 12
-        Me.btnCmd2.Text = "보기"
+        Me.btnCmd2.Text = "종목별회원사현황2"
         Me.btnCmd2.UseVisualStyleBackColor = True
         '
         'lstView2
         '
         Me.lstView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.lstView2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView2.Location = New System.Drawing.Point(12, 392)
+        Me.lstView2.Location = New System.Drawing.Point(12, 431)
         Me.lstView2.Name = "lstView2"
         Me.lstView2.Size = New System.Drawing.Size(513, 187)
         Me.lstView2.TabIndex = 11
@@ -306,7 +319,7 @@ Partial Class frmMain
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label6.Location = New System.Drawing.Point(297, 593)
+        Me.Label6.Location = New System.Drawing.Point(368, 638)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(59, 13)
         Me.Label6.TabIndex = 22
@@ -315,7 +328,7 @@ Partial Class frmMain
         'txtEndDate3
         '
         Me.txtEndDate3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate3.Location = New System.Drawing.Point(356, 590)
+        Me.txtEndDate3.Location = New System.Drawing.Point(433, 635)
         Me.txtEndDate3.Name = "txtEndDate3"
         Me.txtEndDate3.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate3.TabIndex = 21
@@ -324,7 +337,7 @@ Partial Class frmMain
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label7.Location = New System.Drawing.Point(126, 593)
+        Me.Label7.Location = New System.Drawing.Point(213, 638)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(59, 13)
         Me.Label7.TabIndex = 20
@@ -333,7 +346,7 @@ Partial Class frmMain
         'txtStartDate3
         '
         Me.txtStartDate3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate3.Location = New System.Drawing.Point(185, 590)
+        Me.txtStartDate3.Location = New System.Drawing.Point(278, 635)
         Me.txtStartDate3.Name = "txtStartDate3"
         Me.txtStartDate3.Size = New System.Drawing.Size(89, 22)
         Me.txtStartDate3.TabIndex = 19
@@ -341,18 +354,18 @@ Partial Class frmMain
         'btnCmd3
         '
         Me.btnCmd3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd3.Location = New System.Drawing.Point(12, 585)
+        Me.btnCmd3.Location = New System.Drawing.Point(12, 630)
         Me.btnCmd3.Name = "btnCmd3"
-        Me.btnCmd3.Size = New System.Drawing.Size(86, 29)
+        Me.btnCmd3.Size = New System.Drawing.Size(148, 29)
         Me.btnCmd3.TabIndex = 18
-        Me.btnCmd3.Text = "보기"
+        Me.btnCmd3.Text = "종목별 회원사현황3"
         Me.btnCmd3.UseVisualStyleBackColor = True
         '
         'lstView3
         '
         Me.lstView3.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader6, Me.ColumnHeader7, Me.ColumnHeader8, Me.ColumnHeader9, Me.ColumnHeader10})
         Me.lstView3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView3.Location = New System.Drawing.Point(12, 620)
+        Me.lstView3.Location = New System.Drawing.Point(12, 665)
         Me.lstView3.Name = "lstView3"
         Me.lstView3.Size = New System.Drawing.Size(513, 168)
         Me.lstView3.TabIndex = 17
@@ -386,83 +399,142 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend1)
-        Me.chartStock.Location = New System.Drawing.Point(531, 167)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend3)
+        Me.chartStock.Location = New System.Drawing.Point(531, 172)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
-        Me.chartStock.Size = New System.Drawing.Size(776, 621)
+        Me.chartStock.Size = New System.Drawing.Size(980, 661)
         Me.chartStock.TabIndex = 23
         Me.chartStock.Text = "Stock"
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(601, 48)
+        Me.Button1.Enabled = False
+        Me.Button1.Location = New System.Drawing.Point(773, 12)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(97, 30)
+        Me.Button1.Size = New System.Drawing.Size(97, 27)
         Me.Button1.TabIndex = 24
         Me.Button1.Text = "chart"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'btnAnalBetween
         '
-        Me.btnAnalBetween.Location = New System.Drawing.Point(1211, 127)
+        Me.btnAnalBetween.Enabled = False
+        Me.btnAnalBetween.Location = New System.Drawing.Point(970, 51)
         Me.btnAnalBetween.Name = "btnAnalBetween"
         Me.btnAnalBetween.Size = New System.Drawing.Size(96, 30)
         Me.btnAnalBetween.TabIndex = 25
-        Me.btnAnalBetween.Text = "기간분석"
+        Me.btnAnalBetween.Text = "기간일일분석"
         Me.btnAnalBetween.UseVisualStyleBackColor = True
         '
         'txtAnalStartDate
         '
-        Me.txtAnalStartDate.Location = New System.Drawing.Point(936, 133)
+        Me.txtAnalStartDate.Location = New System.Drawing.Point(321, 176)
         Me.txtAnalStartDate.Name = "txtAnalStartDate"
-        Me.txtAnalStartDate.Size = New System.Drawing.Size(85, 21)
+        Me.txtAnalStartDate.Size = New System.Drawing.Size(67, 21)
         Me.txtAnalStartDate.TabIndex = 26
         Me.txtAnalStartDate.Text = "20160101"
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(853, 136)
+        Me.Label8.Location = New System.Drawing.Point(262, 179)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(77, 12)
+        Me.Label8.Size = New System.Drawing.Size(53, 12)
         Me.Label8.TabIndex = 27
-        Me.Label8.Text = "분석시작날짜"
+        Me.Label8.Text = "시작날짜"
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(1027, 136)
+        Me.Label9.Location = New System.Drawing.Point(394, 179)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(77, 12)
+        Me.Label9.Size = New System.Drawing.Size(53, 12)
         Me.Label9.TabIndex = 29
-        Me.Label9.Text = "분석종료날짜"
+        Me.Label9.Text = "종료날짜"
         '
         'txtAnalEndDate
         '
-        Me.txtAnalEndDate.Location = New System.Drawing.Point(1110, 133)
+        Me.txtAnalEndDate.Location = New System.Drawing.Point(453, 176)
         Me.txtAnalEndDate.Name = "txtAnalEndDate"
-        Me.txtAnalEndDate.Size = New System.Drawing.Size(85, 21)
+        Me.txtAnalEndDate.Size = New System.Drawing.Size(69, 21)
         Me.txtAnalEndDate.TabIndex = 28
         Me.txtAnalEndDate.Text = "20160130"
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(742, 13)
+        Me.Button2.Enabled = False
+        Me.Button2.Location = New System.Drawing.Point(654, 12)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(113, 30)
+        Me.Button2.Size = New System.Drawing.Size(113, 27)
         Me.Button2.TabIndex = 30
         Me.Button2.Text = "Test"
         Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(13, 166)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(129, 31)
+        Me.Button3.TabIndex = 31
+        Me.Button3.Text = "종목별 회원사현황1"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'btnTodayCompany
+        '
+        Me.btnTodayCompany.Enabled = False
+        Me.btnTodayCompany.Location = New System.Drawing.Point(970, 10)
+        Me.btnTodayCompany.Name = "btnTodayCompany"
+        Me.btnTodayCompany.Size = New System.Drawing.Size(109, 29)
+        Me.btnTodayCompany.TabIndex = 32
+        Me.btnTodayCompany.Text = "당일주요거래원"
+        Me.btnTodayCompany.UseVisualStyleBackColor = True
+        '
+        'chkRefresh
+        '
+        Me.chkRefresh.AutoSize = True
+        Me.chkRefresh.Location = New System.Drawing.Point(148, 174)
+        Me.chkRefresh.Name = "chkRefresh"
+        Me.chkRefresh.Size = New System.Drawing.Size(96, 16)
+        Me.chkRefresh.TabIndex = 33
+        Me.chkRefresh.Text = "Auto Refresh"
+        Me.chkRefresh.UseVisualStyleBackColor = True
+        '
+        'Timer1
+        '
+        '
+        'btnTimer
+        '
+        Me.btnTimer.Enabled = False
+        Me.btnTimer.Location = New System.Drawing.Point(877, 12)
+        Me.btnTimer.Name = "btnTimer"
+        Me.btnTimer.Size = New System.Drawing.Size(87, 27)
+        Me.btnTimer.TabIndex = 34
+        Me.btnTimer.Text = "타이머테스트"
+        Me.btnTimer.UseVisualStyleBackColor = True
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(529, 152)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(139, 12)
+        Me.Label10.TabIndex = 35
+        Me.Label10.Text = "종목별 회원사보기1 차트"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1319, 800)
+        Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.btnTimer)
+        Me.Controls.Add(Me.chkRefresh)
+        Me.Controls.Add(Me.btnTodayCompany)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.txtAnalEndDate)
@@ -562,4 +634,10 @@ Partial Class frmMain
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents txtAnalEndDate As System.Windows.Forms.TextBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents btnTodayCompany As System.Windows.Forms.Button
+    Friend WithEvents chkRefresh As System.Windows.Forms.CheckBox
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents btnTimer As System.Windows.Forms.Button
+    Friend WithEvents Label10 As System.Windows.Forms.Label
 End Class
