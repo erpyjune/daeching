@@ -75,6 +75,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoogleChartClass.vb" />
     <Compile Include="frmChart.Designer.vb">
       <DependentUpon>frmChart.vb</DependentUpon>
     </Compile>

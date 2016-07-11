@@ -33,7 +33,6 @@ Partial Class frmMain
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
-        Me.txtStockCode = New System.Windows.Forms.TextBox()
         Me.btnSearch = New System.Windows.Forms.Button()
         Me.lstView1 = New System.Windows.Forms.ListView()
         Me.날짜 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -85,7 +84,13 @@ Partial Class frmMain
         Me.Label10 = New System.Windows.Forms.Label()
         Me.cmbStock = New System.Windows.Forms.ComboBox()
         Me.txtSuggest = New System.Windows.Forms.TextBox()
-        Me.txtOut = New System.Windows.Forms.TextBox()
+        Me.txtStockCode = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button6 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -116,16 +121,6 @@ Partial Class frmMain
         Me.lstMsg.Name = "lstMsg"
         Me.lstMsg.Size = New System.Drawing.Size(407, 52)
         Me.lstMsg.TabIndex = 1
-        '
-        'txtStockCode
-        '
-        Me.txtStockCode.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStockCode.Location = New System.Drawing.Point(94, 105)
-        Me.txtStockCode.Name = "txtStockCode"
-        Me.txtStockCode.Size = New System.Drawing.Size(91, 22)
-        Me.txtStockCode.TabIndex = 2
-        Me.txtStockCode.Text = "088910"
-        Me.txtStockCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'btnSearch
         '
@@ -177,17 +172,16 @@ Partial Class frmMain
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(25, 109)
+        Me.Label1.Location = New System.Drawing.Point(31, 97)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(53, 12)
+        Me.Label1.Size = New System.Drawing.Size(41, 12)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "종목코드"
+        Me.Label1.Text = "종목명"
         '
         'btnCmd1
         '
-        Me.btnCmd1.Enabled = False
         Me.btnCmd1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd1.Location = New System.Drawing.Point(1094, 12)
+        Me.btnCmd1.Location = New System.Drawing.Point(1085, 10)
         Me.btnCmd1.Name = "btnCmd1"
         Me.btnCmd1.Size = New System.Drawing.Size(86, 29)
         Me.btnCmd1.TabIndex = 6
@@ -196,20 +190,18 @@ Partial Class frmMain
         '
         'txtStartDate1
         '
-        Me.txtStartDate1.Enabled = False
         Me.txtStartDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate1.Location = New System.Drawing.Point(1156, 48)
+        Me.txtStartDate1.Location = New System.Drawing.Point(875, 139)
         Me.txtStartDate1.Name = "txtStartDate1"
         Me.txtStartDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtStartDate1.TabIndex = 7
-        Me.txtStartDate1.Text = "20160101"
+        Me.txtStartDate1.Text = "20160620"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Enabled = False
         Me.Label2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label2.Location = New System.Drawing.Point(1097, 51)
+        Me.Label2.Location = New System.Drawing.Point(816, 142)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(59, 13)
         Me.Label2.TabIndex = 8
@@ -218,9 +210,8 @@ Partial Class frmMain
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Enabled = False
         Me.Label3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label3.Location = New System.Drawing.Point(1253, 51)
+        Me.Label3.Location = New System.Drawing.Point(972, 142)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(59, 13)
         Me.Label3.TabIndex = 10
@@ -228,13 +219,11 @@ Partial Class frmMain
         '
         'txtEndDate1
         '
-        Me.txtEndDate1.Enabled = False
         Me.txtEndDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate1.Location = New System.Drawing.Point(1312, 48)
+        Me.txtEndDate1.Location = New System.Drawing.Point(1031, 139)
         Me.txtEndDate1.Name = "txtEndDate1"
         Me.txtEndDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate1.TabIndex = 9
-        Me.txtEndDate1.Text = "20160630"
         '
         'Label4
         '
@@ -406,10 +395,10 @@ Partial Class frmMain
         Me.chartStock.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
         Me.chartStock.Legends.Add(Legend1)
-        Me.chartStock.Location = New System.Drawing.Point(531, 172)
+        Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
-        Me.chartStock.Size = New System.Drawing.Size(980, 661)
+        Me.chartStock.Size = New System.Drawing.Size(980, 630)
         Me.chartStock.TabIndex = 23
         Me.chartStock.Text = "Stock"
         '
@@ -425,10 +414,10 @@ Partial Class frmMain
         '
         'btnAnalBetween
         '
-        Me.btnAnalBetween.Enabled = False
-        Me.btnAnalBetween.Location = New System.Drawing.Point(970, 51)
+        Me.btnAnalBetween.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.btnAnalBetween.Location = New System.Drawing.Point(714, 139)
         Me.btnAnalBetween.Name = "btnAnalBetween"
-        Me.btnAnalBetween.Size = New System.Drawing.Size(96, 30)
+        Me.btnAnalBetween.Size = New System.Drawing.Size(87, 25)
         Me.btnAnalBetween.TabIndex = 25
         Me.btnAnalBetween.Text = "기간일일분석"
         Me.btnAnalBetween.UseVisualStyleBackColor = True
@@ -465,7 +454,6 @@ Partial Class frmMain
         Me.txtAnalEndDate.Name = "txtAnalEndDate"
         Me.txtAnalEndDate.Size = New System.Drawing.Size(69, 21)
         Me.txtAnalEndDate.TabIndex = 28
-        Me.txtAnalEndDate.Text = "20160130"
         '
         'Button2
         '
@@ -530,10 +518,9 @@ Partial Class frmMain
         '
         'cmbStock
         '
-        Me.cmbStock.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
-        Me.cmbStock.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList
+        Me.cmbStock.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cmbStock.FormattingEnabled = True
-        Me.cmbStock.Location = New System.Drawing.Point(222, 107)
+        Me.cmbStock.Location = New System.Drawing.Point(801, 57)
         Me.cmbStock.Name = "cmbStock"
         Me.cmbStock.Size = New System.Drawing.Size(145, 20)
         Me.cmbStock.Sorted = True
@@ -542,24 +529,74 @@ Partial Class frmMain
         'txtSuggest
         '
         Me.txtSuggest.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
-        Me.txtSuggest.Location = New System.Drawing.Point(394, 105)
+        Me.txtSuggest.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.txtSuggest.Location = New System.Drawing.Point(78, 94)
         Me.txtSuggest.Name = "txtSuggest"
-        Me.txtSuggest.Size = New System.Drawing.Size(159, 21)
+        Me.txtSuggest.Size = New System.Drawing.Size(91, 21)
         Me.txtSuggest.TabIndex = 37
         '
-        'txtOut
+        'txtStockCode
         '
-        Me.txtOut.Location = New System.Drawing.Point(575, 103)
-        Me.txtOut.Name = "txtOut"
-        Me.txtOut.Size = New System.Drawing.Size(120, 21)
-        Me.txtOut.TabIndex = 38
+        Me.txtStockCode.Location = New System.Drawing.Point(78, 121)
+        Me.txtStockCode.Name = "txtStockCode"
+        Me.txtStockCode.Size = New System.Drawing.Size(91, 21)
+        Me.txtStockCode.TabIndex = 38
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(19, 124)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(53, 12)
+        Me.Label11.TabIndex = 39
+        Me.Label11.Text = "종목코드"
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(1183, 10)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(91, 28)
+        Me.Button4.TabIndex = 40
+        Me.Button4.Text = "900일봉"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(532, 178)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(979, 18)
+        Me.ProgressBar1.TabIndex = 41
+        '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(1183, 44)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(91, 32)
+        Me.Button5.TabIndex = 42
+        Me.Button5.Text = "googleChart"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Button6
+        '
+        Me.Button6.Location = New System.Drawing.Point(1087, 44)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(83, 31)
+        Me.Button6.TabIndex = 43
+        Me.Button6.Text = "웹실행"
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1523, 837)
-        Me.Controls.Add(Me.txtOut)
+        Me.Controls.Add(Me.Button6)
+        Me.Controls.Add(Me.Button5)
+        Me.Controls.Add(Me.ProgressBar1)
+        Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.Label11)
+        Me.Controls.Add(Me.txtStockCode)
         Me.Controls.Add(Me.txtSuggest)
         Me.Controls.Add(Me.cmbStock)
         Me.Controls.Add(Me.Label10)
@@ -595,7 +632,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lstView1)
         Me.Controls.Add(Me.btnSearch)
-        Me.Controls.Add(Me.txtStockCode)
         Me.Controls.Add(Me.lstMsg)
         Me.Controls.Add(Me.btnLogin)
         Me.Controls.Add(Me.KHOpenAPI)
@@ -622,7 +658,6 @@ Partial Class frmMain
             bLoginStatus = False
         End If
     End Sub
-    Friend WithEvents txtStockCode As System.Windows.Forms.TextBox
     Friend WithEvents btnSearch As System.Windows.Forms.Button
     Friend WithEvents lstView1 As System.Windows.Forms.ListView
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -674,5 +709,11 @@ Partial Class frmMain
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents cmbStock As System.Windows.Forms.ComboBox
     Friend WithEvents txtSuggest As System.Windows.Forms.TextBox
-    Friend WithEvents txtOut As System.Windows.Forms.TextBox
+    Friend WithEvents txtStockCode As System.Windows.Forms.TextBox
+    Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents Timer2 As System.Windows.Forms.Timer
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents Button6 As System.Windows.Forms.Button
 End Class
