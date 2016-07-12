@@ -91,6 +91,7 @@ Partial Class frmMain
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
+        Me.txtChartCount = New System.Windows.Forms.TextBox()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -569,9 +570,9 @@ Partial Class frmMain
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(1183, 44)
+        Me.Button5.Location = New System.Drawing.Point(1137, 139)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(91, 32)
+        Me.Button5.Size = New System.Drawing.Size(91, 22)
         Me.Button5.TabIndex = 42
         Me.Button5.Text = "googleChart"
         Me.Button5.UseVisualStyleBackColor = True
@@ -585,12 +586,21 @@ Partial Class frmMain
         Me.Button6.Text = "웹실행"
         Me.Button6.UseVisualStyleBackColor = True
         '
+        'txtChartCount
+        '
+        Me.txtChartCount.Location = New System.Drawing.Point(1238, 141)
+        Me.txtChartCount.Name = "txtChartCount"
+        Me.txtChartCount.Size = New System.Drawing.Size(35, 21)
+        Me.txtChartCount.TabIndex = 44
+        Me.txtChartCount.Text = "5"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.Controls.Add(Me.txtChartCount)
         Me.Controls.Add(Me.Button6)
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.ProgressBar1)
@@ -716,4 +726,5 @@ Partial Class frmMain
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents txtChartCount As System.Windows.Forms.TextBox
 End Class
