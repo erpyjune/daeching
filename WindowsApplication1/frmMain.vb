@@ -25,6 +25,8 @@ Public Class frmMain
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        MsgBox(Application.ExecutablePath)
+
         '// main 초기화
         Call mainInitialize()
         '// 종목 코드 로딩.
