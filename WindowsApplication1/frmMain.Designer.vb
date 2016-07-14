@@ -521,7 +521,7 @@ Partial Class frmMain
         '
         Me.cmbStock.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.cmbStock.FormattingEnabled = True
-        Me.cmbStock.Location = New System.Drawing.Point(801, 57)
+        Me.cmbStock.Location = New System.Drawing.Point(936, 44)
         Me.cmbStock.Name = "cmbStock"
         Me.cmbStock.Size = New System.Drawing.Size(145, 20)
         Me.cmbStock.Sorted = True
