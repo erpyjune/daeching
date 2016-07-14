@@ -24,9 +24,6 @@ Public Class frmMain
     Dim gSortedListStockSellBuyInfo As SortedList = New SortedList
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        MsgBox(Application.ExecutablePath)
-
         '// main 초기화
         Call mainInitialize()
         '// 종목 코드 로딩.
@@ -1188,7 +1185,8 @@ Public Class frmMain
 
         '// 구글 차트 데이터를 생성한다.
         'Call googleChart.drawGoogleChart()
-        Call googleChart.drawGoogleChartTest()
+        'Call googleChart.drawGoogleChartTest()
+        Call googleChart.drawHighChart()
 
     End Sub
 
