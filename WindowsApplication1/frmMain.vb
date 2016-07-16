@@ -22,6 +22,8 @@ Public Class frmMain
     Dim gListStockSellBuyInfoSub As New List(Of StockSellBuyInfoSub)()
     Dim gListStockSellBuyInfoMain As New List(Of StockSellBuyInfoMain)()
     Dim gSortedListStockSellBuyInfo As SortedList = New SortedList
+    Dim gHashOnlyBuyValueAllStock As New Hashtable '// 모든 종목의 순매수 정보 저장
+    Dim gHashScreenNoAndStock As New Hashtable '// 전종목 순매수 정도 가져올때 screen num과 종목 매칭할 임시 저장소
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         '// main 초기화
@@ -346,6 +348,54 @@ Public Class frmMain
         gHashScreenAndDate.Remove(eventArgs.sScrNo)
 
         System.Console.WriteLine(tDate + "| RecvCommandCount : " + CStr(gRecvCommandCount) + " | ScrNumer : " + eventArgs.sScrNo)
+
+    End Sub
+
+    Private Sub trProcSellBuyAnalDataAllStock(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+        Dim nCnt As Short, i As Short
+        Dim strItemValue As String
+        Dim sCompany As String
+        Dim lOnlyBuy As Long
+        Dim lTotalOnlyBuy As Long = 0
+        Dim sStockName As String
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
+        For i = 0 To (nCnt - 1)
+            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "회원사명")
+            sCompany = Trim(strItemValue).Replace(" ", "").Replace(".", "")
+
+            '// 누적순매수
+            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "누적순매수수량")
+            lOnlyBuy = CLng(Trim(strItemValue).Replace("+-", "-").Replace(",", ""))
+
+            If lOnlyBuy > 0 Then
+                lTotalOnlyBuy += lOnlyBuy
+            End If
+
+            ''// 매수수량
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "매수수량")
+            'lBuy = CLng(Trim(strItemValue).Replace("+-", "-").Replace(",", ""))
+
+            ''// 매도수량
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "매도수량")
+            'lSell = CLng(Trim(strItemValue).Replace("+-", "-").Replace(",", ""))
+            Console.WriteLine("{0}, {1}", sCompany, lOnlyBuy)
+        Next
+
+        Console.WriteLine("========================================================================")
+
+        sStockName = ""
+        sStockName = gHashScreenNoAndStock(CStr(eventArgs.sScrNo))
+        If sStockName.Length = 0 Then
+            MsgBox("스크린 번호에 해당되는 종목이 없습니다")
+            Return
+        End If
+
+        gHashOnlyBuyValueAllStock.Add(sStockName, lTotalOnlyBuy)
+        gHashScreenNoAndStock.Remove(CStr(eventArgs.sScrNo))
+        gRecvCommandCount = gRecvCommandCount + 1
+        Console.WriteLine("받음, {0} : {1}, 받은수 {2}", sStockName, CStr(lTotalOnlyBuy), CStr(gRecvCommandCount))
+        Application.DoEvents()
 
     End Sub
 
@@ -782,6 +832,8 @@ Public Class frmMain
             Call trStock900BongInfo(sender, eventArgs)
         ElseIf eventArgs.sRQName = "일일기간분석테스트" Then
             Call trProcSellBuyAnalDataTest(sender, eventArgs)
+        ElseIf eventArgs.sRQName = "누적순매수정보추출" Then
+            Call trProcSellBuyAnalDataAllStock(sender, eventArgs)
         End If
 
         Console.WriteLine("DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
@@ -1186,11 +1238,96 @@ Public Class frmMain
         '// 구글 차트 데이터를 생성한다.
         'Call googleChart.drawGoogleChart()
         'Call googleChart.drawGoogleChartTest()
-        Call googleChart.drawHighChart()
+        Call googleChart.drawHighStockChart()
+        'Call googleChart.drawHighNormalChart()
 
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         GlobalDefine.runBrowser("F:\googleChart.html")
+    End Sub
+
+    Private Sub btnOnlySellBuyAll_Click(sender As Object, e As EventArgs) Handles btnOnlySellBuyAll.Click
+        Dim MyKeys As ICollection
+        Dim Key As Object
+        Dim nScreenNumber As Integer = 1000
+        Dim nProgressMax As Integer, nPorgresValue As Integer = 0
+
+        gSendCommandCount = 0
+        gHashOnlyBuyValueAllStock.Clear()
+        gHashScreenNoAndStock.Clear()
+
+        '// Prograss Bar 셋팅
+        nProgressMax = gStockCodeTable.Count
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = nProgressMax
+
+        MyKeys = gStockCodeTable.Keys()
+        For Each Key In MyKeys
+            If nScreenNumber >= 1099 Then
+                nScreenNumber = 1000
+            Else
+                nScreenNumber += 1
+            End If
+
+            KHOpenAPI.SetInputValue("종목코드", gStockCodeTable(Key.ToString))
+            KHOpenAPI.SetInputValue("수정주가구분", "1")
+            KHOpenAPI.SetInputValue("조회구분", "0")
+            KHOpenAPI.SetInputValue("시작일자", "20160715")
+            KHOpenAPI.SetInputValue("종료일자", "20160715")
+            KHOpenAPI.CommRqData("누적순매수정보추출", "OPT10038", CInt("0"), CStr(nScreenNumber))
+
+            '// 스크린넘버와 종목명 매핑
+
+            gHashScreenNoAndStock.Add(CStr(nScreenNumber), Key.ToString)
+            '// 서버에 보낸 요청 개수
+            gSendCommandCount += 1
+
+            Threading.Thread.Sleep(300)
+            Application.DoEvents()
+            Console.WriteLine("서버 명령 종목:{0}, 코드:{1}, 요청수{2}", Key.ToString, gStockCodeTable(Key.ToString), CStr(gSendCommandCount))
+            nPorgresValue += 1
+            ProgressBar1.Value = nPorgresValue
+        Next
+
+        Dim totalRetryCount As Integer = 0
+        Do While True
+            If gSendCommandCount <= gRecvCommandCount Then
+                Exit Do
+            End If
+            Threading.Thread.Sleep(300)
+            Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCommandCount) + "], R[" + CStr(gRecvCommandCount) + "]")
+            Application.DoEvents()
+            totalRetryCount += 1
+            If totalRetryCount >= 100 Then
+                MsgBox("데이터를 서버로 부터 모두 받지 못했습니다. 다시한번 실행해 주세요!")
+                Return
+            End If
+        Loop
+
+        Console.WriteLine("=============================================================================")
+        Console.WriteLine("=============================================================================")
+        Console.WriteLine("=============================================================================")
+        Console.WriteLine("=============================================================================")
+        Console.WriteLine("순매수 많은 종목순")
+
+        '// 순매수 정보가 많은 순으로 정렬한다.
+        Dim lstSortedOnlyBuyStockAll As New List(Of String)()
+        Dim hashLColl As ICollection
+        Dim hashTemp As New Hashtable
+
+        '// 해시 테이블 복사
+        hashLColl = gHashOnlyBuyValueAllStock.Keys
+        For Each Key In hashLColl
+            hashTemp.Add(Key.ToString, gHashOnlyBuyValueAllStock(Key.ToString))
+        Next
+
+        '// 임시 해시테이블을 이용해서 hash value로 정렬한다.
+        lstSortedOnlyBuyStockAll = GlobalDefine.sortHashtable(hashTemp)
+        '// 정렬된 list 순으로 값을 찍어라
+        For Each _sStockName In lstSortedOnlyBuyStockAll
+            Console.WriteLine("{0}, {1}", _sStockName, gHashOnlyBuyValueAllStock(_sStockName))
+        Next
+
     End Sub
 End Class

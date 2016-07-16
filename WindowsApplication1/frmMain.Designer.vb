@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -92,6 +92,8 @@ Partial Class frmMain
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.txtChartCount = New System.Windows.Forms.TextBox()
+        Me.chkBrowser = New System.Windows.Forms.CheckBox()
+        Me.btnOnlySellBuyAll = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -108,7 +110,7 @@ Partial Class frmMain
         'KHOpenAPI
         '
         Me.KHOpenAPI.Enabled = True
-        Me.KHOpenAPI.Location = New System.Drawing.Point(553, 61)
+        Me.KHOpenAPI.Location = New System.Drawing.Point(459, 70)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
         Me.KHOpenAPI.Size = New System.Drawing.Size(66, 20)
@@ -392,10 +394,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend1)
+        ChartArea2.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend2)
         Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -594,12 +596,35 @@ Partial Class frmMain
         Me.txtChartCount.TabIndex = 44
         Me.txtChartCount.Text = "5"
         '
+        'chkBrowser
+        '
+        Me.chkBrowser.AutoSize = True
+        Me.chkBrowser.Checked = True
+        Me.chkBrowser.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBrowser.Location = New System.Drawing.Point(1140, 117)
+        Me.chkBrowser.Name = "chkBrowser"
+        Me.chkBrowser.Size = New System.Drawing.Size(96, 16)
+        Me.chkBrowser.TabIndex = 45
+        Me.chkBrowser.Text = "브라우저실행"
+        Me.chkBrowser.UseVisualStyleBackColor = True
+        '
+        'btnOnlySellBuyAll
+        '
+        Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(553, 40)
+        Me.btnOnlySellBuyAll.Name = "btnOnlySellBuyAll"
+        Me.btnOnlySellBuyAll.Size = New System.Drawing.Size(95, 26)
+        Me.btnOnlySellBuyAll.TabIndex = 46
+        Me.btnOnlySellBuyAll.Text = "전종목순매수"
+        Me.btnOnlySellBuyAll.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.Controls.Add(Me.btnOnlySellBuyAll)
+        Me.Controls.Add(Me.chkBrowser)
         Me.Controls.Add(Me.txtChartCount)
         Me.Controls.Add(Me.Button6)
         Me.Controls.Add(Me.Button5)
@@ -727,4 +752,6 @@ Partial Class frmMain
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents txtChartCount As System.Windows.Forms.TextBox
+    Friend WithEvents chkBrowser As System.Windows.Forms.CheckBox
+    Friend WithEvents btnOnlySellBuyAll As System.Windows.Forms.Button
 End Class

@@ -381,7 +381,7 @@
 
     End Sub
 
-    Public Sub drawHighChart()
+    Public Sub drawHighStockChart()
         '// 차트 그리기 위한 종목 선정
         Dim chartPrintCountBreaek As Integer = 0
         Dim total As Integer = 0
@@ -391,7 +391,6 @@
         Dim nTotalChartIndex As Integer = 0
         Dim arrChartValue() As Long = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         Dim nLastData As Integer = 0
-        Dim nPrintLinePeed As Integer
         Dim lSellBuyTotal As Long = 0
         Dim nSameCount As Integer = 0
 
@@ -406,7 +405,7 @@
         Dim hashBeforeStockSellBuySub As New Hashtable
         Dim hashAppendSellBuyValue As New Hashtable
         Dim hashRemoveDate As New Hashtable
-        Dim FILE_NAME As String = "f:\highChart.html"
+        Dim FILE_NAME As String = "f:\" + frmMain.txtSuggest.Text + ".html"
 
         '// 누적 값을 구한다
         For Each _stockSellBuyInfoMain In gListStockSellBuyInfoMain
@@ -508,6 +507,7 @@
         Dim f As New System.IO.StreamWriter(FILE_NAME, True)
 
         f.WriteLine("<html>")
+        f.WriteLine("<meta http-equiv=""refresh"" content=""10"" />")
         f.WriteLine("<head>")
         f.WriteLine("<script src=""http://code.jquery.com/jquery-latest.js""></script>")
         f.WriteLine("<script src=""https://code.highcharts.com/stock/highstock.js""></script>")
@@ -537,29 +537,57 @@
         f.WriteLine("selected: 4")
         f.WriteLine("},")
 
-        f.WriteLine("yAxis: {")
-        f.WriteLine("labels: {")
-        f.WriteLine("formatter: function () {")
-        f.WriteLine("return (this.value > 0 ? ' + ' : '') + this.value + '%';")
-        f.WriteLine("}")
-        f.WriteLine("},")
-        f.WriteLine("plotLines: [{")
-        f.WriteLine("value: 0,")
-        f.WriteLine("width: 2,")
-        f.WriteLine("color: 'silver'")
-        f.WriteLine("}]")
-        f.WriteLine("},")
-        f.WriteLine("plotOptions: {")
-        f.WriteLine("series: {")
-        f.WriteLine("compare: 'percent'")
-        f.WriteLine("}")
+        '// title
+        f.WriteLine("title: {")
+        f.WriteLine("   text: '종목이름 : " + frmMain.txtSuggest.Text + " (" + frmMain.txtStartDate1.Text + " ~ " + frmMain.txtEndDate1.Text + ")',")
+        f.WriteLine("   x: -20")
         f.WriteLine("},")
 
-        f.WriteLine("tooltip: {")
-        f.WriteLine("  pointFormat: '<span style=""color:{series.color}"">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',")
-        f.WriteLine("  valueDecimals: 2")
+        '// subtitle
+        'f.WriteLine("subtitle: {")
+        'f.WriteLine("   text: '분석기간 : " + frmMain.txtStartDate1.Text + " ~ " + frmMain.txtEndDate1.Text + ",'")
+        'f.WriteLine("   x: -20")
+        'f.WriteLine("},")
+
+        '// xAxis
+        f.WriteLine("xAxis: {")
+        f.WriteLine("   labels: {")
+        f.WriteLine("       format: '{value}'")
+        f.WriteLine("   }")
         f.WriteLine("},")
-        f.WriteLine("series: seriesOptions")
+
+        '// legend
+        f.WriteLine("legend: {")
+        f.WriteLine("   layout: 'vertical',")
+        f.WriteLine("   align: 'right',")
+        f.WriteLine("   verticalAlign: 'middle',")
+        f.WriteLine("   borderWidth: 0")
+        f.WriteLine("},")
+
+        '// yAxis
+        f.WriteLine("yAxis: {")
+        f.WriteLine("   labels: {")
+        f.WriteLine("       formatter: function () {")
+        'f.WriteLine("return (this.value > 0 ? ' + ' : '') + this.value + '%';")
+        f.WriteLine("           return this.value")
+        f.WriteLine("       }")
+        f.WriteLine("   },")
+        f.WriteLine("   plotLines: [{")
+        f.WriteLine("       value: 0,")
+        f.WriteLine("       width: 2,")
+        f.WriteLine("       color: 'silver'")
+        f.WriteLine("   }]")
+        f.WriteLine("   },")
+        f.WriteLine("   plotOptions: {")
+        f.WriteLine("       series: {")
+        f.WriteLine("           compare: 'value'")
+        f.WriteLine("       }")
+        f.WriteLine("   },")
+        f.WriteLine("   tooltip: {")
+        f.WriteLine("       pointFormat: '<span style=""color:{series.color}"">{series.name}</span>: <b>{point.y}</b>, {point.x}<br/>',")
+        f.WriteLine("       valueDecimals: 2")
+        f.WriteLine("   },")
+        f.WriteLine("   series: seriesOptions")
         f.WriteLine("});")
         f.WriteLine("}")
 
@@ -571,7 +599,11 @@
         '// 프린트할 회원사별로 처음부터 끝까지 그린다.
         For Each _sCompanyName In lstSortedSellBuyInfoCompany
             f.WriteLine("  seriesOptions[" + CStr(nCompanyCount) + "] = {")
-            f.WriteLine("     name: '" + _sCompanyName + "',")
+            f.WriteLine("       name: '" + _sCompanyName + "',")
+            f.WriteLine("       marker : {")
+            f.WriteLine("           enabled : true,")
+            f.WriteLine("           radius : 3")
+            f.WriteLine("       },")
             f.Write("     data: [")
             nListCount = 0
             For Each _stockSellBuyInfoMain In lstMain
@@ -609,7 +641,7 @@
 
         f.WriteLine("</head>")
         f.WriteLine("<body>")
-        f.WriteLine("<div id=""container"" style=""height: 400px; min-width: 310px""></div>")
+        f.WriteLine("<div id=""container"" style=""height: 900px; min-width: 310px""></div>")
         f.WriteLine("</body>")
         f.WriteLine("</html>")
         f.Close()
@@ -617,7 +649,10 @@
         Console.WriteLine("차트 데이터 생성 완료!")
 
         '// run 브라우저
-        GlobalDefine.runBrowser(FILE_NAME)
+        If frmMain.chkBrowser.Checked = True Then
+            GlobalDefine.runBrowser(FILE_NAME)
+        End If
 
     End Sub
+
 End Class
