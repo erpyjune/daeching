@@ -405,7 +405,7 @@
         Dim hashBeforeStockSellBuySub As New Hashtable
         Dim hashAppendSellBuyValue As New Hashtable
         Dim hashRemoveDate As New Hashtable
-        Dim FILE_NAME As String = "f:\" + frmMain.txtSuggest.Text + ".html"
+        Dim FILE_NAME As String = "C:\Temp\daeching\" + frmMain.txtSuggest.Text + ".html"
 
         '// 누적 값을 구한다
         For Each _stockSellBuyInfoMain In gListStockSellBuyInfoMain
@@ -507,7 +507,7 @@
         Dim f As New System.IO.StreamWriter(FILE_NAME, True)
 
         f.WriteLine("<html>")
-        f.WriteLine("<meta http-equiv=""refresh"" content=""10"" />")
+        f.WriteLine("<meta http-equiv=""refresh"" content=""30"" />")
         f.WriteLine("<head>")
         f.WriteLine("<script src=""http://code.jquery.com/jquery-latest.js""></script>")
         f.WriteLine("<script src=""https://code.highcharts.com/stock/highstock.js""></script>")
@@ -641,7 +641,8 @@
 
         f.WriteLine("</head>")
         f.WriteLine("<body>")
-        f.WriteLine("<div id=""container"" style=""height: 900px; min-width: 310px""></div>")
+        'f.WriteLine("<div id=""container"" style=""height: 200px; min-width: 310px""></div>")
+        f.WriteLine("<div id=""container"" style=""height: 90%; min-width: 70%""></div>")
         f.WriteLine("</body>")
         f.WriteLine("</html>")
         f.Close()

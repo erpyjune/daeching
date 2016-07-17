@@ -23,13 +23,13 @@
         Dim ie As Object
         ie = CreateObject("InternetExplorer.Application")
         ie.Visible = True
-        ie.width = 1800              ' 주소창 너비
-        ie.height = 1000             ' 주소창 높이
+        ie.width = 800              ' 주소창 너비
+        ie.height = 400             ' 주소창 높이
         ie.AddressBar = False  ' 주소입력창 숨기기
         ie.ToolBar = False        ' Toolbar 숨기기
         ie.MenuBar = False      ' 메뉴 숨기기
         ie.StatusBar = False     ' 상태바 숨기기
-        ie.Resizable = False     ' 크기 조절 금지
+        ie.Resizable = True     ' 크기 조절 금지
         ie.Navigate(path)
         ie = Nothing
     End Sub

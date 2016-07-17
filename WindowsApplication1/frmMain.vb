@@ -11,6 +11,7 @@ Public Class frmMain
     Dim bLoginStatus As Boolean
     Dim gStockCodeTable As New Hashtable
     Dim gStockCompanyCodeTable As New Hashtable
+    Dim gKosdaqStockCodeTable As New Hashtable
     Dim gListStockCompanyCode As New List(Of String)()
     Dim gHashScreenAndDate As New Hashtable
     Dim gHashStockCompany As New Hashtable
@@ -30,6 +31,8 @@ Public Class frmMain
         Call mainInitialize()
         '// 종목 코드 로딩.
         Call loadingStockCodeData()
+        '// 코스닥만 따로 로딩
+        Call loadingKosdaqStockCodeData()
         '// 회원사 코드 로딩
         Call loadingStockCompanyCodeData()
 
@@ -44,7 +47,7 @@ Public Class frmMain
     End Sub
 
     Private Sub loadingStockCompanyCodeData()
-        Dim strCodeFilePath As String = "C:\Temp\_sotck_company_code.txt"
+        Dim strCodeFilePath As String = Application.StartupPath + "\_sotck_company_code.txt"
         Dim TArr() As String
         Dim strCode As String, strName As String
         Dim fileReader As System.IO.StreamReader
@@ -67,7 +70,7 @@ Public Class frmMain
                         strName = Trim(TArr(i))
                         gStockCompanyCodeTable.Add(strName, strCode)
                         gListStockCompanyCode.Add(strName)
-                        System.Console.WriteLine(strName)
+                        'System.Console.WriteLine(strName)
                     End If
                 Next
             End While
@@ -77,13 +80,49 @@ Public Class frmMain
         End Try
 
     End Sub
+
+    Private Sub loadingKosdaqStockCodeData()
+        Dim strCodeFilePath As String = Application.StartupPath + "\_kosdaq_code.txt"
+        Dim TArr() As String
+        Dim strCode As String, strName As String
+        Dim fileReader As System.IO.StreamReader
+        Dim stringReader As String
+
+        Try
+            fileReader = My.Computer.FileSystem.OpenTextFileReader(strCodeFilePath)
+            While Not fileReader.EndOfStream
+                stringReader = ""
+                stringReader = fileReader.ReadLine()
+                If Trim(stringReader) = "" Then
+                    Exit While
+                End If
+
+                TArr = Split(Trim(stringReader), "|")
+                For i = LBound(TArr) To UBound(TArr)
+                    If i = 0 Then
+                        strCode = Trim(TArr(i))
+                    ElseIf i = 1 Then
+                        strName = Trim(TArr(i))
+                        gKosdaqStockCodeTable.Add(strName, strCode)
+                        'System.Console.WriteLine(strName)
+                    End If
+                Next
+            End While
+        Catch ex As System.IO.IOException
+            MsgBox(strCodeFilePath + " 코스닥 종목코드 파일을 찾을 수 없습니다.")
+            Return
+        End Try
+
+    End Sub
+
     Private Sub loadingStockCodeData()
         Dim strCodeFilePath As String
         Dim TArr() As String
         Dim strCode As String, strName As String
         Dim HSource As New AutoCompleteStringCollection()
 
-        strCodeFilePath = "C:\Temp\_stock_code.txt"
+        'strCodeFilePath = "C:\Temp\_stock_code.txt"
+        strCodeFilePath = Application.StartupPath + "\_stock_code.txt"
         Dim fileReader As System.IO.StreamReader
         Dim stringReader As String
 
@@ -379,7 +418,7 @@ Public Class frmMain
             ''// 매도수량
             'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "매도수량")
             'lSell = CLng(Trim(strItemValue).Replace("+-", "-").Replace(",", ""))
-            Console.WriteLine("{0}, {1}", sCompany, lOnlyBuy)
+            'Console.WriteLine("{0}, {1}", sCompany, lOnlyBuy)
         Next
 
         Console.WriteLine("========================================================================")
@@ -398,6 +437,46 @@ Public Class frmMain
         Application.DoEvents()
 
     End Sub
+
+    Private Sub trProcCompanySellBuyHigh(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+        Dim nCnt As Short, i As Short
+        Dim strItemValue As String
+        Dim sCompany As String, sCode As String
+        Dim lOnlyBuy As Long
+        Dim lTotalOnlyBuy As Long = 0
+        Dim sStockName As String
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
+        For i = 0 To (nCnt - 1)
+            sCode = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "종목코드")
+
+            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "종목명")
+            sCompany = Trim(strItemValue).Replace(" ", "").Replace(".", "")
+
+            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "순매수")
+            lOnlyBuy = CInt(Trim(strItemValue))
+
+            Console.WriteLine("받음 - {0} : {1}", sCompany, strItemValue)
+
+        Next
+
+        Console.WriteLine("========================================================================")
+
+        'sStockName = ""
+        'sStockName = gHashScreenNoAndStock(CStr(eventArgs.sScrNo))
+        'If sStockName.Length = 0 Then
+        '    MsgBox("스크린 번호에 해당되는 종목이 없습니다")
+        '    Return
+        'End If
+
+        'gHashOnlyBuyValueAllStock.Add(sStockName, lTotalOnlyBuy)
+        'gHashScreenNoAndStock.Remove(CStr(eventArgs.sScrNo))
+        gRecvCommandCount = gRecvCommandCount + 1
+        'Console.WriteLine("받음, {0} : {1}, 받은수 {2}", sStockName, CStr(lTotalOnlyBuy), CStr(gRecvCommandCount))
+        Application.DoEvents()
+
+    End Sub
+
 
     Private Sub trProcSellBuyAnalData(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim sDate As String, tDate As String
@@ -834,6 +913,8 @@ Public Class frmMain
             Call trProcSellBuyAnalDataTest(sender, eventArgs)
         ElseIf eventArgs.sRQName = "누적순매수정보추출" Then
             Call trProcSellBuyAnalDataAllStock(sender, eventArgs)
+        ElseIf eventArgs.sRQName = "증권사별매매상위요청" Then
+            Call trProcCompanySellBuyHigh(sender, eventArgs)
         End If
 
         Console.WriteLine("DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
@@ -849,6 +930,21 @@ Public Class frmMain
     Private Sub btnCmd2_Click(sender As Object, e As EventArgs) Handles btnCmd2.Click
         If bLoginStatus = False Then
             MsgBox("로그인이 필요합니다!!")
+            Return
+        End If
+
+        If Trim(txtStartDate1.Text).Length <> 8 Then
+            MsgBox("분석 시작 날짜를 20160101 처럼 8자리의 숫자로 넣어 주세요")
+            Return
+        End If
+
+        If Trim(txtEndDate1.Text).Length <> 8 Then
+            MsgBox("분석 종료 날짜를 20160101 처럼 8자리의 숫자로 넣어 주세요")
+            Return
+        End If
+
+        If Trim(txtStockCode.Text).Length <> 6 Then
+            MsgBox("종목코드 입력이 6자리가 아닙니다. 종목을 다시 입력해 주세요")
             Return
         End If
 
@@ -1124,8 +1220,28 @@ Public Class frmMain
         Dim nProgressMax As Integer = 0
         Dim googleChart As New GoogleChart
 
+        If bLoginStatus = False Then
+            MsgBox("로그인이 필요합니다!!")
+            Return
+        End If
+
         If Trim(txtStockCode.Text).Length = 0 Then
             MsgBox("선택된 종목이 없습니다")
+            Return
+        End If
+
+        If Trim(txtStartDate1.Text).Length <> 8 Then
+            MsgBox("분석 시작 날짜를 20160101 처럼 8자리의 숫자로 넣어 주세요")
+            Return
+        End If
+
+        If Trim(txtEndDate1.Text).Length <> 8 Then
+            MsgBox("분석 종료 날짜를 20160101 처럼 8자리의 숫자로 넣어 주세요")
+            Return
+        End If
+
+        If Trim(txtStockCode.Text).Length <> 6 Then
+            MsgBox("종목코드 입력이 6자리가 아닙니다. 종목을 다시 입력해 주세요")
             Return
         End If
 
@@ -1258,11 +1374,12 @@ Public Class frmMain
         gHashScreenNoAndStock.Clear()
 
         '// Prograss Bar 셋팅
-        nProgressMax = gStockCodeTable.Count
+        nProgressMax = gKosdaqStockCodeTable.Count
         ProgressBar1.Minimum = 0
         ProgressBar1.Maximum = nProgressMax
 
-        MyKeys = gStockCodeTable.Keys()
+        '// 코스닥 정보만 구한다.
+        MyKeys = gKosdaqStockCodeTable.Keys()
         For Each Key In MyKeys
             If nScreenNumber >= 1099 Then
                 nScreenNumber = 1000
@@ -1270,7 +1387,7 @@ Public Class frmMain
                 nScreenNumber += 1
             End If
 
-            KHOpenAPI.SetInputValue("종목코드", gStockCodeTable(Key.ToString))
+            KHOpenAPI.SetInputValue("종목코드", gKosdaqStockCodeTable(Key.ToString))
             KHOpenAPI.SetInputValue("수정주가구분", "1")
             KHOpenAPI.SetInputValue("조회구분", "0")
             KHOpenAPI.SetInputValue("시작일자", "20160715")
@@ -1328,6 +1445,85 @@ Public Class frmMain
         For Each _sStockName In lstSortedOnlyBuyStockAll
             Console.WriteLine("{0}, {1}", _sStockName, gHashOnlyBuyValueAllStock(_sStockName))
         Next
+
+    End Sub
+
+    Private Sub btnStockCompanySort_Click(sender As Object, e As EventArgs) Handles btnStockCompanySort.Click
+        Dim chartSeries As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim nScreenNumber As Integer
+        Dim nPorgresValue As Integer = 0
+        Dim nProgressMax As Integer = 0
+        Dim googleChart As New GoogleChart
+
+        If bLoginStatus = False Then
+            MsgBox("로그인이 필요합니다!!")
+            Return
+        End If
+
+        If Trim(txtStockCode.Text).Length = 0 Then
+            MsgBox("선택된 종목이 없습니다")
+            Return
+        End If
+
+        '// 미리 증권사 목록을 셋팅하고 0 값을 셋팅한다
+        Dim k As Integer
+        For k = 0 To gListStockCompanyCode.Count - 1
+            gCompanySellBuyCount.Add(gListStockCompanyCode.Item(k), 0)
+        Next
+
+        gSendCommandCount = 0
+        gRecvCommandCount = 0
+        nScreenNumber = 1000
+
+        '// progress bar setting min, max
+        'ProgressBar1.Minimum = 0
+        'ProgressBar1.Maximum = nProgressMax
+
+        Dim MyKeys As ICollection
+        Dim Key As Object
+        MyKeys = gStockCompanyCodeTable.Keys()
+        For Each Key In MyKeys
+            If nScreenNumber >= 1099 Then
+                nScreenNumber = 1000
+            Else
+                nScreenNumber += 1
+            End If
+
+            KHOpenAPI.SetInputValue("회원사코드", gStockCompanyCodeTable(Key.ToString))
+            KHOpenAPI.SetInputValue("거래량구분", "0")
+            KHOpenAPI.SetInputValue("매매구분", "1")
+            KHOpenAPI.SetInputValue("기간", "5")
+            KHOpenAPI.CommRqData("증권사별매매상위요청", "OPT10039", CInt("0"), CStr(nScreenNumber))
+
+            Console.WriteLine("{0} : {1}", Key.ToString, gStockCompanyCodeTable(Key.ToString))
+            Threading.Thread.Sleep(300)
+            Application.DoEvents()
+            gSendCommandCount = gSendCommandCount + 1
+            '// progress bar +1 증가
+            nPorgresValue += 1
+            'ProgressBar1.Value = nPorgresValue
+
+            'gHashScreenNoAndStock.Add(Key.ToString, CStr(nScreenNumber))
+
+        Next
+
+        Console.WriteLine("서버에 요청 완료")
+
+        '// 데이터 다 받을때까지 대기.
+        Dim totalRetryCount As Integer = 0
+        Do While True
+            If gSendCommandCount <= gRecvCommandCount Then
+                Exit Do
+            End If
+            Threading.Thread.Sleep(300)
+            Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCommandCount) + "], R[" + CStr(gRecvCommandCount) + "]")
+            Application.DoEvents()
+            totalRetryCount += 1
+            If totalRetryCount >= 100 Then
+                MsgBox("데이터를 서버로 부터 모두 받지 못했습니다. 다시한번 실행해 주세요!")
+                Return
+            End If
+        Loop
 
     End Sub
 End Class

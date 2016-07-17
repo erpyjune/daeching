@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -94,6 +94,7 @@ Partial Class frmMain
         Me.txtChartCount = New System.Windows.Forms.TextBox()
         Me.chkBrowser = New System.Windows.Forms.CheckBox()
         Me.btnOnlySellBuyAll = New System.Windows.Forms.Button()
+        Me.btnStockCompanySort = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -183,6 +184,7 @@ Partial Class frmMain
         '
         'btnCmd1
         '
+        Me.btnCmd1.Enabled = False
         Me.btnCmd1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btnCmd1.Location = New System.Drawing.Point(1085, 10)
         Me.btnCmd1.Name = "btnCmd1"
@@ -194,7 +196,7 @@ Partial Class frmMain
         'txtStartDate1
         '
         Me.txtStartDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate1.Location = New System.Drawing.Point(875, 139)
+        Me.txtStartDate1.Location = New System.Drawing.Point(915, 140)
         Me.txtStartDate1.Name = "txtStartDate1"
         Me.txtStartDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtStartDate1.TabIndex = 7
@@ -204,7 +206,7 @@ Partial Class frmMain
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label2.Location = New System.Drawing.Point(816, 142)
+        Me.Label2.Location = New System.Drawing.Point(856, 143)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(59, 13)
         Me.Label2.TabIndex = 8
@@ -214,7 +216,7 @@ Partial Class frmMain
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label3.Location = New System.Drawing.Point(972, 142)
+        Me.Label3.Location = New System.Drawing.Point(1012, 143)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(59, 13)
         Me.Label3.TabIndex = 10
@@ -223,7 +225,7 @@ Partial Class frmMain
         'txtEndDate1
         '
         Me.txtEndDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate1.Location = New System.Drawing.Point(1031, 139)
+        Me.txtEndDate1.Location = New System.Drawing.Point(1071, 140)
         Me.txtEndDate1.Name = "txtEndDate1"
         Me.txtEndDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate1.TabIndex = 9
@@ -394,10 +396,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend2)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend3)
         Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -418,9 +420,10 @@ Partial Class frmMain
         'btnAnalBetween
         '
         Me.btnAnalBetween.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.btnAnalBetween.Location = New System.Drawing.Point(714, 139)
+        Me.btnAnalBetween.Enabled = False
+        Me.btnAnalBetween.Location = New System.Drawing.Point(654, 39)
         Me.btnAnalBetween.Name = "btnAnalBetween"
-        Me.btnAnalBetween.Size = New System.Drawing.Size(87, 25)
+        Me.btnAnalBetween.Size = New System.Drawing.Size(87, 27)
         Me.btnAnalBetween.TabIndex = 25
         Me.btnAnalBetween.Text = "기간일일분석"
         Me.btnAnalBetween.UseVisualStyleBackColor = True
@@ -513,7 +516,7 @@ Partial Class frmMain
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(529, 152)
+        Me.Label10.Location = New System.Drawing.Point(540, 150)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(139, 12)
         Me.Label10.TabIndex = 35
@@ -522,6 +525,7 @@ Partial Class frmMain
         'cmbStock
         '
         Me.cmbStock.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.cmbStock.Enabled = False
         Me.cmbStock.FormattingEnabled = True
         Me.cmbStock.Location = New System.Drawing.Point(936, 44)
         Me.cmbStock.Name = "cmbStock"
@@ -556,6 +560,7 @@ Partial Class frmMain
         '
         'Button4
         '
+        Me.Button4.Enabled = False
         Me.Button4.Location = New System.Drawing.Point(1183, 10)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(91, 28)
@@ -572,15 +577,16 @@ Partial Class frmMain
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(1137, 139)
+        Me.Button5.Location = New System.Drawing.Point(710, 138)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(91, 22)
+        Me.Button5.Size = New System.Drawing.Size(91, 30)
         Me.Button5.TabIndex = 42
-        Me.Button5.Text = "googleChart"
+        Me.Button5.Text = "기간분석"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button6
         '
+        Me.Button6.Enabled = False
         Me.Button6.Location = New System.Drawing.Point(1087, 44)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(83, 31)
@@ -590,7 +596,7 @@ Partial Class frmMain
         '
         'txtChartCount
         '
-        Me.txtChartCount.Location = New System.Drawing.Point(1238, 141)
+        Me.txtChartCount.Location = New System.Drawing.Point(807, 141)
         Me.txtChartCount.Name = "txtChartCount"
         Me.txtChartCount.Size = New System.Drawing.Size(35, 21)
         Me.txtChartCount.TabIndex = 44
@@ -601,7 +607,7 @@ Partial Class frmMain
         Me.chkBrowser.AutoSize = True
         Me.chkBrowser.Checked = True
         Me.chkBrowser.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkBrowser.Location = New System.Drawing.Point(1140, 117)
+        Me.chkBrowser.Location = New System.Drawing.Point(710, 116)
         Me.chkBrowser.Name = "chkBrowser"
         Me.chkBrowser.Size = New System.Drawing.Size(96, 16)
         Me.chkBrowser.TabIndex = 45
@@ -610,6 +616,7 @@ Partial Class frmMain
         '
         'btnOnlySellBuyAll
         '
+        Me.btnOnlySellBuyAll.Enabled = False
         Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(553, 40)
         Me.btnOnlySellBuyAll.Name = "btnOnlySellBuyAll"
         Me.btnOnlySellBuyAll.Size = New System.Drawing.Size(95, 26)
@@ -617,12 +624,22 @@ Partial Class frmMain
         Me.btnOnlySellBuyAll.Text = "전종목순매수"
         Me.btnOnlySellBuyAll.UseVisualStyleBackColor = True
         '
+        'btnStockCompanySort
+        '
+        Me.btnStockCompanySort.Location = New System.Drawing.Point(747, 39)
+        Me.btnStockCompanySort.Name = "btnStockCompanySort"
+        Me.btnStockCompanySort.Size = New System.Drawing.Size(147, 27)
+        Me.btnStockCompanySort.TabIndex = 47
+        Me.btnStockCompanySort.Text = "증권사별매매상위요청"
+        Me.btnStockCompanySort.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.Controls.Add(Me.btnStockCompanySort)
         Me.Controls.Add(Me.btnOnlySellBuyAll)
         Me.Controls.Add(Me.chkBrowser)
         Me.Controls.Add(Me.txtChartCount)
@@ -754,4 +771,5 @@ Partial Class frmMain
     Friend WithEvents txtChartCount As System.Windows.Forms.TextBox
     Friend WithEvents chkBrowser As System.Windows.Forms.CheckBox
     Friend WithEvents btnOnlySellBuyAll As System.Windows.Forms.Button
+    Friend WithEvents btnStockCompanySort As System.Windows.Forms.Button
 End Class
