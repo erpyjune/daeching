@@ -507,7 +507,7 @@
         Dim f As New System.IO.StreamWriter(FILE_NAME, True)
 
         f.WriteLine("<html>")
-        f.WriteLine("<meta http-equiv=""refresh"" content=""30"" />")
+        'f.WriteLine("<meta http-equiv=""refresh"" content=""30"" />")
         f.WriteLine("<head>")
         f.WriteLine("<script src=""http://code.jquery.com/jquery-latest.js""></script>")
         f.WriteLine("<script src=""https://code.highcharts.com/stock/highstock.js""></script>")

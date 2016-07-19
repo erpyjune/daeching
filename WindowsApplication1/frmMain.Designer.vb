@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -75,7 +75,6 @@ Partial Class frmMain
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtAnalEndDate = New System.Windows.Forms.TextBox()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.btnTodayCompany = New System.Windows.Forms.Button()
         Me.chkRefresh = New System.Windows.Forms.CheckBox()
@@ -95,6 +94,12 @@ Partial Class frmMain
         Me.chkBrowser = New System.Windows.Forms.CheckBox()
         Me.btnOnlySellBuyAll = New System.Windows.Forms.Button()
         Me.btnStockCompanySort = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.btnMinBong = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
+        Me.lstInfo = New System.Windows.Forms.ListBox()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -396,21 +401,21 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend3)
+        ChartArea4.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea4)
+        Legend4.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend4)
         Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
-        Me.chartStock.Size = New System.Drawing.Size(980, 630)
+        Me.chartStock.Size = New System.Drawing.Size(518, 184)
         Me.chartStock.TabIndex = 23
         Me.chartStock.Text = "Stock"
         '
         'Button1
         '
         Me.Button1.Enabled = False
-        Me.Button1.Location = New System.Drawing.Point(773, 12)
+        Me.Button1.Location = New System.Drawing.Point(654, 11)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(97, 27)
         Me.Button1.TabIndex = 24
@@ -420,7 +425,6 @@ Partial Class frmMain
         'btnAnalBetween
         '
         Me.btnAnalBetween.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.btnAnalBetween.Enabled = False
         Me.btnAnalBetween.Location = New System.Drawing.Point(654, 39)
         Me.btnAnalBetween.Name = "btnAnalBetween"
         Me.btnAnalBetween.Size = New System.Drawing.Size(87, 27)
@@ -461,16 +465,6 @@ Partial Class frmMain
         Me.txtAnalEndDate.Size = New System.Drawing.Size(69, 21)
         Me.txtAnalEndDate.TabIndex = 28
         '
-        'Button2
-        '
-        Me.Button2.Enabled = False
-        Me.Button2.Location = New System.Drawing.Point(654, 12)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(113, 27)
-        Me.Button2.TabIndex = 30
-        Me.Button2.Text = "Test"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
         'Button3
         '
         Me.Button3.Location = New System.Drawing.Point(13, 166)
@@ -483,9 +477,9 @@ Partial Class frmMain
         'btnTodayCompany
         '
         Me.btnTodayCompany.Enabled = False
-        Me.btnTodayCompany.Location = New System.Drawing.Point(970, 10)
+        Me.btnTodayCompany.Location = New System.Drawing.Point(848, 12)
         Me.btnTodayCompany.Name = "btnTodayCompany"
-        Me.btnTodayCompany.Size = New System.Drawing.Size(109, 29)
+        Me.btnTodayCompany.Size = New System.Drawing.Size(109, 26)
         Me.btnTodayCompany.TabIndex = 32
         Me.btnTodayCompany.Text = "당일주요거래원"
         Me.btnTodayCompany.UseVisualStyleBackColor = True
@@ -506,7 +500,7 @@ Partial Class frmMain
         'btnTimer
         '
         Me.btnTimer.Enabled = False
-        Me.btnTimer.Location = New System.Drawing.Point(877, 12)
+        Me.btnTimer.Location = New System.Drawing.Point(755, 11)
         Me.btnTimer.Name = "btnTimer"
         Me.btnTimer.Size = New System.Drawing.Size(87, 27)
         Me.btnTimer.TabIndex = 34
@@ -572,7 +566,7 @@ Partial Class frmMain
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(532, 178)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(979, 18)
+        Me.ProgressBar1.Size = New System.Drawing.Size(740, 18)
         Me.ProgressBar1.TabIndex = 41
         '
         'Button5
@@ -616,8 +610,7 @@ Partial Class frmMain
         '
         'btnOnlySellBuyAll
         '
-        Me.btnOnlySellBuyAll.Enabled = False
-        Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(553, 40)
+        Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(1170, 137)
         Me.btnOnlySellBuyAll.Name = "btnOnlySellBuyAll"
         Me.btnOnlySellBuyAll.Size = New System.Drawing.Size(95, 26)
         Me.btnOnlySellBuyAll.TabIndex = 46
@@ -626,6 +619,7 @@ Partial Class frmMain
         '
         'btnStockCompanySort
         '
+        Me.btnStockCompanySort.Enabled = False
         Me.btnStockCompanySort.Location = New System.Drawing.Point(747, 39)
         Me.btnStockCompanySort.Name = "btnStockCompanySort"
         Me.btnStockCompanySort.Size = New System.Drawing.Size(147, 27)
@@ -633,12 +627,74 @@ Partial Class frmMain
         Me.btnStockCompanySort.Text = "증권사별매매상위요청"
         Me.btnStockCompanySort.UseVisualStyleBackColor = True
         '
+        'Button7
+        '
+        Me.Button7.Location = New System.Drawing.Point(175, 97)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(80, 20)
+        Me.Button7.TabIndex = 48
+        Me.Button7.Text = "주식상태"
+        Me.Button7.UseVisualStyleBackColor = True
+        '
+        'btnMinBong
+        '
+        Me.btnMinBong.Location = New System.Drawing.Point(1185, 48)
+        Me.btnMinBong.Name = "btnMinBong"
+        Me.btnMinBong.Size = New System.Drawing.Size(88, 26)
+        Me.btnMinBong.TabIndex = 49
+        Me.btnMinBong.Text = "분봉조회"
+        Me.btnMinBong.UseVisualStyleBackColor = True
+        '
+        'Button8
+        '
+        Me.Button8.BackColor = System.Drawing.SystemColors.HotTrack
+        Me.Button8.ForeColor = System.Drawing.SystemColors.Window
+        Me.Button8.Location = New System.Drawing.Point(564, 97)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(70, 26)
+        Me.Button8.TabIndex = 50
+        Me.Button8.Text = "중단"
+        Me.Button8.UseVisualStyleBackColor = False
+        '
+        'lstInfo
+        '
+        Me.lstInfo.FormattingEnabled = True
+        Me.lstInfo.ItemHeight = 12
+        Me.lstInfo.Location = New System.Drawing.Point(1058, 206)
+        Me.lstInfo.Name = "lstInfo"
+        Me.lstInfo.Size = New System.Drawing.Size(214, 172)
+        Me.lstInfo.TabIndex = 51
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(553, 40)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(95, 26)
+        Me.Button2.TabIndex = 52
+        Me.Button2.Text = "시작점"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.Location = New System.Drawing.Point(963, 12)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(96, 25)
+        Me.Button9.TabIndex = 53
+        Me.Button9.Text = "몇일뒤날짜"
+        Me.Button9.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
-        Me.ClientSize = New System.Drawing.Size(1523, 837)
+        Me.ClientSize = New System.Drawing.Size(1277, 837)
+        Me.Controls.Add(Me.Button9)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.lstInfo)
+        Me.Controls.Add(Me.Button8)
+        Me.Controls.Add(Me.btnMinBong)
+        Me.Controls.Add(Me.Button7)
         Me.Controls.Add(Me.btnStockCompanySort)
         Me.Controls.Add(Me.btnOnlySellBuyAll)
         Me.Controls.Add(Me.chkBrowser)
@@ -656,7 +712,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.chkRefresh)
         Me.Controls.Add(Me.btnTodayCompany)
         Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.txtAnalEndDate)
         Me.Controls.Add(Me.Label8)
@@ -752,7 +807,6 @@ Partial Class frmMain
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents txtAnalEndDate As System.Windows.Forms.TextBox
-    Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents btnTodayCompany As System.Windows.Forms.Button
     Friend WithEvents chkRefresh As System.Windows.Forms.CheckBox
@@ -772,4 +826,10 @@ Partial Class frmMain
     Friend WithEvents chkBrowser As System.Windows.Forms.CheckBox
     Friend WithEvents btnOnlySellBuyAll As System.Windows.Forms.Button
     Friend WithEvents btnStockCompanySort As System.Windows.Forms.Button
+    Friend WithEvents Button7 As System.Windows.Forms.Button
+    Friend WithEvents btnMinBong As System.Windows.Forms.Button
+    Friend WithEvents Button8 As System.Windows.Forms.Button
+    Friend WithEvents lstInfo As System.Windows.Forms.ListBox
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Button9 As System.Windows.Forms.Button
 End Class

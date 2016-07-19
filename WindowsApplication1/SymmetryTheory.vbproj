@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="StockSellBuyInfoMain.vb" />
     <Compile Include="StockSellBuyInfoSub.vb" />
+    <Compile Include="StockValueInfo.vb" />
     <Compile Include="StoreClass.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -72,4 +72,18 @@
 
     End Function
 
+    Function getBeforeAfterDate(ByVal val As Integer)
+        Dim strStartDate As String
+        Dim strStartY As String, strStartM As String, strStartD As String
+
+        strStartY = frmMain.txtEndDate1.Text.Substring(0, 4)
+        strStartM = frmMain.txtEndDate1.Text.Substring(4, 2)
+        strStartD = frmMain.txtEndDate1.Text.Substring(6, 2)
+        Dim startDate As DateTime = New DateTime(CInt(strStartY), CInt(strStartM), CInt(strStartD))
+        startDate = startDate.AddDays(val)
+        strStartDate = startDate.Year.ToString + checkMonthDay(CInt(startDate.Month.ToString)) + checkMonthDay(CInt(startDate.Day.ToString))
+
+        Return strStartDate
+    End Function
+
 End Module
