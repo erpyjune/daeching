@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -100,6 +100,9 @@ Partial Class frmMain
         Me.lstInfo = New System.Windows.Forms.ListBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button12 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -401,10 +404,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend4)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend3)
         Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -683,12 +686,42 @@ Partial Class frmMain
         Me.Button9.Text = "몇일뒤날짜"
         Me.Button9.UseVisualStyleBackColor = True
         '
+        'Button10
+        '
+        Me.Button10.Location = New System.Drawing.Point(537, 431)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(97, 33)
+        Me.Button10.TabIndex = 54
+        Me.Button10.Text = "실시간종목"
+        Me.Button10.UseVisualStyleBackColor = True
+        '
+        'Button11
+        '
+        Me.Button11.Location = New System.Drawing.Point(640, 431)
+        Me.Button11.Name = "Button11"
+        Me.Button11.Size = New System.Drawing.Size(79, 32)
+        Me.Button11.TabIndex = 55
+        Me.Button11.Text = "API"
+        Me.Button11.UseVisualStyleBackColor = True
+        '
+        'Button12
+        '
+        Me.Button12.Location = New System.Drawing.Point(725, 431)
+        Me.Button12.Name = "Button12"
+        Me.Button12.Size = New System.Drawing.Size(88, 32)
+        Me.Button12.TabIndex = 56
+        Me.Button12.Text = "종목정보"
+        Me.Button12.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(1277, 837)
+        Me.Controls.Add(Me.Button12)
+        Me.Controls.Add(Me.Button11)
+        Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.Button9)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.lstInfo)
@@ -832,4 +865,7 @@ Partial Class frmMain
     Friend WithEvents lstInfo As System.Windows.Forms.ListBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button9 As System.Windows.Forms.Button
+    Friend WithEvents Button10 As System.Windows.Forms.Button
+    Friend WithEvents Button11 As System.Windows.Forms.Button
+    Friend WithEvents Button12 As System.Windows.Forms.Button
 End Class

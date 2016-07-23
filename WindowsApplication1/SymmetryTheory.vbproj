@@ -104,6 +104,18 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmAPI.Designer.vb">
+      <DependentUpon>frmAPI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAPI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStartPoint.Designer.vb">
+      <DependentUpon>frmStartPoint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmStartPoint.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GoogleChartClass.vb" />
     <Compile Include="frmChart.Designer.vb">
       <DependentUpon>frmChart.vb</DependentUpon>
@@ -134,17 +146,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="StartPointInfo.vb" />
     <Compile Include="StockSellBuyInfoMain.vb" />
     <Compile Include="StockSellBuyInfoSub.vb" />
     <Compile Include="StockValueInfo.vb" />
     <Compile Include="StoreClass.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmAPI.resx">
+      <DependentUpon>frmAPI.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmChart.resx">
       <DependentUpon>frmChart.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStartPoint.resx">
+      <DependentUpon>frmStartPoint.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
