@@ -32,15 +32,20 @@ Partial Class frmStartPoint
         Me.주포2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.주포3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
+        Me.상장주식수 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.시가총액 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.영업이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.당기순이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lstViewStartPoint
         '
-        Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3})
+        Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3, Me.상장주식수, Me.시가총액, Me.영업이익, Me.당기순이익})
+        Me.lstViewStartPoint.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lstViewStartPoint.Location = New System.Drawing.Point(9, 60)
         Me.lstViewStartPoint.Name = "lstViewStartPoint"
-        Me.lstViewStartPoint.Size = New System.Drawing.Size(1235, 572)
+        Me.lstViewStartPoint.Size = New System.Drawing.Size(1022, 414)
         Me.lstViewStartPoint.TabIndex = 0
         Me.lstViewStartPoint.UseCompatibleStateImageBehavior = False
         Me.lstViewStartPoint.View = System.Windows.Forms.View.Details
@@ -63,7 +68,7 @@ Partial Class frmStartPoint
         '종목상태
         '
         Me.종목상태.Text = "종목상태"
-        Me.종목상태.Width = 177
+        Me.종목상태.Width = 169
         '
         '주포1
         '
@@ -83,17 +88,35 @@ Partial Class frmStartPoint
         'KHOpenAPI
         '
         Me.KHOpenAPI.Enabled = True
-        Me.KHOpenAPI.Location = New System.Drawing.Point(1158, 12)
+        Me.KHOpenAPI.Location = New System.Drawing.Point(686, 21)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
         Me.KHOpenAPI.Size = New System.Drawing.Size(66, 20)
         Me.KHOpenAPI.TabIndex = 1
         '
+        '상장주식수
+        '
+        Me.상장주식수.Text = "상장주식수"
+        Me.상장주식수.Width = 76
+        '
+        '시가총액
+        '
+        Me.시가총액.Text = "시가총액"
+        '
+        '영업이익
+        '
+        Me.영업이익.Text = "영업이익"
+        '
+        '당기순이익
+        '
+        Me.당기순이익.Text = "당기순이익"
+        Me.당기순이익.Width = 80
+        '
         'frmStartPoint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1251, 638)
+        Me.ClientSize = New System.Drawing.Size(1033, 480)
         Me.Controls.Add(Me.KHOpenAPI)
         Me.Controls.Add(Me.lstViewStartPoint)
         Me.Name = "frmStartPoint"
@@ -111,4 +134,8 @@ Partial Class frmStartPoint
     Friend WithEvents 주포2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents 주포3 As System.Windows.Forms.ColumnHeader
     Public WithEvents KHOpenAPI As AxKHOpenAPILib.AxKHOpenAPI
+    Friend WithEvents 상장주식수 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 시가총액 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 영업이익 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 당기순이익 As System.Windows.Forms.ColumnHeader
 End Class

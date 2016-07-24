@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -103,6 +103,7 @@ Partial Class frmMain
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button12 = New System.Windows.Forms.Button()
+        Me.Button13 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -404,10 +405,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend3)
+        ChartArea2.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend2)
         Me.chartStock.Location = New System.Drawing.Point(531, 203)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -713,12 +714,22 @@ Partial Class frmMain
         Me.Button12.Text = "종목정보"
         Me.Button12.UseVisualStyleBackColor = True
         '
+        'Button13
+        '
+        Me.Button13.Location = New System.Drawing.Point(824, 431)
+        Me.Button13.Name = "Button13"
+        Me.Button13.Size = New System.Drawing.Size(100, 31)
+        Me.Button13.TabIndex = 57
+        Me.Button13.Text = "주식기본정보"
+        Me.Button13.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
-        Me.ClientSize = New System.Drawing.Size(1277, 837)
+        Me.ClientSize = New System.Drawing.Size(1277, 741)
+        Me.Controls.Add(Me.Button13)
         Me.Controls.Add(Me.Button12)
         Me.Controls.Add(Me.Button11)
         Me.Controls.Add(Me.Button10)
@@ -868,4 +879,5 @@ Partial Class frmMain
     Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents Button12 As System.Windows.Forms.Button
+    Friend WithEvents Button13 As System.Windows.Forms.Button
 End Class

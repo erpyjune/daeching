@@ -77,7 +77,7 @@
   <ItemGroup>
     <Reference Include="AxInterop.KHOpenAPILib, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\주식\OpenAPI\kiwoom\KHOpenApiLib\AxInterop.KHOpenAPILib.dll</HintPath>
+      <HintPath>.\AxInterop.KHOpenAPILib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -147,6 +147,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="StartPointInfo.vb" />
+    <Compile Include="StockBizInfo.vb" />
     <Compile Include="StockSellBuyInfoMain.vb" />
     <Compile Include="StockSellBuyInfoSub.vb" />
     <Compile Include="StockValueInfo.vb" />

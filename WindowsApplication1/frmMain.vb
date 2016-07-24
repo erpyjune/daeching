@@ -557,6 +557,39 @@ Public Class frmMain
         Application.DoEvents()
 
     End Sub
+    Private Sub trProcStockInfo(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+        Dim nCnt As Short, i As Short
+        Dim strItemValue As String
+        Dim lTotalOnlyBuy As Long = 0
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
+        For i = 0 To (nCnt - 1)
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "종목코드"))
+            Console.WriteLine("종목코드 : " + strItemValue)
+            lstInfo.Items.Add("종목코드 : " + strItemValue)
+
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "종목명"))
+            Console.WriteLine("종목명 : " + strItemValue)
+            lstInfo.Items.Add("종목명 : " + strItemValue)
+
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "상장주식"))
+            Console.WriteLine("상장주식 : " + strItemValue)
+            lstInfo.Items.Add("상장주식 : " + strItemValue)
+
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시가총액"))
+            Console.WriteLine("시가총액 : " + strItemValue)
+            lstInfo.Items.Add("시가총액 : " + strItemValue)
+
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "영업이익"))
+            Console.WriteLine("영업이익 : " + strItemValue)
+            lstInfo.Items.Add("영업이익 : " + strItemValue)
+
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "당기순이익"))
+            Console.WriteLine("당기순이익 : " + strItemValue)
+            lstInfo.Items.Add("당기순이익 : " + strItemValue)
+
+        Next
+    End Sub
 
     Private Sub trProcBunBong(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim nCnt As Short, i As Short
@@ -1113,6 +1146,10 @@ Public Class frmMain
             Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
         ElseIf eventArgs.sRQName = "주식분봉차트조회요청" Then
             Call trProcBunBong(sender, eventArgs)
+            KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
+            Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
+        ElseIf eventArgs.sRQName = "주식기본정보테스트" Then
+            Call trProcStockInfo(sender, eventArgs)
             KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
             Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
         End If
@@ -2025,5 +2062,10 @@ Public Class frmMain
         Dim msg As String
         msg = KHOpenAPI.GetMasterStockState(Trim(txtStockCode.Text))
         MsgBox(msg)
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        KHOpenAPI.SetInputValue("종목코드", txtStockCode.Text)
+        KHOpenAPI.CommRqData("주식기본정보테스트", "opt10001", "0", 1000)
     End Sub
 End Class
