@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Windows.Forms.DataVisualization.Charting.Chart
+Imports System.IO.StreamWriter
 'Imports System.String
 
 Public Class frmMain
@@ -1739,12 +1740,19 @@ Public Class frmMain
 
         '// 임시 해시테이블을 이용해서 hash value로 정렬한다.
         lstSortedOnlyBuyStockAll = GlobalDefine.sortHashtable(hashTemp)
+
         '// 정렬된 list 순으로 값을 찍어라
+        '// 파일로도 남긴다.
+        Dim file As System.IO.StreamWriter
+        file = My.Computer.FileSystem.OpenTextFileWriter("c:\temp\daeching\SunMaeDoSort.txt", True)
         lstInfo.Items.Clear()
         For Each _sStockName In lstSortedOnlyBuyStockAll
             lstInfo.Items.Add(_sStockName + ", " + CStr(gHashOnlyBuyValueAllStock(_sStockName)))
             Console.WriteLine("{0}, {1}", _sStockName, gHashOnlyBuyValueAllStock(_sStockName))
+            file.WriteLine("{0}, {1}", _sStockName, gHashOnlyBuyValueAllStock(_sStockName))
         Next
+
+        file.Close()
 
     End Sub
 
