@@ -1926,7 +1926,6 @@ Public Class frmMain
         Console.WriteLine("============================================")
         Console.WriteLine("============================================")
 
-        Dim nStartPer As Integer, nEndPer As Integer
         Dim hashTodayStartEndValue As New Hashtable
         Dim stockVInfo As StockValueInfo
         Dim stockValueInfo As New StockValueInfo
@@ -1981,68 +1980,8 @@ Public Class frmMain
 
         Next '// next for
 
+        '// 새창으로 시작점 계산 후 보여준다.
         frmStartPoint.Show()
-
-
-        ''// 종목별 시작점 리스트를 돌면서 오늘 주가 비교
-        'For Each stockStartValue In listSijackStockValueInfo
-        '    stockTodayValue = hashTodayStartEndValue(stockStartValue.getName)
-
-        '    nStartPer = 200
-        '    nEndPer = 200
-
-        '    If stockStartValue.getStartV >= stockTodayValue.getEndV Then
-        '        nStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
-        '    ElseIf stockStartValue.getStartV < stockTodayValue.getEndV Then
-        '        nStartPer = stockTodayValue.getEndV / stockStartValue.getStartV * 100
-        '    End If
-
-        '    If stockStartValue.getEndV >= stockTodayValue.getEndV Then
-        '        nEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
-        '    ElseIf stockStartValue.getEndV < stockTodayValue.getEndV Then
-        '        nEndPer = stockTodayValue.getEndV / stockStartValue.getEndV * 100
-        '    End If
-
-        '    'Console.WriteLine(" 종목 {0}, 시작점날짜 {1}. 시작점 시가 {2}, 시작점 종가 {3}", stockStartValue.getName, stockStartValue.getCurDate, stockStartValue.getStartV, stockStartValue.getEndV)
-        '    'Console.WriteLine("T종목 {0}, 시작점날짜 {1}. 오늘 종가 {2}", stockTodayValue.getName, stockTodayValue.getCurDate, stockTodayValue.getEndV)
-        '    'Console.WriteLine("start per {0}, end per {1}", nStartPer, nEndPer)
-
-        '    If nStartPer <= 101 Then
-        '        Console.WriteLine("근처 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '    End If
-
-        '    If nEndPer <= 101 Then
-        '        Console.WriteLine("근처 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '    End If
-
-        '    '/////////////////////////////////////////////////////////
-        '    '// 오늘 시작, 종가가 시작가를 상향돌파
-        '    If stockTodayValue.getStartV < stockTodayValue.getEndV Then
-        '        If stockStartValue.getStartV >= stockTodayValue.getStartV And stockStartValue.getStartV <= stockTodayValue.getEndV Then
-        '            Console.WriteLine("시작점 돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '        End If
-
-        '        If stockStartValue.getEndV >= stockTodayValue.getStartV And stockStartValue.getEndV <= stockTodayValue.getEndV Then
-        '            Console.WriteLine("시작점 돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '        End If
-
-        '    End If
-
-        '    '/////////////////////////////////////////////////////////
-        '    '// 오늘 시작, 종가가 시작가를 하향돌파
-        '    If stockTodayValue.getEndV < stockTodayValue.getStartV Then
-        '        If stockStartValue.getStartV <= stockTodayValue.getStartV And stockStartValue.getStartV >= stockTodayValue.getEndV Then
-        '            Console.WriteLine("시작점 하향돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '        End If
-
-        '        If stockStartValue.getEndV <= stockTodayValue.getStartV And stockStartValue.getEndV >= stockTodayValue.getEndV Then
-        '            Console.WriteLine("시작점 하향돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-        '        End If
-
-        '    End If
-
-        '    'Console.WriteLine("startPer : {0}, endPer : {1}", nStartPer, nEndPer)
-        'Next
 
     End Sub
 

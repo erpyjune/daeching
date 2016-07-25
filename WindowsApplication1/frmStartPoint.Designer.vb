@@ -36,6 +36,7 @@ Partial Class frmStartPoint
         Me.영업이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.당기순이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -43,9 +44,9 @@ Partial Class frmStartPoint
         '
         Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3, Me.상장주식수, Me.시가총액, Me.영업이익, Me.당기순이익})
         Me.lstViewStartPoint.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstViewStartPoint.Location = New System.Drawing.Point(9, 25)
+        Me.lstViewStartPoint.Location = New System.Drawing.Point(9, 52)
         Me.lstViewStartPoint.Name = "lstViewStartPoint"
-        Me.lstViewStartPoint.Size = New System.Drawing.Size(1022, 449)
+        Me.lstViewStartPoint.Size = New System.Drawing.Size(1022, 422)
         Me.lstViewStartPoint.TabIndex = 0
         Me.lstViewStartPoint.UseCompatibleStateImageBehavior = False
         Me.lstViewStartPoint.View = System.Windows.Forms.View.Details
@@ -112,11 +113,19 @@ Partial Class frmStartPoint
         Me.KHOpenAPI.Size = New System.Drawing.Size(66, 20)
         Me.KHOpenAPI.TabIndex = 1
         '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(9, 21)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(1022, 25)
+        Me.ProgressBar1.TabIndex = 2
+        '
         'frmStartPoint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1033, 480)
+        Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.KHOpenAPI)
         Me.Controls.Add(Me.lstViewStartPoint)
         Me.Name = "frmStartPoint"
@@ -138,4 +147,5 @@ Partial Class frmStartPoint
     Friend WithEvents 시가총액 As System.Windows.Forms.ColumnHeader
     Friend WithEvents 영업이익 As System.Windows.Forms.ColumnHeader
     Friend WithEvents 당기순이익 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
 End Class

@@ -23,7 +23,6 @@
     End Sub
     Private Sub frmStartPoint_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         KHOpenAPI = frmMain.getAPI
-
         Call printStartPoint()
     End Sub
     Sub printStartPoint()
@@ -50,6 +49,22 @@
         gListStartPointLow.Clear() '// 하향 돌파
         gListStartPointNear.Clear() '// 근처
 
+        '// progress bar를 위해서 미리 처리할 개수를 count 한다.
+        Dim nProgressCount As Integer = 0
+        gHashSijaMainKeys = frmMain.getHashSijaMain().Keys
+        For Each key In gHashSijaMainKeys
+            listStockValueInfo = frmMain.getHashSijaMainData(key.ToString)
+            For Each stockValueInfo In listStockValueInfo
+                nProgressCount += 1
+            Next
+        Next
+
+        '// progress bar 초기화
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = nProgressCount
+        Dim nProgressValue As Integer = 0
+
+        '// 시작점 찾기
         gHashSijaMainKeys = frmMain.getHashSijaMain().Keys
         For Each key In gHashSijaMainKeys
             listStockValueInfo = frmMain.getHashSijaMainData(key.ToString)
@@ -61,11 +76,16 @@
                 End If
 
                 '// 오늘 주가 정보 저장 - 오늘 시작점 위치인것 찾을때 사용
-                If "20160722" = Trim(stockValueInfo.getCurDate) Then
+                If "20160725" = Trim(stockValueInfo.getCurDate) Then
                     stockVInfo = New StockValueInfo
                     stockVInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
                     hashTodayStartEndValue.Add(stockValueInfo.getName, stockVInfo)
                 End If
+
+                '// progress bar add
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                Application.DoEvents()
                 'Console.WriteLine("{0},{1},{2},{3},{4}", key.ToString, stockValueInfo.getCurDate, stockValueInfo.getTradeV, stockValueInfo.getStartV, stockValueInfo.getEndV)
             Next
             '// 찾은 시작점 list에 추가.
@@ -89,6 +109,11 @@
             MsgBox("시작점 데이터를 찾지 못했습니다.")
             Return
         End If
+
+        '// progress bar 초기화
+        nProgressValue = 0
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = listSijackStockValueInfo.Count
 
         Dim nPrintCount As Integer = 0
         Dim sName As String
@@ -201,6 +226,8 @@
             Next
 
             nPrintCount += 1
+            nProgressValue += 1
+            ProgressBar1.Value = nProgressValue
 
         Loop
 
