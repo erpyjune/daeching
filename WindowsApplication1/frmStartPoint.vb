@@ -3,19 +3,32 @@
     Dim gHashScreenStock As New Hashtable
     Dim gHashCompanyOnlyBuy As New Hashtable '// 종목별 1포, 2포, 3포 순매수 저장
     Dim gHashCompanyBizInfo As New Hashtable '// 상장주식수, 영업이익, 순이익, 매출
-    Dim gHashStockTable As New Hashtable
-    Dim gListStartPointHigh As New List(Of StartPointInfo)
-    Dim gListStartPointLow As New List(Of StartPointInfo)
-    Dim gListStartPointHighNear As New List(Of StartPointInfo)
-    Dim gListStartPointLowNear As New List(Of StartPointInfo)
+    Dim gHashStockTable As New Hashtable        '// 주식 종목 테이블
     Dim gSendCount As Integer
     Dim gRecvCount As Integer
+    Dim gHashStockStatus As New Hashtable       '// 종목별 상태값 저장
 
+    'Dim gListStartPointHighOver As New List(Of StartPointInfo)  '// 오늘 종가가 시작점 상대 위에
+    'Dim gListStartPointLowOver As New List(Of StartPointInfo)   '// 오늘 종가가 시작점 하대 위에
+    'Dim gListStartPointHigh As New List(Of StartPointInfo)      '// 오늘 종가가 시작점 상향 돌파
+    'Dim gListStartPointLow As New List(Of StartPointInfo)       '// 오늘 종가가 시작점 하향 돌파
+    'Dim gListStartPointHighNear As New List(Of StartPointInfo)  '// 오늘 종가가 시작점 상대 근처
+    'Dim gListStartPointLowNear As New List(Of StartPointInfo)   '// 오늘 종가가 시작점 하대 근처
+
+    Dim gListSPHadaeNear As New List(Of StartPointInfo)      '// 하대 근접
+    Dim gListSPHadaeSurpass As New List(Of StartPointInfo)   '// 하대 돌파
+    Dim gListSPHadeaDrop As New List(Of StartPointInfo)      '// 하대 하향
+    Dim gListSPSangdaeNear As New List(Of StartPointInfo)    '// 상대 근접
+    Dim gListSPSangdaeSurpass As New List(Of StartPointInfo) '// 상대 돌파
+    Dim gListSPSangdaeOver As New List(Of StartPointInfo)    '// 상대 이상
+    Dim gListSPSangdaeDrop As New List(Of StartPointInfo)    '// 상대 하향
+    Dim gListSPSangHaSurpass As New List(Of StartPointInfo)  '// 대박 돌파 
+    Dim gListSPSangHaDrop As New List(Of StartPointInfo)     '// 대박 하향
     Sub requestTROnlyBuy(ByVal stockCode As String, ByVal screenNo As Integer)
         KHOpenAPI.SetInputValue("종목코드", Trim(stockCode))
         KHOpenAPI.SetInputValue("조회구분", "0")
         KHOpenAPI.SetInputValue("시작일자", "20160101")
-        KHOpenAPI.SetInputValue("종료일자", "20160722")
+        KHOpenAPI.SetInputValue("종료일자", frmMain.txtEndDate1.Text)
         KHOpenAPI.CommRqData("시작점종목별증권사순위", "OPT10038", CInt("0"), CStr(screenNo))
     End Sub
     Sub requestTRStockInfo(ByVal stockCode As String, ByVal screenNo As Integer)
@@ -24,10 +37,12 @@
     End Sub
     Private Sub frmStartPoint_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         KHOpenAPI = frmMain.getAPI
-        Call printStartPoint()
+
+        gHashStockTable = frmMain.getStockCodeTable
+
     End Sub
-    Sub printStartPoint()
-        Dim nStartPer As Integer, nEndPer As Integer
+    Sub printStartPoint2()
+        Dim fStartPer As Single, fEndPer As Single
         Dim hashTodayStartEndValue As New Hashtable
         Dim hashPrintedStock As New Hashtable
         Dim stockVInfo As StockValueInfo
@@ -40,16 +55,24 @@
         Dim listSijackStockValueInfo As New List(Of StockValueInfo)()
         Dim gHashSijaMainKeys As ICollection
         Dim nMaxTV As Integer
-
+        Dim stockCode As String
+        Dim sMsg As String
+        Dim nTotalFindedStartPointStock As Integer = 0
+        Dim stockCodeTable As New Hashtable
 
         '/////////////////////////////////////////////////////////////////////////////////////////////
         '// 시작점 찾기
         '/////////////////////////////////////////////////////////////////////////////////////////////
-
-        gListStartPointHigh.Clear() '// 상향 돌파
-        gListStartPointLow.Clear() '// 하향 돌파
-        gListStartPointHighNear.Clear() '// 상대가리 근처
-        gListStartPointLowNear.Clear() '// 하대가리 근처
+        gListSPHadaeNear.Clear()
+        gListSPHadaeSurpass.Clear()
+        gListSPHadeaDrop.Clear()
+        gListSPSangdaeDrop.Clear()
+        gListSPSangdaeNear.Clear()
+        gListSPSangdaeOver.Clear()
+        gListSPSangdaeSurpass.Clear()
+        gListSPSangHaSurpass.Clear()
+        gListSPSangHaDrop.Clear()
+        gHashStockStatus.Clear()
 
 
         '// progress bar를 위해서 미리 처리할 개수를 count 한다.
@@ -67,19 +90,21 @@
         ProgressBar1.Maximum = nProgressCount
         Dim nProgressValue As Integer = 0
 
-        '// 시작점 찾기
+        '// 시작점을 찾고, 오늘 주가의 시가, 종가를 저장한다
+        lbMsg1.Text = "시작점 찾는 중..."
         gHashSijaMainKeys = frmMain.getHashSijaMain().Keys
         For Each key In gHashSijaMainKeys
             listStockValueInfo = frmMain.getHashSijaMainData(key.ToString)
             nMaxTV = 0
             For Each stockValueInfo In listStockValueInfo
+
                 If nMaxTV < stockValueInfo.getTradeV Then
                     maxStockValueInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
                     nMaxTV = stockValueInfo.getTradeV
                 End If
 
                 '// 오늘 주가 정보 저장 - 오늘 시작점 위치인것 찾을때 사용
-                If "20160725" = Trim(stockValueInfo.getCurDate) Then
+                If frmMain.txtSPToday.Text = stockValueInfo.getCurDate Then
                     stockVInfo = New StockValueInfo
                     stockVInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
                     hashTodayStartEndValue.Add(stockValueInfo.getName, stockVInfo)
@@ -88,26 +113,44 @@
                 '// progress bar add
                 nProgressValue += 1
                 ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = stockValueInfo.getName
                 Application.DoEvents()
                 'Console.WriteLine("{0},{1},{2},{3},{4}", key.ToString, stockValueInfo.getCurDate, stockValueInfo.getTradeV, stockValueInfo.getStartV, stockValueInfo.getEndV)
             Next
-            '// 찾은 시작점 list에 추가.
-            stockVInfo = New StockValueInfo
-            stockVInfo.setStockValue(maxStockValueInfo.getCurDate, maxStockValueInfo.getStartV, maxStockValueInfo.getEndV, maxStockValueInfo.getTradeV, maxStockValueInfo.getName, "")
-            listSijackStockValueInfo.Add(stockVInfo)
+
+            '// 종목에 대한 정보를 api를 통해서 가져와서 저장.
+            stockCodeTable = frmMain.getStockCodeTable
+            stockCode = stockCodeTable(stockValueInfo.getName)
+            If stockCode <> Nothing Then
+                If gHashStockStatus.Contains(stockValueInfo.getName) = False Then
+                    sMsg = KHOpenAPI.GetMasterStockState(stockCode)
+                    gHashStockStatus.Add(stockValueInfo.getName, sMsg)
+
+                    '// 찾은 시작점 list에 추가.
+                    stockVInfo = New StockValueInfo
+                    stockVInfo.setStockValue(maxStockValueInfo.getCurDate, maxStockValueInfo.getStartV, maxStockValueInfo.getEndV, maxStockValueInfo.getTradeV, maxStockValueInfo.getName, "")
+                    listSijackStockValueInfo.Add(stockVInfo)
+                    Console.WriteLine("{0} {1}", stockValueInfo.getName, sMsg)
+                End If
+            Else
+                '// 정보없는 종목은 삭제한다. 주식 정보가 없기 때문에 이상한 종목임.
+                hashTodayStartEndValue.Remove(stockValueInfo.getName)
+                Console.WriteLine("종목코드없음:" + stockValueInfo.getName)
+            End If
+
+            ''// 찾은 시작점 list에 추가.
+            'stockVInfo = New StockValueInfo
+            'stockVInfo.setStockValue(maxStockValueInfo.getCurDate, maxStockValueInfo.getStartV, maxStockValueInfo.getEndV, maxStockValueInfo.getTradeV, maxStockValueInfo.getName, "")
+            'listSijackStockValueInfo.Add(stockVInfo)
         Next
 
+        Console.WriteLine("================================================================")
         Console.WriteLine("===================== 종목별 시작점 날짜 =======================")
         Console.WriteLine("================================================================")
-        Console.WriteLine("================================================================")
-
 
         '// 동일 종목을 계산하지 않음.
         hashPrintedStock.Clear()
 
-        '////////////////////////////////////////////////////////////////////
-        '// 시작점 근처 종목 프린트
-        '////////////////////////////////////////////////////////////////////
         If listSijackStockValueInfo.Count = 0 Then
             MsgBox("시작점 데이터를 찾지 못했습니다.")
             Return
@@ -120,184 +163,540 @@
 
         Dim nPrintCount As Integer = 0
         Dim sName As String
-        Do While nPrintCount < 3
-            For Each stockStartValue In listSijackStockValueInfo
-                sName = stockStartValue.getName
-                stockTodayValue = hashTodayStartEndValue(sName)
 
-                nStartPer = 200
-                nEndPer = 200
+        '////////////////////////////////////////////////////
+        '// 오늘 주가가 시작점 위치인것 찾기
+        '////////////////////////////////////////////////////
+        lbMsg1.Text = "시작점 종목 찾는중..."
+        For Each stockStartValue In listSijackStockValueInfo
+            '// 시작점의 어떤 종목
+            sName = stockStartValue.getName
+            '// 시작점 종목의 오늘 주가 정보
+            stockTodayValue = hashTodayStartEndValue(sName)
+            lbMsg2.Text = sName
 
-                If stockStartValue.getStartV >= stockTodayValue.getEndV Then
-                    nStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
-                ElseIf stockStartValue.getStartV < stockTodayValue.getEndV Then
-                    nStartPer = stockTodayValue.getEndV / stockStartValue.getStartV * 100
+            '/////////////////////////////////////////////////////////////////////////////////////////////////////
+            '// 시작점 상승, 오늘주가 상승
+            '/////////////////////////////////////////////////////////////////////////////////////////////////////
+            If stockStartValue.getStartV <= stockStartValue.getEndV And stockTodayValue.getStartV <= stockTodayValue.getEndV Then
+                '// 시작점 상대 돌파
+                If stockStartValue.getEndV <= stockTodayValue.getEndV And _
+                    stockStartValue.getEndV >= stockTodayValue.getStartV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-                If stockStartValue.getEndV >= stockTodayValue.getEndV Then
-                    nEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
-                ElseIf stockStartValue.getEndV < stockTodayValue.getEndV Then
-                    nEndPer = stockTodayValue.getEndV / stockStartValue.getEndV * 100
+                '// 시작점 하대 돌파
+                If stockStartValue.getStartV <= stockTodayValue.getEndV And _
+                    stockStartValue.getStartV >= stockTodayValue.getStartV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-                If nStartPer <= 102 And nPrintCount = 1 Then
-                    If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                        Console.WriteLine("근처 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                '// 오늘 종가의 시작점 시가 근접도
+                fStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
+                '// 오늘 종가의 시작점 종가 근접도
+                fEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
 
-                        hashPrintedStock.Add(stockStartValue.getName, 1)
-
-                        startPointInfo = New StartPointInfo
-                        startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                               stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                        gListStartPointLowNear.Add(startPointInfo)
-
-                    End If
-
+                '// 오늘 종가가 시작점 상대 근접한 경우
+                If fEndPer <= 101 And fEndPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-                If nEndPer <= 102 And nPrintCount = 1 Then
-                    If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                        Console.WriteLine("근처 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-
-                        hashPrintedStock.Add(stockStartValue.getName, 1)
-
-                        startPointInfo = New StartPointInfo
-                        startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                               stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                        gListStartPointHighNear.Add(startPointInfo)
-                    End If
+                '// 오늘 종가가 시작점 하대 근접한 경우
+                If fStartPer <= 101 And fStartPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-                '/////////////////////////////////////////////////////////
-                '// 오늘 시작, 종가가 시작가를 상향돌파
-                If stockTodayValue.getStartV < stockTodayValue.getEndV And nPrintCount = 0 Then
-                    If stockStartValue.getStartV >= stockTodayValue.getStartV And stockStartValue.getStartV <= stockTodayValue.getEndV Then
-                        If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                            Console.WriteLine("시작점 돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-
-                            hashPrintedStock.Add(stockStartValue.getName, 1)
-
-                            startPointInfo = New StartPointInfo
-                            startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                                   stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                            gListStartPointHigh.Add(startPointInfo)
-                        End If
-                    End If
-
-                    If stockStartValue.getEndV >= stockTodayValue.getStartV And stockStartValue.getEndV <= stockTodayValue.getEndV Then
-                        If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                            Console.WriteLine("시작점 돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-
-                            hashPrintedStock.Add(stockStartValue.getName, 1)
-
-                            startPointInfo = New StartPointInfo
-                            startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                                   stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                            gListStartPointHigh.Add(startPointInfo)
-                        End If
-                    End If
-
+                '// 상대 이상 찾기
+                If stockStartValue.getEndV <= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeOver.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대이상 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-                '/////////////////////////////////////////////////////////
-                '// 오늘 시작, 종가가 시작가를 하향돌파
-                If stockTodayValue.getEndV < stockTodayValue.getStartV And nPrintCount = 2 Then
-                    If stockStartValue.getStartV <= stockTodayValue.getStartV And stockStartValue.getStartV >= stockTodayValue.getEndV Then
-                        If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                            Console.WriteLine("시작점 하향돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-                            hashPrintedStock.Add(stockStartValue.getName, 1)
-                            startPointInfo = New StartPointInfo
-                            startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                                   stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                            gListStartPointLow.Add(startPointInfo)
-                        End If
-                    End If
+                '// 대박 돌파
+                If stockStartValue.getStartV >= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangHaSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("대박돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+            ElseIf stockStartValue.getStartV <= stockStartValue.getEndV And stockTodayValue.getStartV >= stockTodayValue.getEndV Then
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                '// 시작점 상승 & 오늘 주가 하락
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    If stockStartValue.getEndV <= stockTodayValue.getStartV And stockStartValue.getEndV >= stockTodayValue.getEndV Then
-                        If hashPrintedStock.Contains(stockStartValue.getName) = False Then
-                            Console.WriteLine("시작점 하향돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
-                            hashPrintedStock.Add(stockStartValue.getName, 1)
-                            startPointInfo = New StartPointInfo
-                            startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
-                                                   stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
-                            gListStartPointLow.Add(startPointInfo)
-                        End If
-                    End If
-
+                '// 시작점 상대 하향
+                If stockStartValue.getEndV <= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
                 End If
 
-            Next
+                '// 시작점 하대 하향
+                If stockStartValue.getStartV <= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadeaDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
 
-            nPrintCount += 1
+                '// 오늘 종가의 시작점 시가 근접도
+                fStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
+                '// 오늘 종가의 시작점 종가 근접도
+                fEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
+
+                '// 오늘 종가가 시작점 상대 근접한 경우
+                If fEndPer <= 101 And fEndPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 오늘 종가가 시작점 하대 근접한 경우
+                If fStartPer <= 101 And fStartPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 상대 이상 찾기
+                If stockStartValue.getEndV <= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeOver.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대이상 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 대박 하향
+                If stockStartValue.getEndV <= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangHaDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("대박하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+            ElseIf stockStartValue.getStartV >= stockStartValue.getEndV And stockTodayValue.getStartV <= stockTodayValue.getEndV Then
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                '// 시작점 하락 & 오늘 주가 상승
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                '// 시작점 상대 돌파
+                If stockStartValue.getStartV <= stockTodayValue.getEndV And _
+                    stockStartValue.getStartV >= stockTodayValue.getStartV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 시작점 하대 돌파
+                If stockStartValue.getEndV <= stockTodayValue.getEndV And _
+                    stockStartValue.getEndV >= stockTodayValue.getStartV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 오늘 종가의 시작점 시가 근접도
+                fStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
+                '// 오늘 종가의 시작점 종가 근접도
+                fEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
+
+                '// 오늘 종가가 시작점 하대 근접한 경우 (시작점 주가 하향이기 때문에 종가가 하대임)
+                If fEndPer <= 101 And fEndPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 오늘 종가가 시작점 상대 근접한 경우 (시작점 주가가 하향이기 때문에 시가가 상대임)
+                If fStartPer <= 101 And fStartPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 상대 이상 찾기
+                If stockStartValue.getStartV <= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeOver.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대이상 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 대박 돌파
+                If stockStartValue.getEndV >= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangHaSurpass.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("대박돌파 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+            ElseIf stockStartValue.getStartV >= stockStartValue.getEndV And stockTodayValue.getStartV >= stockTodayValue.getEndV Then
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                '// 시작점 하락 & 오늘 주가 하락
+                '///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                '// 시작점 하대 하향 (시작점 주가가 하향이기 때문에 종가가 하대임)
+                If stockStartValue.getEndV <= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadeaDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 시작점 상대 하향 (시작점 주가가 하향이기 때문에 시가가 상대임)
+                If stockStartValue.getStartV <= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 오늘 종가의 시작점 시가 근접도
+                fStartPer = stockStartValue.getStartV / stockTodayValue.getEndV * 100
+                '// 오늘 종가의 시작점 종가 근접도
+                fEndPer = stockStartValue.getEndV / stockTodayValue.getEndV * 100
+
+                '// 오늘 종가가 시작점 하대 근접한 경우 (시작점 주가가 하향이기 때문에 종가가 하대임)
+                If fEndPer <= 101 And fEndPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPHadaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("하대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 오늘 종가가 시작점 상대 근접한 경우 (시작점 주가가 하향이기 때문에 시가가 상대임)
+                If fStartPer <= 101 And fStartPer >= 99 And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeNear.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대근접 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 상대 이상 찾기
+                If stockStartValue.getStartV <= stockTodayValue.getStartV And _
+                    stockStartValue.getStartV <= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangdaeOver.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("상대이상 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+
+                '// 대박 하향
+                If stockStartValue.getStartV <= stockTodayValue.getStartV And _
+                    stockStartValue.getEndV >= stockTodayValue.getEndV And hashPrintedStock.Contains(stockStartValue.getName) = False Then
+                    startPointInfo = New StartPointInfo
+                    startPointInfo.setData(stockStartValue.getName, CStr(frmMain.getStockCode(stockStartValue.getName)), _
+                                           stockStartValue.getCurDate, frmMain.getStockStatus(Trim(stockStartValue.getName)), 0, 0, 0)
+                    gListSPSangHaDrop.Add(startPointInfo)
+                    '// 찾은 종목 저장
+                    hashPrintedStock.Add(stockStartValue.getName, 1)
+                    nTotalFindedStartPointStock += 1
+                    Console.WriteLine("대박하향 {0}, {1}", stockStartValue.getName, stockStartValue.getCurDate)
+                End If
+            Else
+                Console.WriteLine("조건에 해당되는 주식이 아닙니다 [{0}]", stockTodayValue.getName)
+            End If
+
             nProgressValue += 1
             ProgressBar1.Value = nProgressValue
+        Next
 
-        Loop
-
-
-        '/////////////////////////////////////////////////////////////////////////////////////////////
+        '///////////////////////////////////////////////////////////////////////////////////////////////////
         '// 종목별회원사 순매수 가져오기
-        '/////////////////////////////////////////////////////////////////////////////////////////////
+        '///////////////////////////////////////////////////////////////////////////////////////////////////
         gSendCount = 0
         gRecvCount = 0
         gHashCompanyOnlyBuy.Clear()
         gHashScreenStock.Clear()
 
-        '// 시작점 상향 돌파 
+        '// progress bar 관련 초기화
+        nProgressValue = 0
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = nTotalFindedStartPointStock
+
+        '// 시작점 하대 근접
         Dim nScreenNo As Integer = 7000
         Dim st As New StartPointInfo
-        If gListStartPointHigh.Count > 0 Then
-            For Each st In gListStartPointHigh
-                Console.WriteLine("상향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        lbMsg1.Text = "순매수 정보 가져오는중..."
+        If gListSPHadaeNear.Count > 0 Then
+            For Each st In gListSPHadaeNear
+                Console.WriteLine("순매수 하대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTROnlyBuy(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 상대 근처
-        If gListStartPointHighNear.Count > 0 Then
-            For Each st In gListStartPointHighNear
-                Console.WriteLine("상대근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 하대 돌파
+        If gListSPHadaeSurpass.Count > 0 Then
+            For Each st In gListSPHadaeSurpass
+                Console.WriteLine("순매수 하대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTROnlyBuy(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 하대 근처
-        If gListStartPointLowNear.Count > 0 Then
-            For Each st In gListStartPointLowNear
-                Console.WriteLine("하대근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 하대 하향
+        If gListSPHadeaDrop.Count > 0 Then
+            For Each st In gListSPHadeaDrop
+                Console.WriteLine("순매수 하대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTROnlyBuy(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 하향 돌파
-        If gListStartPointLow.Count > 0 Then
-            For Each st In gListStartPointLow
-                Console.WriteLine("하향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 상대 근접
+        If gListSPSangdaeNear.Count > 0 Then
+            For Each st In gListSPSangdaeNear
+                Console.WriteLine("순매수 상대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTROnlyBuy(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 돌파
+        If gListSPSangdaeSurpass.Count > 0 Then
+            For Each st In gListSPSangdaeSurpass
+                Console.WriteLine("순매수 상대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTROnlyBuy(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 이상
+        If gListSPSangdaeOver.Count > 0 Then
+            For Each st In gListSPSangdaeOver
+                Console.WriteLine("순매수 상대이상 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTROnlyBuy(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 하향
+        If gListSPSangdaeDrop.Count > 0 Then
+            For Each st In gListSPSangdaeDrop
+                Console.WriteLine("순매수 상대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTROnlyBuy(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 대박 돌파
+        If gListSPSangHaSurpass.Count > 0 Then
+            For Each st In gListSPSangHaSurpass
+                Console.WriteLine("순매수 대박돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTROnlyBuy(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 대박 하향
+        If gListSPSangHaDrop.Count > 0 Then
+            For Each st In gListSPSangHaDrop
+                Console.WriteLine("순매수 대박하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTROnlyBuy(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
@@ -307,7 +706,7 @@
             If gSendCount <= gRecvCount Then
                 Exit Do
             End If
-            Threading.Thread.Sleep(300)
+            Threading.Thread.Sleep(210)
             Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCount) + "], R[" + CStr(gRecvCount) + "]")
             Application.DoEvents()
             totalRetryCount += 1
@@ -326,60 +725,171 @@
         nScreenNo = 7000
         gHashScreenStock.Clear()
         gHashCompanyBizInfo.Clear()
+        '// progress bar 관련 초기화
+        nProgressValue = 0
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = nTotalFindedStartPointStock
 
-        '// 시작점 상향 돌파
-        If gListStartPointHigh.Count > 0 Then
-            For Each st In gListStartPointHigh
-                Console.WriteLine("상향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 하대 근접
+        lbMsg1.Text = "영업이익,당기순익 가져오는 중..."
+        If gListSPHadaeNear.Count > 0 Then
+            For Each st In gListSPHadaeNear
+                Console.WriteLine("영업이익 하대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTRStockInfo(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 상대 근처
-        If gListStartPointHighNear.Count > 0 Then
-            For Each st In gListStartPointHighNear
-                Console.WriteLine("근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 하대 돌파
+        If gListSPHadaeSurpass.Count > 0 Then
+            For Each st In gListSPHadaeSurpass
+                Console.WriteLine("영업이익 하대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTRStockInfo(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 하대 근처
-        If gListStartPointLowNear.Count > 0 Then
-            For Each st In gListStartPointLowNear
-                Console.WriteLine("근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 하대 하향
+        If gListSPHadeaDrop.Count > 0 Then
+            For Each st In gListSPHadeaDrop
+                Console.WriteLine("영업이익 하대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTRStockInfo(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
-        '// 시작점 하향 돌파
-        If gListStartPointLow.Count > 0 Then
-            For Each st In gListStartPointLow
-                Console.WriteLine("하향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+        '// 시작점 상대 근접
+        If gListSPSangdaeNear.Count > 0 Then
+            For Each st In gListSPSangdaeNear
+                Console.WriteLine("영업이익 상대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
                 gHashScreenStock.Add(CStr(nScreenNo), st.getName)
                 '// 순매수량 요청
                 requestTRStockInfo(st.getCode, nScreenNo)
-                Threading.Thread.Sleep(300)
+                Threading.Thread.Sleep(210)
                 Application.DoEvents()
                 gSendCount += 1
                 nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 돌파
+        If gListSPSangdaeSurpass.Count > 0 Then
+            For Each st In gListSPSangdaeSurpass
+                Console.WriteLine("영업이익 상대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTRStockInfo(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 이상
+        If gListSPSangdaeOver.Count > 0 Then
+            For Each st In gListSPSangdaeOver
+                Console.WriteLine("영업이익 상대이상 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTRStockInfo(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 상대 하향
+        If gListSPSangdaeDrop.Count > 0 Then
+            For Each st In gListSPSangdaeDrop
+                Console.WriteLine("영업이익 상대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTRStockInfo(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 대박 돌파
+        If gListSPSangHaSurpass.Count > 0 Then
+            For Each st In gListSPSangHaSurpass
+                Console.WriteLine("영업이익 대박 돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTRStockInfo(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
+            Next
+        End If
+
+        '// 시작점 대박 하향
+        If gListSPSangHaDrop.Count > 0 Then
+            For Each st In gListSPSangHaDrop
+                Console.WriteLine("영업이익 대박 하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                gHashScreenStock.Add(CStr(nScreenNo), st.getName)
+                '// 순매수량 요청
+                requestTRStockInfo(st.getCode, nScreenNo)
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+                gSendCount += 1
+                nScreenNo += 1
+                '// progress bar
+                nProgressValue += 1
+                ProgressBar1.Value = nProgressValue
+                lbMsg2.Text = st.getName
             Next
         End If
 
@@ -389,7 +899,7 @@
             If gSendCount <= gRecvCount Then
                 Exit Do
             End If
-            Threading.Thread.Sleep(300)
+            Threading.Thread.Sleep(210)
             Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCount) + "], R[" + CStr(gRecvCount) + "]")
             Application.DoEvents()
             totalRetryCount += 1
@@ -399,11 +909,14 @@
             End If
         Loop
 
+        lbMsg1.Text = "분석 완료"
+        lbMsg2.Text = ""
 
         '// 리스트뷰에 채운다.
         Call printListView()
 
     End Sub
+
     Sub printListView()
 
         '// setting listView
@@ -426,163 +939,580 @@
         Dim st As New StartPointInfo
         Dim stOnlyBuy As New StartPointInfo
         Dim stStockBiz As New StockBizInfo
+        Dim bCompanySaleProfit As Boolean
+        Dim bCompanySaleNetPorfit As Boolean
 
-        If gListStartPointHigh.Count > 0 Then
-            For Each st In gListStartPointHigh
-                Console.WriteLine("상향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
-                item = New ListViewItem(CStr(st.getName))
-                item.SubItems.Add(CStr(st.getDate))
-                item.SubItems.Add("상향돌파")
-                item.UseItemStyleForSubItems = False
-                item.SubItems(2).ForeColor = Color.Blue
-                item.SubItems.Add(frmMain.getStockStatus(Trim(st.getName)))
-                '// 주포1, 2, 3 순매수
-                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
-                '// 상장주식수, 시가총액, 영업이익, 당기순이익
+        '// 상대돌파
+        If gListSPSangdaeSurpass.Count > 0 Then
+            For Each st In gListSPSangdaeSurpass
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
                 stStockBiz = gHashCompanyBizInfo(st.getName)
-                item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
-                item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
-                item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
-                If stStockBiz.getSaleProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Red
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
                 End If
 
-                item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
-                If stStockBiz.getSaleNetProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Red
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
                 End If
 
-                lstViewStartPoint.Items.Add(item)
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("상대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("상대돌파")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
             Next
         End If
 
-        '// 시작점 상대 근처
-        If gListStartPointHighNear.Count > 0 Then
-            For Each st In gListStartPointHighNear
-                Console.WriteLine("근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
-                item = New ListViewItem(CStr(st.getName))
-                item.SubItems.Add(CStr(st.getDate))
-                item.SubItems.Add("상대근접")
-                item.SubItems.Add(frmMain.getStockStatus(Trim(st.getName)))
-                '// 주포1, 2, 3 순매수
-                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
-                '// 상장주식수, 시가총액, 영업이익, 당기순이익
+        '// 하대 돌파
+        If gListSPHadaeSurpass.Count > 0 Then
+            For Each st In gListSPHadaeSurpass
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
                 stStockBiz = gHashCompanyBizInfo(st.getName)
-                item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
-                item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
-                item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
-                If stStockBiz.getSaleProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Red
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
                 End If
 
-                item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
-                If stStockBiz.getSaleNetProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Red
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
                 End If
 
-                lstViewStartPoint.Items.Add(item)
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("하대돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("하대돌파")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
             Next
         End If
 
-        '// 시작점 하대 근처
-        If gListStartPointLowNear.Count > 0 Then
-            For Each st In gListStartPointLowNear
-                Console.WriteLine("근처 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
-                item = New ListViewItem(CStr(st.getName))
-                item.SubItems.Add(CStr(st.getDate))
-                item.SubItems.Add("하대근접")
-                item.SubItems.Add(frmMain.getStockStatus(Trim(st.getName)))
-                '// 주포1, 2, 3 순매수
-                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
-                '// 상장주식수, 시가총액, 영업이익, 당기순이익
+        '// 상대 근접
+        If gListSPSangdaeNear.Count > 0 Then
+            For Each st In gListSPSangdaeNear
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
                 stStockBiz = gHashCompanyBizInfo(st.getName)
-                item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
-                item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
-                item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
-                If stStockBiz.getSaleProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Red
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
                 End If
 
-                item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
-                If stStockBiz.getSaleNetProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Red
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
                 End If
 
-                lstViewStartPoint.Items.Add(item)
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("상대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("상대근접")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
             Next
         End If
 
-        '// 시작점 하향 돌파
-        If gListStartPointLow.Count > 0 Then
-            For Each st In gListStartPointLow
-                Console.WriteLine("하향돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
-                item = New ListViewItem(CStr(st.getName))
-                item.SubItems.Add(CStr(st.getDate))
-                item.SubItems.Add("하향돌파")
-                item.UseItemStyleForSubItems = False
-                item.SubItems(2).ForeColor = Color.Red
-                item.SubItems.Add(frmMain.getStockStatus(Trim(st.getName)))
-                '// 주포1, 2, 3 순매수
-                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
-                item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
-                '// 상장주식수, 시가총액, 영업이익, 당기순이익
+        '// 하대근접
+        If gListSPHadaeNear.Count > 0 Then
+            For Each st In gListSPHadaeNear
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
                 stStockBiz = gHashCompanyBizInfo(st.getName)
-                item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
-                item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
-                item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
-                If stStockBiz.getSaleProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(9).ForeColor = Color.Red
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
                 End If
 
-                item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
-                If stStockBiz.getSaleNetProfitValue > 0 Then
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Blue
-                Else
-                    item.UseItemStyleForSubItems = False
-                    item.SubItems(10).ForeColor = Color.Red
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
                 End If
 
-                lstViewStartPoint.Items.Add(item)
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("하대근접 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("하대근접")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
+            Next
+        End If
+
+        '// 상대이상
+        If gListSPSangdaeOver.Count > 0 Then
+            For Each st In gListSPSangdaeOver
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
+                stStockBiz = gHashCompanyBizInfo(st.getName)
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
+                End If
+
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
+                End If
+
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("상대이상 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("상대이상")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
+            Next
+        End If
+
+        '// 하대하향
+        If gListSPHadeaDrop.Count > 0 Then
+            For Each st In gListSPHadeaDrop
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
+                stStockBiz = gHashCompanyBizInfo(st.getName)
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
+                End If
+
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
+                End If
+
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("하대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("하대하향")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Red
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
+            Next
+        End If
+
+        '// 상대하향
+        If gListSPSangdaeDrop.Count > 0 Then
+            For Each st In gListSPSangdaeDrop
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
+                stStockBiz = gHashCompanyBizInfo(st.getName)
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
+                End If
+
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
+                End If
+
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("상대하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("상대하향")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Red
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
+            Next
+        End If
+
+        '// 대박돌파
+        If gListSPSangHaSurpass.Count > 0 Then
+            For Each st In gListSPSangHaSurpass
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
+                stStockBiz = gHashCompanyBizInfo(st.getName)
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
+                End If
+
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
+                End If
+
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("대박돌파 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("대박돌파")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
+            Next
+        End If
+
+        '// 대박하향
+        If gListSPSangHaDrop.Count > 0 Then
+            For Each st In gListSPSangHaDrop
+
+                bCompanySaleProfit = True
+                bCompanySaleNetPorfit = True
+
+                stStockBiz = gHashCompanyBizInfo(st.getName)
+
+                '// 영업이익 체크
+                If frmMain.chkBizValue.Checked = True Then
+                    If stStockBiz.getSaleProfitValue < 0 Then
+                        bCompanySaleProfit = False
+                    End If
+                End If
+
+                '// 당기순익 체크
+                If frmMain.chkBizSunValue.Checked = True Then
+                    If stStockBiz.getSaleNetProfitValue < 0 Then
+                        bCompanySaleNetPorfit = False
+                    End If
+                End If
+
+                stOnlyBuy = gHashCompanyOnlyBuy(st.getName)
+                If CInt(frmMain.txtJupo1.Text) <= stOnlyBuy.getCompany1 And bCompanySaleProfit = True And bCompanySaleNetPorfit = True Then
+                    Console.WriteLine("대박하향 {0}, {1}, {2}, {3}", st.getName, st.getCode, st.getDate, st.getStatus)
+                    item = New ListViewItem(CStr(st.getName))
+                    item.SubItems.Add(CStr(st.getDate))
+                    item.SubItems.Add("대박하향")
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Red
+                    item.SubItems.Add(gHashStockStatus(Trim(st.getName)))
+                    '// 주포1, 2, 3 순매수
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany1))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany2))
+                    item.SubItems.Add(CStr(stOnlyBuy.getCompany3))
+                    '// 상장주식수, 시가총액, 영업이익, 당기순이익
+                    stStockBiz = gHashCompanyBizInfo(st.getName)
+                    item.SubItems.Add(CStr(stStockBiz.getStockTotalCount))
+                    item.SubItems.Add(CStr(stStockBiz.getCompayTotalValue))
+                    item.SubItems.Add(CStr(stStockBiz.getSaleProfitValue))
+                    If stStockBiz.getSaleProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(9).ForeColor = Color.Red
+                    End If
+
+                    item.SubItems.Add(CStr(stStockBiz.getSaleNetProfitValue))
+                    If stStockBiz.getSaleNetProfitValue > 0 Then
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Blue
+                    Else
+                        item.UseItemStyleForSubItems = False
+                        item.SubItems(10).ForeColor = Color.Red
+                    End If
+
+                    lstViewStartPoint.Items.Add(item)
+                End If
+
             Next
         End If
 
@@ -678,10 +1608,10 @@
         Next
 
         startPointInfo = New StartPointInfo
-        Console.WriteLine("{0}. {1}, {2}, {3}", sStockName, nCmp1, nCmp2, nCmp3)
         startPointInfo.setData(sStockName, "", "", "", nCmp1, nCmp2, nCmp3)
         gHashCompanyOnlyBuy.Add(Trim(sStockName), startPointInfo)
         gRecvCount += 1
+        Console.WriteLine("Recv {0}. {1}, {2}, {3}", sStockName, nCmp1, nCmp2, nCmp3)
 
     End Sub
     Private Sub KHOpenAPI_OnReceiveTrData(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent) Handles KHOpenAPI.OnReceiveTrData
@@ -694,6 +1624,22 @@
             KHOpenAPI.DisconnectRealData(e.sScrNo)
             Console.WriteLine("DisconnectRealData SrcNumber : " + e.sScrNo)
         End If
+    End Sub
+    Private Sub frmStartPoint_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        Call printStartPoint2()
+    End Sub
+
+    Private Sub lstViewStartPoint_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lstViewStartPoint.MouseDoubleClick
+        Dim sTxt As String
+
+        sTxt = lstViewStartPoint.SelectedItems(0).Text
+        frmMain.txtSuggest.Text = sTxt
+        frmMain.txtStockCode.Text = gHashStockTable(sTxt)
+
+        Call frmMain.Button3_Click(sender, e)
+        Call frmMain.btnCmd2_Click(sender, e)
+        Call frmMain.btnCmd3_Click(sender, e)
+
     End Sub
 
     Private Sub lstViewStartPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstViewStartPoint.SelectedIndexChanged

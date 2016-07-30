@@ -104,13 +104,30 @@ Partial Class frmMain
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button12 = New System.Windows.Forms.Button()
         Me.Button13 = New System.Windows.Forms.Button()
+        Me.txtSPToday = New System.Windows.Forms.TextBox()
+        Me.Button14 = New System.Windows.Forms.Button()
+        Me.txtSignValue = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Button15 = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.txtSPBong = New System.Windows.Forms.TextBox()
+        Me.txtJupo1 = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.chkBizSunValue = New System.Windows.Forms.CheckBox()
+        Me.chkBizValue = New System.Windows.Forms.CheckBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnLogin
         '
-        Me.btnLogin.Location = New System.Drawing.Point(12, 12)
+        Me.btnLogin.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btnLogin.Location = New System.Drawing.Point(8, 10)
         Me.btnLogin.Name = "btnLogin"
         Me.btnLogin.Size = New System.Drawing.Size(100, 25)
         Me.btnLogin.TabIndex = 0
@@ -120,10 +137,10 @@ Partial Class frmMain
         'KHOpenAPI
         '
         Me.KHOpenAPI.Enabled = True
-        Me.KHOpenAPI.Location = New System.Drawing.Point(459, 70)
+        Me.KHOpenAPI.Location = New System.Drawing.Point(1717, 123)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.KHOpenAPI.Size = New System.Drawing.Size(66, 20)
+        Me.KHOpenAPI.Size = New System.Drawing.Size(75, 21)
         Me.KHOpenAPI.TabIndex = 0
         '
         'lstMsg
@@ -132,13 +149,13 @@ Partial Class frmMain
         Me.lstMsg.ItemHeight = 12
         Me.lstMsg.Location = New System.Drawing.Point(118, 12)
         Me.lstMsg.Name = "lstMsg"
-        Me.lstMsg.Size = New System.Drawing.Size(407, 52)
+        Me.lstMsg.Size = New System.Drawing.Size(199, 52)
         Me.lstMsg.TabIndex = 1
         '
         'btnSearch
         '
         Me.btnSearch.Enabled = False
-        Me.btnSearch.Location = New System.Drawing.Point(553, 12)
+        Me.btnSearch.Location = New System.Drawing.Point(553, 9)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(95, 27)
         Me.btnSearch.TabIndex = 3
@@ -149,9 +166,9 @@ Partial Class frmMain
         '
         Me.lstView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.날짜, Me.증권사, Me.누적순매수, Me.매수, Me.매도})
         Me.lstView1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView1.Location = New System.Drawing.Point(12, 203)
+        Me.lstView1.Location = New System.Drawing.Point(8, 156)
         Me.lstView1.Name = "lstView1"
-        Me.lstView1.Size = New System.Drawing.Size(513, 184)
+        Me.lstView1.Size = New System.Drawing.Size(495, 123)
         Me.lstView1.TabIndex = 4
         Me.lstView1.UseCompatibleStateImageBehavior = False
         Me.lstView1.View = System.Windows.Forms.View.Details
@@ -170,24 +187,28 @@ Partial Class frmMain
         '누적순매수
         '
         Me.누적순매수.Text = "누적순매수"
-        Me.누적순매수.Width = 110
+        Me.누적순매수.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.누적순매수.Width = 92
         '
         '매수
         '
         Me.매수.Text = "매수"
-        Me.매수.Width = 101
+        Me.매수.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.매수.Width = 88
         '
         '매도
         '
         Me.매도.Text = "매도"
-        Me.매도.Width = 100
+        Me.매도.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.매도.Width = 107
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(31, 97)
+        Me.Label1.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label1.Location = New System.Drawing.Point(6, 73)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(41, 12)
+        Me.Label1.Size = New System.Drawing.Size(49, 14)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "종목명"
         '
@@ -205,17 +226,18 @@ Partial Class frmMain
         'txtStartDate1
         '
         Me.txtStartDate1.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate1.Location = New System.Drawing.Point(915, 140)
+        Me.txtStartDate1.Location = New System.Drawing.Point(912, 140)
         Me.txtStartDate1.Name = "txtStartDate1"
-        Me.txtStartDate1.Size = New System.Drawing.Size(89, 22)
+        Me.txtStartDate1.Size = New System.Drawing.Size(82, 22)
         Me.txtStartDate1.TabIndex = 7
         Me.txtStartDate1.Text = "20160620"
+        Me.txtStartDate1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label2.Location = New System.Drawing.Point(856, 143)
+        Me.Label2.Location = New System.Drawing.Point(845, 143)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(59, 13)
         Me.Label2.TabIndex = 8
@@ -225,7 +247,7 @@ Partial Class frmMain
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label3.Location = New System.Drawing.Point(1012, 143)
+        Me.Label3.Location = New System.Drawing.Point(1006, 143)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(59, 13)
         Me.Label3.TabIndex = 10
@@ -238,49 +260,52 @@ Partial Class frmMain
         Me.txtEndDate1.Name = "txtEndDate1"
         Me.txtEndDate1.Size = New System.Drawing.Size(89, 22)
         Me.txtEndDate1.TabIndex = 9
+        Me.txtEndDate1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label4.Location = New System.Drawing.Point(374, 404)
+        Me.Label4.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label4.Location = New System.Drawing.Point(347, 283)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(59, 13)
+        Me.Label4.Size = New System.Drawing.Size(63, 14)
         Me.Label4.TabIndex = 16
         Me.Label4.Text = "종료날짜"
         '
         'txtEndDate2
         '
-        Me.txtEndDate2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate2.Location = New System.Drawing.Point(433, 401)
+        Me.txtEndDate2.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtEndDate2.Location = New System.Drawing.Point(414, 280)
         Me.txtEndDate2.Name = "txtEndDate2"
-        Me.txtEndDate2.Size = New System.Drawing.Size(89, 22)
+        Me.txtEndDate2.Size = New System.Drawing.Size(89, 23)
         Me.txtEndDate2.TabIndex = 15
+        Me.txtEndDate2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label5.Location = New System.Drawing.Point(219, 404)
+        Me.Label5.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label5.Location = New System.Drawing.Point(204, 283)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(59, 13)
+        Me.Label5.Size = New System.Drawing.Size(63, 14)
         Me.Label5.TabIndex = 14
         Me.Label5.Text = "시작날짜"
         '
         'txtStartDate2
         '
-        Me.txtStartDate2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate2.Location = New System.Drawing.Point(278, 401)
+        Me.txtStartDate2.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtStartDate2.Location = New System.Drawing.Point(272, 281)
         Me.txtStartDate2.Name = "txtStartDate2"
-        Me.txtStartDate2.Size = New System.Drawing.Size(89, 22)
+        Me.txtStartDate2.Size = New System.Drawing.Size(75, 23)
         Me.txtStartDate2.TabIndex = 13
+        Me.txtStartDate2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'btnCmd2
         '
         Me.btnCmd2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd2.Location = New System.Drawing.Point(12, 396)
+        Me.btnCmd2.Location = New System.Drawing.Point(8, 281)
         Me.btnCmd2.Name = "btnCmd2"
-        Me.btnCmd2.Size = New System.Drawing.Size(148, 29)
+        Me.btnCmd2.Size = New System.Drawing.Size(136, 20)
         Me.btnCmd2.TabIndex = 12
         Me.btnCmd2.Text = "종목별회원사현황2"
         Me.btnCmd2.UseVisualStyleBackColor = True
@@ -289,9 +314,9 @@ Partial Class frmMain
         '
         Me.lstView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.lstView2.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView2.Location = New System.Drawing.Point(12, 431)
+        Me.lstView2.Location = New System.Drawing.Point(8, 305)
         Me.lstView2.Name = "lstView2"
-        Me.lstView2.Size = New System.Drawing.Size(513, 187)
+        Me.lstView2.Size = New System.Drawing.Size(495, 121)
         Me.lstView2.TabIndex = 11
         Me.lstView2.UseCompatibleStateImageBehavior = False
         Me.lstView2.View = System.Windows.Forms.View.Details
@@ -304,65 +329,71 @@ Partial Class frmMain
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "증권사"
-        Me.ColumnHeader2.Width = 106
+        Me.ColumnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader2.Width = 113
         '
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "누적순매수"
-        Me.ColumnHeader3.Width = 125
+        Me.ColumnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader3.Width = 105
         '
         'ColumnHeader4
         '
         Me.ColumnHeader4.Text = "매수"
-        Me.ColumnHeader4.Width = 104
+        Me.ColumnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader4.Width = 88
         '
         'ColumnHeader5
         '
         Me.ColumnHeader5.Text = "매도"
+        Me.ColumnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ColumnHeader5.Width = 99
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label6.Location = New System.Drawing.Point(368, 638)
+        Me.Label6.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label6.Location = New System.Drawing.Point(349, 431)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(59, 13)
+        Me.Label6.Size = New System.Drawing.Size(63, 14)
         Me.Label6.TabIndex = 22
         Me.Label6.Text = "종료날짜"
         '
         'txtEndDate3
         '
-        Me.txtEndDate3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtEndDate3.Location = New System.Drawing.Point(433, 635)
+        Me.txtEndDate3.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtEndDate3.Location = New System.Drawing.Point(414, 428)
         Me.txtEndDate3.Name = "txtEndDate3"
-        Me.txtEndDate3.Size = New System.Drawing.Size(89, 22)
+        Me.txtEndDate3.Size = New System.Drawing.Size(89, 23)
         Me.txtEndDate3.TabIndex = 21
+        Me.txtEndDate3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label7.Location = New System.Drawing.Point(213, 638)
+        Me.Label7.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label7.Location = New System.Drawing.Point(206, 431)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(59, 13)
+        Me.Label7.Size = New System.Drawing.Size(63, 14)
         Me.Label7.TabIndex = 20
         Me.Label7.Text = "시작날짜"
         '
         'txtStartDate3
         '
-        Me.txtStartDate3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txtStartDate3.Location = New System.Drawing.Point(278, 635)
+        Me.txtStartDate3.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtStartDate3.Location = New System.Drawing.Point(272, 428)
         Me.txtStartDate3.Name = "txtStartDate3"
-        Me.txtStartDate3.Size = New System.Drawing.Size(89, 22)
+        Me.txtStartDate3.Size = New System.Drawing.Size(75, 23)
         Me.txtStartDate3.TabIndex = 19
+        Me.txtStartDate3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'btnCmd3
         '
         Me.btnCmd3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd3.Location = New System.Drawing.Point(12, 630)
+        Me.btnCmd3.Location = New System.Drawing.Point(7, 428)
         Me.btnCmd3.Name = "btnCmd3"
-        Me.btnCmd3.Size = New System.Drawing.Size(148, 29)
+        Me.btnCmd3.Size = New System.Drawing.Size(142, 20)
         Me.btnCmd3.TabIndex = 18
         Me.btnCmd3.Text = "종목별 회원사현황3"
         Me.btnCmd3.UseVisualStyleBackColor = True
@@ -371,9 +402,9 @@ Partial Class frmMain
         '
         Me.lstView3.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader6, Me.ColumnHeader7, Me.ColumnHeader8, Me.ColumnHeader9, Me.ColumnHeader10})
         Me.lstView3.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstView3.Location = New System.Drawing.Point(12, 665)
+        Me.lstView3.Location = New System.Drawing.Point(7, 453)
         Me.lstView3.Name = "lstView3"
-        Me.lstView3.Size = New System.Drawing.Size(513, 168)
+        Me.lstView3.Size = New System.Drawing.Size(495, 121)
         Me.lstView3.TabIndex = 17
         Me.lstView3.UseCompatibleStateImageBehavior = False
         Me.lstView3.View = System.Windows.Forms.View.Details
@@ -386,22 +417,26 @@ Partial Class frmMain
         'ColumnHeader7
         '
         Me.ColumnHeader7.Text = "증권사"
+        Me.ColumnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ColumnHeader7.Width = 100
         '
         'ColumnHeader8
         '
         Me.ColumnHeader8.Text = "누적순매수"
-        Me.ColumnHeader8.Width = 121
+        Me.ColumnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader8.Width = 97
         '
         'ColumnHeader9
         '
         Me.ColumnHeader9.Text = "매수"
-        Me.ColumnHeader9.Width = 119
+        Me.ColumnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader9.Width = 101
         '
         'ColumnHeader10
         '
         Me.ColumnHeader10.Text = "매도"
-        Me.ColumnHeader10.Width = 83
+        Me.ColumnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ColumnHeader10.Width = 91
         '
         'chartStock
         '
@@ -409,10 +444,10 @@ Partial Class frmMain
         Me.chartStock.ChartAreas.Add(ChartArea2)
         Legend2.Name = "Legend1"
         Me.chartStock.Legends.Add(Legend2)
-        Me.chartStock.Location = New System.Drawing.Point(531, 203)
+        Me.chartStock.Location = New System.Drawing.Point(507, 201)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
-        Me.chartStock.Size = New System.Drawing.Size(518, 184)
+        Me.chartStock.Size = New System.Drawing.Size(281, 184)
         Me.chartStock.TabIndex = 23
         Me.chartStock.Text = "Stock"
         '
@@ -438,44 +473,50 @@ Partial Class frmMain
         '
         'txtAnalStartDate
         '
-        Me.txtAnalStartDate.Location = New System.Drawing.Point(321, 176)
+        Me.txtAnalStartDate.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtAnalStartDate.Location = New System.Drawing.Point(300, 131)
         Me.txtAnalStartDate.Name = "txtAnalStartDate"
-        Me.txtAnalStartDate.Size = New System.Drawing.Size(67, 21)
+        Me.txtAnalStartDate.Size = New System.Drawing.Size(67, 23)
         Me.txtAnalStartDate.TabIndex = 26
         Me.txtAnalStartDate.Text = "20160101"
+        Me.txtAnalStartDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(262, 179)
+        Me.Label8.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label8.Location = New System.Drawing.Point(234, 133)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(53, 12)
+        Me.Label8.Size = New System.Drawing.Size(63, 14)
         Me.Label8.TabIndex = 27
         Me.Label8.Text = "시작날짜"
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(394, 179)
+        Me.Label9.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label9.Location = New System.Drawing.Point(368, 134)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(53, 12)
+        Me.Label9.Size = New System.Drawing.Size(63, 14)
         Me.Label9.TabIndex = 29
         Me.Label9.Text = "종료날짜"
         '
         'txtAnalEndDate
         '
-        Me.txtAnalEndDate.Location = New System.Drawing.Point(453, 176)
+        Me.txtAnalEndDate.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtAnalEndDate.Location = New System.Drawing.Point(433, 130)
         Me.txtAnalEndDate.Name = "txtAnalEndDate"
-        Me.txtAnalEndDate.Size = New System.Drawing.Size(69, 21)
+        Me.txtAnalEndDate.Size = New System.Drawing.Size(69, 23)
         Me.txtAnalEndDate.TabIndex = 28
+        Me.txtAnalEndDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(13, 166)
+        Me.Button3.Location = New System.Drawing.Point(8, 127)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(129, 31)
+        Me.Button3.Size = New System.Drawing.Size(119, 23)
         Me.Button3.TabIndex = 31
-        Me.Button3.Text = "종목별 회원사현황1"
+        Me.Button3.Text = "종목별회원사현황1"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'btnTodayCompany
@@ -491,7 +532,7 @@ Partial Class frmMain
         'chkRefresh
         '
         Me.chkRefresh.AutoSize = True
-        Me.chkRefresh.Location = New System.Drawing.Point(148, 174)
+        Me.chkRefresh.Location = New System.Drawing.Point(134, 131)
         Me.chkRefresh.Name = "chkRefresh"
         Me.chkRefresh.Size = New System.Drawing.Size(96, 16)
         Me.chkRefresh.TabIndex = 33
@@ -535,24 +576,27 @@ Partial Class frmMain
         '
         Me.txtSuggest.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.txtSuggest.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.txtSuggest.Location = New System.Drawing.Point(78, 94)
+        Me.txtSuggest.Location = New System.Drawing.Point(73, 71)
         Me.txtSuggest.Name = "txtSuggest"
         Me.txtSuggest.Size = New System.Drawing.Size(91, 21)
         Me.txtSuggest.TabIndex = 37
+        Me.txtSuggest.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'txtStockCode
         '
-        Me.txtStockCode.Location = New System.Drawing.Point(78, 121)
+        Me.txtStockCode.Location = New System.Drawing.Point(73, 96)
         Me.txtStockCode.Name = "txtStockCode"
         Me.txtStockCode.Size = New System.Drawing.Size(91, 21)
         Me.txtStockCode.TabIndex = 38
+        Me.txtStockCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(19, 124)
+        Me.Label11.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label11.Location = New System.Drawing.Point(6, 98)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(53, 12)
+        Me.Label11.Size = New System.Drawing.Size(63, 14)
         Me.Label11.TabIndex = 39
         Me.Label11.Text = "종목코드"
         '
@@ -568,16 +612,16 @@ Partial Class frmMain
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(532, 178)
+        Me.ProgressBar1.Location = New System.Drawing.Point(507, 178)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(740, 18)
+        Me.ProgressBar1.Size = New System.Drawing.Size(764, 18)
         Me.ProgressBar1.TabIndex = 41
         '
         'Button5
         '
         Me.Button5.Location = New System.Drawing.Point(710, 138)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(91, 30)
+        Me.Button5.Size = New System.Drawing.Size(91, 25)
         Me.Button5.TabIndex = 42
         Me.Button5.Text = "기간분석"
         Me.Button5.UseVisualStyleBackColor = True
@@ -599,6 +643,7 @@ Partial Class frmMain
         Me.txtChartCount.Size = New System.Drawing.Size(35, 21)
         Me.txtChartCount.TabIndex = 44
         Me.txtChartCount.Text = "5"
+        Me.txtChartCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chkBrowser
         '
@@ -614,11 +659,12 @@ Partial Class frmMain
         '
         'btnOnlySellBuyAll
         '
-        Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(1170, 137)
+        Me.btnOnlySellBuyAll.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btnOnlySellBuyAll.Location = New System.Drawing.Point(837, 69)
         Me.btnOnlySellBuyAll.Name = "btnOnlySellBuyAll"
-        Me.btnOnlySellBuyAll.Size = New System.Drawing.Size(95, 26)
+        Me.btnOnlySellBuyAll.Size = New System.Drawing.Size(87, 21)
         Me.btnOnlySellBuyAll.TabIndex = 46
-        Me.btnOnlySellBuyAll.Text = "전종목순매수"
+        Me.btnOnlySellBuyAll.Text = "순매수량"
         Me.btnOnlySellBuyAll.UseVisualStyleBackColor = True
         '
         'btnStockCompanySort
@@ -633,9 +679,10 @@ Partial Class frmMain
         '
         'Button7
         '
-        Me.Button7.Location = New System.Drawing.Point(175, 97)
+        Me.Button7.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Button7.Location = New System.Drawing.Point(168, 71)
         Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(80, 20)
+        Me.Button7.Size = New System.Drawing.Size(80, 25)
         Me.Button7.TabIndex = 48
         Me.Button7.Text = "주식상태"
         Me.Button7.UseVisualStyleBackColor = True
@@ -653,9 +700,9 @@ Partial Class frmMain
         '
         Me.Button8.BackColor = System.Drawing.SystemColors.HotTrack
         Me.Button8.ForeColor = System.Drawing.SystemColors.Window
-        Me.Button8.Location = New System.Drawing.Point(564, 97)
+        Me.Button8.Location = New System.Drawing.Point(251, 71)
         Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(70, 26)
+        Me.Button8.Size = New System.Drawing.Size(66, 25)
         Me.Button8.TabIndex = 50
         Me.Button8.Text = "중단"
         Me.Button8.UseVisualStyleBackColor = False
@@ -664,18 +711,19 @@ Partial Class frmMain
         '
         Me.lstInfo.FormattingEnabled = True
         Me.lstInfo.ItemHeight = 12
-        Me.lstInfo.Location = New System.Drawing.Point(1058, 206)
+        Me.lstInfo.Location = New System.Drawing.Point(794, 201)
         Me.lstInfo.Name = "lstInfo"
-        Me.lstInfo.Size = New System.Drawing.Size(214, 172)
+        Me.lstInfo.Size = New System.Drawing.Size(479, 160)
         Me.lstInfo.TabIndex = 51
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(553, 40)
+        Me.Button2.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Button2.Location = New System.Drawing.Point(8, 19)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(95, 26)
+        Me.Button2.Size = New System.Drawing.Size(89, 24)
         Me.Button2.TabIndex = 52
-        Me.Button2.Text = "시작점"
+        Me.Button2.Text = "시작점찾기"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button9
@@ -689,52 +737,217 @@ Partial Class frmMain
         '
         'Button10
         '
-        Me.Button10.Location = New System.Drawing.Point(537, 431)
+        Me.Button10.Location = New System.Drawing.Point(553, 39)
         Me.Button10.Name = "Button10"
-        Me.Button10.Size = New System.Drawing.Size(97, 33)
+        Me.Button10.Size = New System.Drawing.Size(97, 27)
         Me.Button10.TabIndex = 54
         Me.Button10.Text = "실시간종목"
         Me.Button10.UseVisualStyleBackColor = True
         '
         'Button11
         '
-        Me.Button11.Location = New System.Drawing.Point(640, 431)
+        Me.Button11.Location = New System.Drawing.Point(553, 69)
         Me.Button11.Name = "Button11"
-        Me.Button11.Size = New System.Drawing.Size(79, 32)
+        Me.Button11.Size = New System.Drawing.Size(79, 22)
         Me.Button11.TabIndex = 55
         Me.Button11.Text = "API"
         Me.Button11.UseVisualStyleBackColor = True
         '
         'Button12
         '
-        Me.Button12.Location = New System.Drawing.Point(725, 431)
+        Me.Button12.Location = New System.Drawing.Point(638, 68)
         Me.Button12.Name = "Button12"
-        Me.Button12.Size = New System.Drawing.Size(88, 32)
+        Me.Button12.Size = New System.Drawing.Size(88, 22)
         Me.Button12.TabIndex = 56
         Me.Button12.Text = "종목정보"
         Me.Button12.UseVisualStyleBackColor = True
         '
         'Button13
         '
-        Me.Button13.Location = New System.Drawing.Point(824, 431)
+        Me.Button13.Location = New System.Drawing.Point(731, 69)
         Me.Button13.Name = "Button13"
-        Me.Button13.Size = New System.Drawing.Size(100, 31)
+        Me.Button13.Size = New System.Drawing.Size(100, 21)
         Me.Button13.TabIndex = 57
         Me.Button13.Text = "주식기본정보"
         Me.Button13.UseVisualStyleBackColor = True
+        '
+        'txtSPToday
+        '
+        Me.txtSPToday.Location = New System.Drawing.Point(108, 28)
+        Me.txtSPToday.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtSPToday.Name = "txtSPToday"
+        Me.txtSPToday.Size = New System.Drawing.Size(70, 21)
+        Me.txtSPToday.TabIndex = 58
+        Me.txtSPToday.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Button14
+        '
+        Me.Button14.AutoSize = True
+        Me.Button14.Location = New System.Drawing.Point(6, 21)
+        Me.Button14.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button14.Name = "Button14"
+        Me.Button14.Size = New System.Drawing.Size(66, 23)
+        Me.Button14.TabIndex = 59
+        Me.Button14.Text = "체결정보"
+        Me.Button14.UseVisualStyleBackColor = True
+        '
+        'txtSignValue
+        '
+        Me.txtSignValue.Location = New System.Drawing.Point(85, 31)
+        Me.txtSignValue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtSignValue.Name = "txtSignValue"
+        Me.txtSignValue.Size = New System.Drawing.Size(48, 21)
+        Me.txtSignValue.TabIndex = 60
+        Me.txtSignValue.Text = "10000"
+        Me.txtSignValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(83, 17)
+        Me.Label12.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(41, 12)
+        Me.Label12.TabIndex = 61
+        Me.Label12.Text = "체결량"
+        '
+        'Button15
+        '
+        Me.Button15.Location = New System.Drawing.Point(794, 364)
+        Me.Button15.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button15.Name = "Button15"
+        Me.Button15.Size = New System.Drawing.Size(90, 21)
+        Me.Button15.TabIndex = 62
+        Me.Button15.Text = "지우기"
+        Me.Button15.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label15)
+        Me.GroupBox1.Controls.Add(Me.txtSPBong)
+        Me.GroupBox1.Controls.Add(Me.txtJupo1)
+        Me.GroupBox1.Controls.Add(Me.Label14)
+        Me.GroupBox1.Controls.Add(Me.Label13)
+        Me.GroupBox1.Controls.Add(Me.chkBizSunValue)
+        Me.GroupBox1.Controls.Add(Me.chkBizValue)
+        Me.GroupBox1.Controls.Add(Me.Button2)
+        Me.GroupBox1.Controls.Add(Me.txtSPToday)
+        Me.GroupBox1.Location = New System.Drawing.Point(327, 12)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBox1.Size = New System.Drawing.Size(212, 113)
+        Me.GroupBox1.TabIndex = 63
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "시작점찾기"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(67, 50)
+        Me.Label15.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(17, 12)
+        Me.Label15.TabIndex = 65
+        Me.Label15.Text = "봉"
+        '
+        'txtSPBong
+        '
+        Me.txtSPBong.Location = New System.Drawing.Point(11, 47)
+        Me.txtSPBong.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtSPBong.Name = "txtSPBong"
+        Me.txtSPBong.Size = New System.Drawing.Size(53, 21)
+        Me.txtSPBong.TabIndex = 64
+        Me.txtSPBong.Text = "250"
+        Me.txtSPBong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txtJupo1
+        '
+        Me.txtJupo1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtJupo1.Location = New System.Drawing.Point(108, 69)
+        Me.txtJupo1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtJupo1.Name = "txtJupo1"
+        Me.txtJupo1.Size = New System.Drawing.Size(70, 21)
+        Me.txtJupo1.TabIndex = 63
+        Me.txtJupo1.Text = "1000000"
+        Me.txtJupo1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(103, 51)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(99, 12)
+        Me.Label14.TabIndex = 62
+        Me.Label14.Text = "주포1순매수 이상"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(108, 12)
+        Me.Label13.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(53, 12)
+        Me.Label13.TabIndex = 61
+        Me.Label13.Text = "오늘날짜"
+        '
+        'chkBizSunValue
+        '
+        Me.chkBizSunValue.AutoSize = True
+        Me.chkBizSunValue.Checked = True
+        Me.chkBizSunValue.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBizSunValue.Location = New System.Drawing.Point(8, 91)
+        Me.chkBizSunValue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.chkBizSunValue.Name = "chkBizSunValue"
+        Me.chkBizSunValue.Size = New System.Drawing.Size(78, 16)
+        Me.chkBizSunValue.TabIndex = 60
+        Me.chkBizSunValue.Text = "당기순익+"
+        Me.chkBizSunValue.UseVisualStyleBackColor = True
+        '
+        'chkBizValue
+        '
+        Me.chkBizValue.AutoSize = True
+        Me.chkBizValue.Checked = True
+        Me.chkBizValue.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBizValue.Location = New System.Drawing.Point(8, 71)
+        Me.chkBizValue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.chkBizValue.Name = "chkBizValue"
+        Me.chkBizValue.Size = New System.Drawing.Size(78, 16)
+        Me.chkBizValue.TabIndex = 59
+        Me.chkBizValue.Text = "영업이익+"
+        Me.chkBizValue.UseVisualStyleBackColor = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Button14)
+        Me.GroupBox2.Controls.Add(Me.Label12)
+        Me.GroupBox2.Controls.Add(Me.txtSignValue)
+        Me.GroupBox2.Location = New System.Drawing.Point(939, 68)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBox2.Size = New System.Drawing.Size(136, 59)
+        Me.GroupBox2.TabIndex = 64
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "체결정보찾기"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
-        Me.ClientSize = New System.Drawing.Size(1277, 741)
+        Me.ClientSize = New System.Drawing.Size(1278, 577)
+        Me.Controls.Add(Me.GroupBox2)
+        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.Button15)
         Me.Controls.Add(Me.Button13)
         Me.Controls.Add(Me.Button12)
         Me.Controls.Add(Me.Button11)
         Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.Button9)
-        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.lstInfo)
         Me.Controls.Add(Me.Button8)
         Me.Controls.Add(Me.btnMinBong)
@@ -790,6 +1003,10 @@ Partial Class frmMain
         Me.Text = "대칭이론"
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -880,4 +1097,18 @@ Partial Class frmMain
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents Button12 As System.Windows.Forms.Button
     Friend WithEvents Button13 As System.Windows.Forms.Button
+    Friend WithEvents txtSPToday As System.Windows.Forms.TextBox
+    Friend WithEvents Button14 As System.Windows.Forms.Button
+    Friend WithEvents txtSignValue As System.Windows.Forms.TextBox
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents Button15 As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents txtJupo1 As System.Windows.Forms.TextBox
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents chkBizSunValue As System.Windows.Forms.CheckBox
+    Friend WithEvents chkBizValue As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents txtSPBong As System.Windows.Forms.TextBox
 End Class

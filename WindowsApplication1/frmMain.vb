@@ -64,6 +64,7 @@ Public Class frmMain
 
         txtEndDate1.Text = Format(Now, "yyyyMMdd")
         txtAnalEndDate.Text = Format(Now, "yyyyMMdd")
+        'txtSPToday.Text = Format(Now, "yyyyMMdd")
 
     End Sub
 
@@ -227,7 +228,6 @@ Public Class frmMain
         Dim i As Integer
         Dim nBong As Integer = 0
         Dim strItemValue As String
-        Dim sBeforeDate As String
         Dim sName As String, sCurDate As String
         Dim nStartV As Integer, nEndV As Integer, nTV As Integer
         Dim stockValueInfo As StockValueInfo
@@ -244,18 +244,18 @@ Public Class frmMain
             '// 클래스 하나 셋팅
             stockValueInfo = New StockValueInfo
 
-            sCurDate = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "일자")
+            sCurDate = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "일자"))
             'Console.WriteLine("일자:" + sCurDate)
 
-            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "거래량")
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "거래량"))
             nTV = CInt(strItemValue)
             'Console.WriteLine("거래량:" + strItemValue)
 
-            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시가")
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시가"))
             nStartV = CInt(strItemValue)
             'Console.WriteLine("시가:" + strItemValue)
 
-            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "현재가")
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "현재가"))
             nEndV = CInt(strItemValue)
             'Console.WriteLine("종가(현재가):" + strItemValue)
 
@@ -268,9 +268,9 @@ Public Class frmMain
             'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "거래대금")
             'Console.WriteLine("거래대금:" + strItemValue)
 
-            stockValueInfo.setStockValue(Trim(sCurDate), nStartV, nEndV, nTV, sName, "")
+            stockValueInfo.setStockValue(sCurDate, nStartV, nEndV, nTV, sName, "")
             listStockValueInfo.Add(stockValueInfo)
-            If nBong > 250 Then
+            If nBong > CInt(Trim(txtSPBong.Text)) Then
                 Console.WriteLine("end of 250 bong...")
                 Exit For
             End If
@@ -558,6 +558,91 @@ Public Class frmMain
         Application.DoEvents()
 
     End Sub
+    Private Sub trProcStockSign(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+        Dim item As ListViewItem
+        Dim nCnt As Short, i As Short
+        Dim nSignValue As Integer = 0, nFindTotal As Integer = 0
+        Dim sStockName As String
+        Dim sTime As String, sHighLow As String, sPower As String, sCurPrice As String, sSignValue As String
+
+        sStockName = gHashScreenNoAndStock(CStr(eventArgs.sScrNo))
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName) - 1
+        If nCnt < 0 Then
+            Console.WriteLine("API 데이터가 없습니다")
+            Return
+        End If
+
+        For i = nCnt To 0 Step -1
+            'Next
+
+            'For i = 0 To (nCnt - 1)
+
+            sSignValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "체결거래량"))
+            nSignValue = CInt(Trim(sSignValue).Replace("+", "").Replace("-", ""))
+            If nSignValue >= CInt(Trim(txtSignValue.Text)) Then
+
+                nFindTotal += 1
+
+                Console.WriteLine("체결거래량 : " + sSignValue)
+
+                sTime = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시간"))
+                Console.WriteLine("시간 : " + sTime)
+
+                sHighLow = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "대비율"))
+                Console.WriteLine("등락율 : " + sHighLow)
+
+                sPower = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "체결강도"))
+                Console.WriteLine("체결강도 : " + sPower)
+
+                sCurPrice = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "현재가"))
+                Console.WriteLine("현재가 : " + sCurPrice)
+
+                lstInfo.Items.Add(sStockName + ", 시간[" + sTime + "], 체결량[" + sSignValue + "] 등락률[" + sHighLow + "] 체결강도[" + sPower + "] 현재가[" + sCurPrice + "]")
+
+                '// list view
+                item = New ListViewItem(sStockName)     '// 종목명
+                item.SubItems.Add(sTime)                '// 체결시간
+                item.SubItems.Add(sSignValue)           '// 체결량
+                If CInt(sSignValue) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Red
+                End If
+
+                item.SubItems.Add(sHighLow)             '// 주가등락
+                If CInt(sHighLow) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(3).ForeColor = Color.Blue
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(3).ForeColor = Color.Red
+                End If
+
+                item.SubItems.Add(sPower)               '// 체결강도
+                item.SubItems.Add(sCurPrice)            '// 현재가
+                If CInt(sCurPrice) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(5).ForeColor = Color.Red
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(5).ForeColor = Color.Blue
+                End If
+                item.SubItems.Add(CStr(nFindTotal))           '// 출현횟수
+
+                'frmSign.lstSign.Items.Add(item)
+                frmSign.lstSign.Items.Insert(0, item)
+
+            End If
+        Next
+
+        gRecvCommandCount += 1
+        gHashScreenNoAndStock.Remove(eventArgs.sScrNo)
+        Console.WriteLine("Recv count {0}, {1}", gRecvCommandCount, sStockName)
+
+    End Sub
     Private Sub trProcStockInfo(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim nCnt As Short, i As Short
         Dim strItemValue As String
@@ -595,10 +680,7 @@ Public Class frmMain
     Private Sub trProcBunBong(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim nCnt As Short, i As Short
         Dim strItemValue As String
-        Dim sCompany As String, sCode As String
-        Dim lOnlyBuy As Long
         Dim lTotalOnlyBuy As Long = 0
-        Dim sStockName As String
 
         nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
         For i = 0 To (nCnt - 1)
@@ -658,7 +740,6 @@ Public Class frmMain
         Dim sCompany As String, sCode As String
         Dim lOnlyBuy As Long
         Dim lTotalOnlyBuy As Long = 0
-        Dim sStockName As String
 
         nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
         For i = 0 To (nCnt - 1)
@@ -1153,6 +1234,10 @@ Public Class frmMain
             Call trProcStockInfo(sender, eventArgs)
             KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
             Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
+        ElseIf eventArgs.sRQName = "체결정보요청" Then
+            Call trProcStockSign(sender, eventArgs)
+            KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
+            Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
         End If
 
     End Sub
@@ -1162,7 +1247,7 @@ Public Class frmMain
         KHOpenAPI.CommRqData("주식기본정보요청", "opt10001", CInt("0"), "8001")
     End Sub
 
-    Private Sub btnCmd2_Click(sender As Object, e As EventArgs) Handles btnCmd2.Click
+    Public Sub btnCmd2_Click(sender As Object, e As EventArgs) Handles btnCmd2.Click
         If bLoginStatus = False Then
             MsgBox("로그인이 필요합니다!!")
             Return
@@ -1197,7 +1282,7 @@ Public Class frmMain
         KHOpenAPI.CommRqData("종목별증권사순위요청기간2", "OPT10038", CInt("0"), "4001")
     End Sub
 
-    Private Sub btnCmd3_Click(sender As Object, e As EventArgs) Handles btnCmd3.Click
+    Public Sub btnCmd3_Click(sender As Object, e As EventArgs) Handles btnCmd3.Click
         If bLoginStatus = False Then
             MsgBox("로그인이 필요합니다!!")
             Return
@@ -1328,7 +1413,7 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Public Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If bLoginStatus = False Then
             MsgBox("로그인이 필요합니다!!")
             Return
@@ -1878,6 +1963,11 @@ Public Class frmMain
             Return
         End If
 
+        If Trim(txtSPToday.Text).Length = 0 Then
+            MsgBox("시작점 찾을 기준날짜를 입력하세요")
+            Return
+        End If
+
         gSendCommandCount = 0
         gRecvCommandCount = 0
         gHashSijaMain.Clear()
@@ -1888,39 +1978,44 @@ Public Class frmMain
         ProgressBar1.Minimum = 0
         ProgressBar1.Maximum = gKosdaqStockCodeTable.Count + 1
 
+        '// 코스닥 종목에 대해서 일봉 데이터를 가져온다.
         gKosdaqStockCodeTableKeys = gKosdaqStockCodeTable.Keys
         For Each key In gKosdaqStockCodeTableKeys
-            If nScreenNumber >= 1099 Then
-                nScreenNumber = 1000
-            End If
+            If key.ToString.Contains("스팩") = False Then
 
-            gHashScreenNoAndStock.Add(CStr(nScreenNumber), key.ToString)
+                If nScreenNumber >= 1099 Then
+                    nScreenNumber = 1000
+                End If
 
-            KHOpenAPI.SetInputValue("종목코드", gKosdaqStockCodeTable(key.ToString))
-            KHOpenAPI.SetInputValue("기준일자", Trim(txtEndDate1.Text))
-            KHOpenAPI.SetInputValue("수정주가구분", "1")
-            KHOpenAPI.CommRqData("주식일봉차트조회", "OPT10081", CInt("0"), CStr(nScreenNumber))
-            Threading.Thread.Sleep(300)
-            Application.DoEvents()
+                gHashScreenNoAndStock.Add(CStr(nScreenNumber), key.ToString)
 
-            gSendCommandCount += 1
-            nScreenNumber += 1
-            nProcValue += 1
-            ProgressBar1.Value = nProcValue
-            Console.WriteLine("Send count {0}, {1}", gSendCommandCount, key.ToString)
-            If bStop = True Then
-                MsgBox("스톱!!")
-                Exit For
-            End If
+                KHOpenAPI.SetInputValue("종목코드", gKosdaqStockCodeTable(key.ToString))
+                KHOpenAPI.SetInputValue("기준일자", Trim(txtEndDate1.Text))
+                KHOpenAPI.SetInputValue("수정주가구분", "1")
+                KHOpenAPI.CommRqData("주식일봉차트조회", "OPT10081", CInt("0"), CStr(nScreenNumber))
+                Threading.Thread.Sleep(210)
+                Application.DoEvents()
+
+                gSendCommandCount += 1
+                nScreenNumber += 1
+                nProcValue += 1
+                ProgressBar1.Value = nProcValue
+                Console.WriteLine("Send count {0}, {1}", gSendCommandCount, key.ToString)
+                If bStop = True Then
+                    MsgBox("멈춤!!")
+                    Exit For
+                End If
+
+            End If '// 스팩 skip
         Next
 
-        '// 데이터 다 받을때까지 대기.
+        '// 일봉 데이터 다 받을때까지 대기.
         Dim totalRetryCount As Integer = 0
         Do While True
             If gSendCommandCount <= gRecvCommandCount Then
                 Exit Do
             End If
-            Threading.Thread.Sleep(300)
+            Threading.Thread.Sleep(210)
             Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCommandCount) + "], R[" + CStr(gRecvCommandCount) + "]")
             Application.DoEvents()
             totalRetryCount += 1
@@ -1930,63 +2025,72 @@ Public Class frmMain
             End If
         Loop
 
-        Console.WriteLine("============================================")
-        Console.WriteLine("============================================")
-        Console.WriteLine("============================================")
 
-        Dim hashTodayStartEndValue As New Hashtable
-        Dim stockVInfo As StockValueInfo
-        Dim stockValueInfo As New StockValueInfo
-        Dim maxStockValueInfo As New StockValueInfo
-        Dim stockTodayValue As New StockValueInfo
-        Dim stockStartValue As New StockValueInfo
-        Dim listStockValueInfo As New List(Of StockValueInfo)()
-        Dim listSijackStockValueInfo As New List(Of StockValueInfo)()
-        Dim gHashSijaMainKeys As ICollection
-        Dim nMaxTV As Integer
-        Dim sMsg As String, stockCode As String
+        ''///////////////////////////////////////////////////////////////////
+        ''// 종목별 시작점을 찾기
+        ''///////////////////////////////////////////////////////////////////
+        'Dim hashTodayStartEndValue As New Hashtable
+        'Dim stockVInfo As StockValueInfo
+        'Dim stockValueInfo As New StockValueInfo
+        'Dim maxStockValueInfo As New StockValueInfo
+        'Dim stockTodayValue As New StockValueInfo
+        'Dim stockStartValue As New StockValueInfo
+        'Dim listStockValueInfo As New List(Of StockValueInfo)()
+        'Dim listSijackStockValueInfo As New List(Of StockValueInfo)()
+        'Dim gHashSijaMainKeys As ICollection
+        'Dim nMaxTV As Integer
+        'Dim sFindStartPointDate As String
+        'Dim sMsg As String, stockCode As String
 
-        '//////////////////////////////////////////////////////////////////
-        '// 종목별 시작점 찾기
-        '//////////////////////////////////////////////////////////////////
-        gHashSijaMainKeys = gHashSijaMain.Keys
-        For Each key In gHashSijaMainKeys
-            listStockValueInfo = gHashSijaMain(key.ToString)
-            nMaxTV = 0
-            For Each stockValueInfo In listStockValueInfo
-                If nMaxTV < stockValueInfo.getTradeV Then
-                    maxStockValueInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
-                    nMaxTV = stockValueInfo.getTradeV
-                End If
+        ''//////////////////////////////////////////////////////////////////
+        ''// 종목별 시작점 찾기
+        ''//////////////////////////////////////////////////////////////////
+        'sFindStartPointDate = Trim(txtEndDate1.Text)
+        'gHashSijaMainKeys = gHashSijaMain.Keys
+        'For Each key In gHashSijaMainKeys
 
-                '// 오늘 주가 정보 저장 - 오늘 시작점 위치인것 찾을때 사용
-                If Trim(txtEndDate1.Text) = Trim(stockValueInfo.getCurDate) Then
-                    stockVInfo = New StockValueInfo
-                    stockVInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
-                    hashTodayStartEndValue.Add(stockValueInfo.getName, stockVInfo)
-                End If
-                'Console.WriteLine("{0},{1},{2},{3},{4}", key.ToString, stockValueInfo.getCurDate, stockValueInfo.getTradeV, stockValueInfo.getStartV, stockValueInfo.getEndV)
-            Next
-            '// 찾은 시작점 list에 추가.
-            stockVInfo = New StockValueInfo
-            stockVInfo.setStockValue(maxStockValueInfo.getCurDate, maxStockValueInfo.getStartV, maxStockValueInfo.getEndV, maxStockValueInfo.getTradeV, maxStockValueInfo.getName, "")
-            listSijackStockValueInfo.Add(stockVInfo)
+        '    listStockValueInfo = gHashSijaMain(key.ToString)
+        '    '// 거래량
+        '    nMaxTV = 0
 
-            stockCode = gStockCodeTable(Trim(stockVInfo.getName))
-            If stockCode <> Nothing Then
-                If gHashStockStatus.Contains(Trim(stockVInfo.getName)) = False Then
-                    sMsg = KHOpenAPI.GetMasterStockState(stockCode)
-                    gHashStockStatus.Add(Trim(stockVInfo.getName), sMsg)
-                    Console.WriteLine("{0} {1}", stockVInfo.getName, sMsg)
-                End If
-            Else
-                If gHashStockStatus.Contains(Trim(stockVInfo.getName)) = False Then
-                    gHashStockStatus.Add(Trim(stockVInfo.getName), "정보없음")
-                    Console.WriteLine("종목코드없음:" + Trim(stockVInfo.getName))
-                End If
-            End If
+        '    '// 종목별 일봉 거래량중 max 값을 찾는다.
+        '    For Each stockValueInfo In listStockValueInfo
+        '        '// 거래량 가장 큰 일봉 데이터 셋팅
+        '        If nMaxTV < stockValueInfo.getTradeV Then
+        '            maxStockValueInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
+        '            nMaxTV = stockValueInfo.getTradeV
+        '        End If
 
-        Next '// next for
+        '        '// 오늘 주가 정보 저장 - 오늘 시작점 위치인것 찾을때 사용
+        '        If sFindStartPointDate = stockValueInfo.getCurDate Then
+        '            stockVInfo = New StockValueInfo
+        '            stockVInfo.setStockValue(stockValueInfo.getCurDate, stockValueInfo.getStartV, stockValueInfo.getEndV, stockValueInfo.getTradeV, stockValueInfo.getName, "")
+        '            hashTodayStartEndValue.Add(stockValueInfo.getName, stockVInfo)
+        '        End If
+        '        'Console.WriteLine("{0},{1},{2},{3},{4}", key.ToString, stockValueInfo.getCurDate, stockValueInfo.getTradeV, stockValueInfo.getStartV, stockValueInfo.getEndV)
+        '    Next
+
+        '    '// 종목에 대한 정보를 api를 통해서 가져와서 저장.
+        '    stockCode = gStockCodeTable(stockValueInfo.getName)
+        '    If stockCode <> Nothing Then
+        '        If gHashStockStatus.Contains(stockValueInfo.getName) = False Then
+        '            sMsg = KHOpenAPI.GetMasterStockState(stockCode)
+        '            gHashStockStatus.Add(stockValueInfo.getName, sMsg)
+
+        '            '// 찾은 시작점 list에 추가.
+        '            stockVInfo = New StockValueInfo
+        '            stockVInfo.setStockValue(maxStockValueInfo.getCurDate, maxStockValueInfo.getStartV, maxStockValueInfo.getEndV, maxStockValueInfo.getTradeV, maxStockValueInfo.getName, "")
+        '            listSijackStockValueInfo.Add(stockVInfo)
+        '            Console.WriteLine("{0} {1}", stockValueInfo.getName, sMsg)
+        '        End If
+        '    Else
+        '        '// 정보없는 종목은 삭제한다. 주식 정보가 없기 때문에 이상한 종목임.
+        '        hashTodayStartEndValue.Remove(stockValueInfo.getName)
+        '        Console.WriteLine("종목코드없음:" + stockValueInfo.getName)
+        '    End If
+
+        'Next '// next for
+
 
         '// 새창으로 시작점 계산 후 보여준다.
         frmStartPoint.Show()
@@ -2014,5 +2118,83 @@ Public Class frmMain
     Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
         KHOpenAPI.SetInputValue("종목코드", txtStockCode.Text)
         KHOpenAPI.CommRqData("주식기본정보테스트", "opt10001", "0", 1000)
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        Dim MyKeys As ICollection
+        Dim nScreenNumber As Integer = 0
+        Dim nProcValue As Integer = 0
+
+        If bLoginStatus = False Then
+            MsgBox("로그인이 필요합니다!!")
+            Return
+        End If
+
+        '// 체결량 정보 출력용 form
+        frmSign.Show()
+
+        bStop = False
+        gSendCommandCount = 0
+        gRecvCommandCount = 0
+        gHashScreenNoAndStock.Clear()
+        '// progress bar
+        frmSign.pBar.Minimum = 0
+        frmSign.pBar.Maximum = gKosdaqStockCodeTable.Count
+
+        '// 체결량 정보를 뿌린다.
+        frmSign.lstSign.Columns(0).TextAlign = HorizontalAlignment.Center   '// 종목명
+        frmSign.lstSign.Columns(1).TextAlign = HorizontalAlignment.Center   '// 체결시간
+        frmSign.lstSign.Columns(2).TextAlign = HorizontalAlignment.Center   '// 체결량
+        frmSign.lstSign.Columns(3).TextAlign = HorizontalAlignment.Center   '// 주가등락
+        frmSign.lstSign.Columns(4).TextAlign = HorizontalAlignment.Center   '// 체결강도
+        frmSign.lstSign.Columns(5).TextAlign = HorizontalAlignment.Center   '// 현재가
+        frmSign.lstSign.Columns(6).TextAlign = HorizontalAlignment.Center   '// 출현횟수
+
+        MyKeys = gKosdaqStockCodeTable.Keys()
+        For Each Key In MyKeys
+            If nScreenNumber >= 1099 Then
+                nScreenNumber = 1000
+            End If
+
+            gHashScreenNoAndStock.Add(CStr(nScreenNumber), Key.ToString)
+
+            KHOpenAPI.SetInputValue("종목코드", gKosdaqStockCodeTable(Key.ToString))
+            KHOpenAPI.CommRqData("체결정보요청", "opt10003", "0", nScreenNumber)
+            Threading.Thread.Sleep(210)
+            Application.DoEvents()
+
+            gSendCommandCount += 1
+            nScreenNumber += 1
+            '// progress bar
+            nProcValue += 1
+            frmSign.pBar.Value = nProcValue
+            Console.WriteLine("Send count {0}, {1}", gSendCommandCount, Key.ToString)
+            If bStop = True Then
+                MsgBox("스톱!!")
+                Exit For
+            End If
+
+        Next
+
+        '// 데이터 다 받을때까지 대기.
+        Dim totalRetryCount As Integer = 0
+        Do While True
+            If gSendCommandCount <= gRecvCommandCount Then
+                Exit Do
+            End If
+            Threading.Thread.Sleep(300)
+            Console.WriteLine("Wait OnRecvTRdata...S[" + CStr(gSendCommandCount) + "], R[" + CStr(gRecvCommandCount) + "]")
+            Application.DoEvents()
+            totalRetryCount += 1
+            If totalRetryCount >= 100 Then
+                MsgBox("데이터를 서버로 부터 모두 받지 못했습니다. 다시한번 실행해 주세요!")
+                Return
+            End If
+        Loop
+
+    End Sub
+
+    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
+        lstInfo.Items.Clear()
     End Sub
 End Class

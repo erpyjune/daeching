@@ -16,4 +16,10 @@
             MsgBox("로그인 실패")
         End If
     End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim s As String
+        s = "스팩대한민국제2"
+        MsgBox(CStr(InStr(s, "스팩ㅇㅇㅇ")))
+    End Sub
 End Class
