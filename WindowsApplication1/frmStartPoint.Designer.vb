@@ -45,10 +45,11 @@ Partial Class frmStartPoint
         'lstViewStartPoint
         '
         Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3, Me.상장주식수, Me.시가총액, Me.영업이익, Me.당기순이익})
-        Me.lstViewStartPoint.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstViewStartPoint.Location = New System.Drawing.Point(9, 67)
+        Me.lstViewStartPoint.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.lstViewStartPoint.Location = New System.Drawing.Point(13, 100)
+        Me.lstViewStartPoint.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.lstViewStartPoint.Name = "lstViewStartPoint"
-        Me.lstViewStartPoint.Size = New System.Drawing.Size(1022, 407)
+        Me.lstViewStartPoint.Size = New System.Drawing.Size(1458, 608)
         Me.lstViewStartPoint.TabIndex = 0
         Me.lstViewStartPoint.UseCompatibleStateImageBehavior = False
         Me.lstViewStartPoint.View = System.Windows.Forms.View.Details
@@ -110,26 +111,27 @@ Partial Class frmStartPoint
         '
         Me.KHOpenAPI.Enabled = True
         Me.KHOpenAPI.Location = New System.Drawing.Point(965, -1)
+        Me.KHOpenAPI.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.KHOpenAPI.Size = New System.Drawing.Size(99, 30)
+        Me.KHOpenAPI.Size = New System.Drawing.Size(148, 45)
         Me.KHOpenAPI.TabIndex = 1
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(9, 36)
+        Me.ProgressBar1.Location = New System.Drawing.Point(13, 54)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(1022, 25)
+        Me.ProgressBar1.Size = New System.Drawing.Size(1460, 38)
         Me.ProgressBar1.TabIndex = 2
         '
         'lbMsg1
         '
         Me.lbMsg1.AutoSize = True
         Me.lbMsg1.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbMsg1.Location = New System.Drawing.Point(8, 15)
-        Me.lbMsg1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.lbMsg1.Location = New System.Drawing.Point(11, 22)
         Me.lbMsg1.Name = "lbMsg1"
-        Me.lbMsg1.Size = New System.Drawing.Size(43, 14)
+        Me.lbMsg1.Size = New System.Drawing.Size(55, 20)
         Me.lbMsg1.TabIndex = 3
         Me.lbMsg1.Text = "Msg1"
         '
@@ -137,24 +139,25 @@ Partial Class frmStartPoint
         '
         Me.lbMsg2.AutoSize = True
         Me.lbMsg2.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbMsg2.Location = New System.Drawing.Point(238, 15)
-        Me.lbMsg2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.lbMsg2.Location = New System.Drawing.Point(340, 22)
         Me.lbMsg2.Name = "lbMsg2"
-        Me.lbMsg2.Size = New System.Drawing.Size(43, 14)
+        Me.lbMsg2.Size = New System.Drawing.Size(55, 20)
         Me.lbMsg2.TabIndex = 4
         Me.lbMsg2.Text = "Msg2"
         '
         'frmStartPoint
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1033, 480)
+        Me.ClientSize = New System.Drawing.Size(1476, 720)
         Me.Controls.Add(Me.lbMsg2)
         Me.Controls.Add(Me.lbMsg1)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.KHOpenAPI)
         Me.Controls.Add(Me.lstViewStartPoint)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "frmStartPoint"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "시작점"
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

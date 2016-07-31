@@ -27,15 +27,15 @@ Partial Class frmAPI
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.txtCode = New System.Windows.Forms.TextBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(63, 92)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Location = New System.Drawing.Point(44, 61)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(199, 58)
+        Me.Button1.Size = New System.Drawing.Size(139, 39)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "테스트"
         Me.Button1.UseVisualStyleBackColor = True
@@ -44,7 +44,6 @@ Partial Class frmAPI
         '
         Me.KHOpenAPI.Enabled = True
         Me.KHOpenAPI.Location = New System.Drawing.Point(216, 45)
-        Me.KHOpenAPI.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
         Me.KHOpenAPI.Size = New System.Drawing.Size(99, 30)
@@ -52,32 +51,41 @@ Partial Class frmAPI
         '
         'txtCode
         '
-        Me.txtCode.Location = New System.Drawing.Point(54, 32)
-        Me.txtCode.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtCode.Location = New System.Drawing.Point(38, 21)
         Me.txtCode.Name = "txtCode"
-        Me.txtCode.Size = New System.Drawing.Size(113, 28)
+        Me.txtCode.Size = New System.Drawing.Size(80, 21)
         Me.txtCode.TabIndex = 2
         Me.txtCode.Text = "058820"
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(109, 207)
+        Me.Button2.Location = New System.Drawing.Point(44, 105)
+        Me.Button2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(127, 49)
+        Me.Button2.Size = New System.Drawing.Size(89, 33)
         Me.Button2.TabIndex = 3
         Me.Button2.Text = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(165, 111)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(78, 26)
+        Me.Button3.TabIndex = 4
+        Me.Button3.Text = "Button3"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'frmAPI
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 18.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(517, 429)
+        Me.ClientSize = New System.Drawing.Size(362, 286)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.txtCode)
         Me.Controls.Add(Me.KHOpenAPI)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "frmAPI"
         Me.Text = "frmAPI"
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).EndInit()
@@ -89,4 +97,5 @@ Partial Class frmAPI
     Public WithEvents KHOpenAPI As AxKHOpenAPILib.AxKHOpenAPI
     Friend WithEvents txtCode As System.Windows.Forms.TextBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 End Class

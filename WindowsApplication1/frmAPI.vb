@@ -22,4 +22,19 @@
         s = "스팩대한민국제2"
         MsgBox(CStr(InStr(s, "스팩ㅇㅇㅇ")))
     End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Dim sgIncrease As Single, sgD As Single
+        Dim nA As Integer, nB As Integer
+
+        nA = 4567
+        nB = 6000
+
+        sgIncrease = 0.0129
+
+        sgD = nA * sgIncrease
+
+        Console.WriteLine("result {0}, {1} ", CStr(nA), CStr(sgD))
+
+    End Sub
 End Class
