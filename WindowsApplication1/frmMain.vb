@@ -1317,6 +1317,31 @@ Public Class frmMain
         'Next
 
     End Sub
+
+    Private Sub KHOpenAPI_OnReceiveMsg(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveMsgEvent) Handles KHOpenAPI.OnReceiveMsg
+        Console.WriteLine("화면번호:{0} | RQName:{1} | TRCode:{2} | 메세지:{3}", e.sScrNo, e.sRQName, e.sTrCode, e.sMsg)
+    End Sub
+
+    Private Sub KHOpenAPI_OnReceiveRealData(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent) Handles KHOpenAPI.OnReceiveRealData
+        Dim a As String, b As String
+
+        Console.WriteLine("OnReceiveRealData::종목코드 : {0} | RealType : {1} | RealData : {2}", e.sRealKey, e.sRealType, e.sRealData)
+
+        If e.sRealType = "주식시세" Then
+            Console.WriteLine("종목코드 : {0} | 현재가 : {1:C} | 등락율 : {2} | 누적거래량 : {3:N0} ", _
+                              e.sRealKey, KHOpenAPI.GetCommRealData(e.sRealType, 10), KHOpenAPI.GetCommRealData(e.sRealType, 12), KHOpenAPI.GetCommRealData(e.sRealType, 13))
+        End If
+
+        'Console.WriteLine("Recv real data...")
+
+        'If e.sRealType = "순간체결량" Then
+        '    a = KHOpenAPI.GetCommRealData(e.sRealType, 215)
+        '    b = KHOpenAPI.GetCommRealData(e.sRealType, 214)
+        '    Console.WriteLine("a : {0}, b {1}", a, b)
+        'End If
+
+        Console.WriteLine("OnReceiveRealData....")
+    End Sub
     Private Sub KHOpenAPI_OnReceiveTrData(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent) Handles KHOpenAPI.OnReceiveTrData
 
         If eventArgs.sRQName = "종목별증권사순위요청기간1" Or eventArgs.sRQName = "종목별증권사순위요청기간2" Or eventArgs.sRQName = "종목별증권사순위요청기간3" Then
@@ -3808,4 +3833,15 @@ Public Class frmMain
 
     End Sub
 
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        Dim nRet As Integer
+
+        nRet = KHOpenAPI.SetRealReg("0001", "054620;058820", "10;12;13", "0")
+        If nRet = 0 Then
+            MsgBox("등록 성공")
+        Else
+            MsgBox("등록 실패")
+        End If
+
+    End Sub
 End Class
