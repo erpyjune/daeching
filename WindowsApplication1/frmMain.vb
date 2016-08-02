@@ -10,7 +10,8 @@ Public Class frmMain
     Dim gStore As StoreClass
     Dim lRefreshCount As Long = 0
     Dim bLoginStatus As Boolean
-    Dim gStockCodeTable As New Hashtable
+    Dim gStockCodeTable As New Hashtable    '// 코스피 + 코스닥 종목 테이블, key = 종목명, value = 종목코드
+    Dim gStockNameTable As New Hashtable    '// 코스피 + 코스닥 종목 테이블, key = 종목코드, value = 종목명
     Dim gStockCompanyCodeTable As New Hashtable
     Dim gKosdaqStockCodeTable As New Hashtable
     Dim gListStockCompanyCode As New List(Of String)()
@@ -42,6 +43,20 @@ Public Class frmMain
     Dim gListSPSangHaDrop As New List(Of StartPointInfo)     '// 대박 하향
     Dim gHashCompanyOnlyBuy As New Hashtable '// 종목별 1포, 2포, 3포 순매수 저장
     Dim gHashCompanyBizInfo As New Hashtable '// 상장주식수, 영업이익, 순이익, 매출
+
+    Dim gCosdaqStrList1 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList2 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList3 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList4 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList5 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList6 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList7 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList8 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList9 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList10 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList11 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gCosdaqStrList12 As String '// 실시간 정보를 받아 오기위한 코스닥 리스트
+    Dim gnSignValue As Integer    '// 순간체결량 이상, 이하값
 
     Function getAPI()
         Return KHOpenAPI
@@ -129,6 +144,18 @@ Public Class frmMain
         Dim strCode As String, strName As String
         Dim fileReader As System.IO.StreamReader
         Dim stringReader As String
+        Dim nTotal As Integer = 0
+        Dim sb1 As New System.Text.StringBuilder()
+        Dim sb2 As New System.Text.StringBuilder()
+        Dim sb3 As New System.Text.StringBuilder()
+        Dim sb4 As New System.Text.StringBuilder()
+        Dim sb5 As New System.Text.StringBuilder()
+        Dim sb6 As New System.Text.StringBuilder()
+        Dim sb7 As New System.Text.StringBuilder()
+        Dim sb8 As New System.Text.StringBuilder()
+        Dim sb9 As New System.Text.StringBuilder()
+        Dim sb10 As New System.Text.StringBuilder()
+        Dim sb11 As New System.Text.StringBuilder()
 
         Try
             fileReader = My.Computer.FileSystem.OpenTextFileReader(strCodeFilePath)
@@ -146,14 +173,135 @@ Public Class frmMain
                     ElseIf i = 1 Then
                         strName = Trim(TArr(i))
                         gKosdaqStockCodeTable.Add(strName, strCode)
-                        'System.Console.WriteLine(strName)
+
+                        If nTotal <= 98 Then
+                            If sb1.Length = 0 Then
+                                sb1.Append(strCode)
+                            Else
+                                sb1.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 98 And nTotal <= 196 Then
+                            If sb2.Length = 0 Then
+                                sb2.Append(strCode)
+                            Else
+                                sb2.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 196 And nTotal <= 294 Then
+                            If sb3.Length = 0 Then
+                                sb3.Append(strCode)
+                            Else
+                                sb3.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 294 And nTotal <= 392 Then
+                            If sb4.Length = 0 Then
+                                sb4.Append(strCode)
+                            Else
+                                sb4.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 392 And nTotal <= 490 Then
+                            If sb5.Length = 0 Then
+                                sb5.Append(strCode)
+                            Else
+                                sb5.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 490 And nTotal <= 588 Then
+                            If sb6.Length = 0 Then
+                                sb6.Append(strCode)
+                            Else
+                                sb6.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 588 And nTotal <= 686 Then
+                            If sb7.Length = 0 Then
+                                sb7.Append(strCode)
+                            Else
+                                sb7.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 686 And nTotal <= 784 Then
+                            If sb8.Length = 0 Then
+                                sb8.Append(strCode)
+                            Else
+                                sb8.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 784 And nTotal <= 882 Then
+                            If sb9.Length = 0 Then
+                                sb9.Append(strCode)
+                            Else
+                                sb9.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 882 And nTotal <= 980 Then
+                            If sb10.Length = 0 Then
+                                sb10.Append(strCode)
+                            Else
+                                sb10.Append(";").Append(strCode)
+                            End If
+                        ElseIf nTotal > 980 And nTotal <= 1078 Then
+                            If sb11.Length = 0 Then
+                                sb11.Append(strCode)
+                            Else
+                                sb11.Append(";").Append(strCode)
+                            End If
+                        Else
+
+                        End If
+
                     End If
+
+                    nTotal += 1
+
                 Next
+
             End While
         Catch ex As System.IO.IOException
             MsgBox(strCodeFilePath + " 코스닥 종목코드 파일을 찾을 수 없습니다.")
             Return
         End Try
+
+        '// 실시간 데이터 받아오기위한 코스닥 종목 코드 리스트
+        '// 000000;111111;222222
+        gCosdaqStrList1 = ""
+        gCosdaqStrList1 = sb1.ToString
+
+        gCosdaqStrList2 = ""
+        gCosdaqStrList2 = sb2.ToString
+
+        gCosdaqStrList3 = ""
+        gCosdaqStrList3 = sb3.ToString
+
+        gCosdaqStrList4 = ""
+        gCosdaqStrList4 = sb4.ToString
+
+        gCosdaqStrList5 = ""
+        gCosdaqStrList5 = sb5.ToString
+
+        gCosdaqStrList6 = ""
+        gCosdaqStrList6 = sb6.ToString
+
+        gCosdaqStrList7 = ""
+        gCosdaqStrList7 = sb7.ToString
+
+        gCosdaqStrList8 = ""
+        gCosdaqStrList8 = sb8.ToString
+
+        gCosdaqStrList9 = ""
+        gCosdaqStrList9 = sb9.ToString
+
+        gCosdaqStrList10 = ""
+        gCosdaqStrList10 = sb10.ToString
+
+        gCosdaqStrList11 = ""
+        gCosdaqStrList11 = sb11.ToString
+
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList1)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList2)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList3)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList4)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList5)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList6)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList7)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList8)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList9)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList10)
+        Console.WriteLine("코스닥 리스트 : 개수{0}, {1}", gKosdaqStockCodeTable.Count, gCosdaqStrList11)
 
     End Sub
 
@@ -184,6 +332,7 @@ Public Class frmMain
                     ElseIf i = 1 Then
                         strName = Trim(TArr(i))
                         gStockCodeTable.Add(strName, strCode)
+                        gStockNameTable.Add(strCode, strName)
                         'System.Console.WriteLine(strName)
                         'cmbStock.Items.Add(strName)
                         HSource.Add(strName)
@@ -1318,29 +1467,106 @@ Public Class frmMain
 
     End Sub
 
+    Private Sub KHOpenAPI_OnReceiveChejanData(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent) Handles KHOpenAPI.OnReceiveChejanData
+        Console.WriteLine("[채장] sGubun : {0},  sFIdList : {1},  nItemCnt : {2}", e.sGubun, e.sFIdList, e.nItemCnt)
+    End Sub
+
     Private Sub KHOpenAPI_OnReceiveMsg(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveMsgEvent) Handles KHOpenAPI.OnReceiveMsg
-        Console.WriteLine("화면번호:{0} | RQName:{1} | TRCode:{2} | 메세지:{3}", e.sScrNo, e.sRQName, e.sTrCode, e.sMsg)
+        Console.WriteLine("[메세지받기] 화면번호:{0} | RQName:{1} | TRCode:{2} | 메세지:{3}", e.sScrNo, e.sRQName, e.sTrCode, e.sMsg)
     End Sub
 
     Private Sub KHOpenAPI_OnReceiveRealData(sender As Object, e As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent) Handles KHOpenAPI.OnReceiveRealData
-        Dim a As String, b As String
+        Dim strName As String
+        Dim strDate As String
+        Dim nTradeValue As Integer
+        Dim sHighLow As String
+        Dim sCurPrice As String
+        Dim item As ListViewItem
 
-        Console.WriteLine("OnReceiveRealData::종목코드 : {0} | RealType : {1} | RealData : {2}", e.sRealKey, e.sRealType, e.sRealData)
+        'Console.WriteLine("OnReceiveRealData::종목코드 : {0},  RealType : {1},  RealData : {2}", _
+        '                  e.sRealKey, e.sRealType, e.sRealData)
 
-        If e.sRealType = "주식시세" Then
-            Console.WriteLine("종목코드 : {0} | 현재가 : {1:C} | 등락율 : {2} | 누적거래량 : {3:N0} ", _
-                              e.sRealKey, KHOpenAPI.GetCommRealData(e.sRealType, 10), KHOpenAPI.GetCommRealData(e.sRealType, 12), KHOpenAPI.GetCommRealData(e.sRealType, 13))
+        If e.sRealType = "주식체결" Then
+            strName = gStockNameTable(Trim(e.sRealKey))
+            nTradeValue = CInt(Trim(KHOpenAPI.GetCommRealData(e.sRealType, 15)).Replace("+", "").Replace("-", ""))
+
+            Console.WriteLine("[주식체결] 종목코드 : {0}, 체결시간 : {1}, 거래량 : {2}, 등락률 : {3}, 현재가 : {4} ", _
+                              strName, _
+                              KHOpenAPI.GetCommRealData(e.sRealType, 20), _
+                              KHOpenAPI.GetCommRealData(e.sRealType, 15), _
+                              KHOpenAPI.GetCommRealData(e.sRealType, 12), _
+                              KHOpenAPI.GetCommRealData(e.sRealType, 10))
+
+            If nTradeValue >= gnSignValue Then
+                strDate = Trim(KHOpenAPI.GetCommRealData(e.sRealType, 20))
+                nTradeValue = CInt(Trim(KHOpenAPI.GetCommRealData(e.sRealType, 15)))
+                sHighLow = Trim(KHOpenAPI.GetCommRealData(e.sRealType, 12))
+                sCurPrice = Trim(KHOpenAPI.GetCommRealData(e.sRealType, 10))
+
+                'Console.WriteLine("[주식체결] 종목코드 : {0}, 체결시간 : {1}, 현재가 : {2}, 등락률 : {3}, 거래량 : {4} ", _
+                '  strName, _
+                '  KHOpenAPI.GetCommRealData(e.sRealType, 20), _
+                '  KHOpenAPI.GetCommRealData(e.sRealType, 10), _
+                '  KHOpenAPI.GetCommRealData(e.sRealType, 12), _
+                '  KHOpenAPI.GetCommRealData(e.sRealType, 15))
+
+                item = New ListViewItem(strName)
+
+                '// 체결시간
+                item.SubItems.Add(strDate)
+
+                '// 체결량
+                item.SubItems.Add(nTradeValue)
+                If CInt(nTradeValue) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Blue
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(2).ForeColor = Color.Red
+                End If
+
+                '// 주가 등락
+                item.SubItems.Add(sHighLow)             '// 주가등락
+                If CInt(sHighLow) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(3).ForeColor = Color.Blue
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(3).ForeColor = Color.Red
+                End If
+
+                '// 체결강도
+                item.SubItems.Add("공백")
+
+                '// 현재가
+                item.SubItems.Add(sCurPrice)            '// 현재가
+                If CInt(sCurPrice) > 0 Then
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(5).ForeColor = Color.Red
+                Else
+                    item.UseItemStyleForSubItems = False
+                    item.SubItems(5).ForeColor = Color.Blue
+                End If
+
+                '// 출현횟수
+                item.SubItems.Add("공백")
+
+                frmSign.lstSign.Items.Insert(0, item)
+
+                Application.DoEvents()
+
+
+
+                'lstInfo.Items.Insert(0, "[주식체결] 종목코드 : " + strName + ", 체결시간 : " + KHOpenAPI.GetCommRealData(e.sRealType, 20) + ", 거래량 : " + KHOpenAPI.GetCommRealData(e.sRealType, 15) + _
+                '                  ", 등락률 : " + KHOpenAPI.GetCommRealData(e.sRealType, 12) + ", 현재가 : " + KHOpenAPI.GetCommRealData(e.sRealType, 10))
+
+                'lstInfo.Items.Add("[주식체결] 종목코드 : " + strName + ", 체결시간 : " + KHOpenAPI.GetCommRealData(e.sRealType, 20) + ", 거래량 : " + KHOpenAPI.GetCommRealData(e.sRealType, 15) + _
+                '                  ", 등락률 : " + KHOpenAPI.GetCommRealData(e.sRealType, 12) + ", 현재가 : " + KHOpenAPI.GetCommRealData(e.sRealType, 10))
+            End If
+        ElseIf e.sRealType = "순간체결량" Then
+
         End If
 
-        'Console.WriteLine("Recv real data...")
-
-        'If e.sRealType = "순간체결량" Then
-        '    a = KHOpenAPI.GetCommRealData(e.sRealType, 215)
-        '    b = KHOpenAPI.GetCommRealData(e.sRealType, 214)
-        '    Console.WriteLine("a : {0}, b {1}", a, b)
-        'End If
-
-        Console.WriteLine("OnReceiveRealData....")
     End Sub
     Private Sub KHOpenAPI_OnReceiveTrData(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent) Handles KHOpenAPI.OnReceiveTrData
 
@@ -3836,9 +4062,44 @@ Public Class frmMain
     Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
         Dim nRet As Integer
 
-        nRet = KHOpenAPI.SetRealReg("0001", "054620;058820", "10;12;13", "0")
+        'nRet = KHOpenAPI.SetRealReg("0001", "054620;058820", "10;20;13", "0")
+        nRet = KHOpenAPI.SetRealReg("0001", gCosdaqStrList1, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공1:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0002", gCosdaqStrList2, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공2:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0003", gCosdaqStrList3, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공3:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0004", gCosdaqStrList4, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공4:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0005", gCosdaqStrList5, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공5:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0006", gCosdaqStrList6, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공6:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0007", gCosdaqStrList7, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공7:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0008", gCosdaqStrList8, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공8:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0009", gCosdaqStrList9, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공9:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0010", gCosdaqStrList10, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공10:{0}", nRet)
+
+        nRet = KHOpenAPI.SetRealReg("0011", gCosdaqStrList11, "20;302;10;12;15", "0")
+        Console.WriteLine("등록성공11:{0}", nRet)
+
         If nRet = 0 Then
+            gnSignValue = CInt(Trim(txtSignValue.Text))
             MsgBox("등록 성공")
+            frmSign.Show()
         Else
             MsgBox("등록 실패")
         End If

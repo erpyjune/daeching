@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -455,10 +455,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend1)
+        ChartArea2.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend2)
         Me.chartStock.Location = New System.Drawing.Point(509, 93)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -834,7 +834,7 @@ Partial Class frmMain
         Me.txtSignValue.Name = "txtSignValue"
         Me.txtSignValue.Size = New System.Drawing.Size(48, 21)
         Me.txtSignValue.TabIndex = 60
-        Me.txtSignValue.Text = "10000"
+        Me.txtSignValue.Text = "5000"
         Me.txtSignValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label12
@@ -1102,7 +1102,7 @@ Partial Class frmMain
         '
         'Button17
         '
-        Me.Button17.Location = New System.Drawing.Point(947, 431)
+        Me.Button17.Location = New System.Drawing.Point(1007, 317)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(90, 27)
         Me.Button17.TabIndex = 66
@@ -1113,7 +1113,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1281, 579)
+        Me.ClientSize = New System.Drawing.Size(1281, 764)
         Me.Controls.Add(Me.Button17)
         Me.Controls.Add(Me.Button16)
         Me.Controls.Add(Me.GroupBox2)
