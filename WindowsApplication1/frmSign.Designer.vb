@@ -38,9 +38,10 @@ Partial Class frmSign
         '
         Me.lstSign.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목명, Me.체결시간, Me.체결량, Me.주가등락, Me.체결강도, Me.현재가, Me.출현횟수})
         Me.lstSign.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstSign.Location = New System.Drawing.Point(14, 105)
+        Me.lstSign.Location = New System.Drawing.Point(10, 70)
+        Me.lstSign.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.lstSign.Name = "lstSign"
-        Me.lstSign.Size = New System.Drawing.Size(1357, 662)
+        Me.lstSign.Size = New System.Drawing.Size(951, 443)
         Me.lstSign.TabIndex = 0
         Me.lstSign.UseCompatibleStateImageBehavior = False
         Me.lstSign.View = System.Windows.Forms.View.Details
@@ -82,32 +83,33 @@ Partial Class frmSign
         '
         'pBar
         '
-        Me.pBar.Location = New System.Drawing.Point(19, 58)
+        Me.pBar.Location = New System.Drawing.Point(13, 39)
+        Me.pBar.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.pBar.Name = "pBar"
-        Me.pBar.Size = New System.Drawing.Size(1353, 40)
+        Me.pBar.Size = New System.Drawing.Size(947, 27)
         Me.pBar.TabIndex = 1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(1264, 8)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Location = New System.Drawing.Point(885, 5)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(106, 36)
+        Me.Button1.Size = New System.Drawing.Size(74, 24)
         Me.Button1.TabIndex = 2
         Me.Button1.Text = "멈춤"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'frmSign
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 18.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1379, 777)
+        Me.ClientSize = New System.Drawing.Size(965, 518)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.pBar)
         Me.Controls.Add(Me.lstSign)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "frmSign"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "frmSign"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "신호등"
         Me.ResumeLayout(False)
 
     End Sub

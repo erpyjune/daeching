@@ -2,7 +2,6 @@
 
     Dim strHowCommand As String
     Dim gStockCompany As New List(Of String)()
-
     Public Structure StockCompSub
         Dim vDate As String
         Dim vOnlyBuyCount As Long
@@ -14,11 +13,9 @@
         Dim stockByCompValue As List(Of StockCompSub)()
         'Dim stockByCompValue() As StockDateCount
     End Structure
-
     Function checkMonthDay(ByVal num As Integer)
         Return Format(num, "00").ToString
     End Function
-
     Public Sub runBrowser(ByVal path As String)
         Dim ie As Object
         ie = CreateObject("InternetExplorer.Application")
@@ -33,7 +30,6 @@
         ie.Navigate(path)
         ie = Nothing
     End Sub
-
     '// hashtable의 value 기준으로 정렬한다.
     '// return은 정렬된 key array list 이다.
     Function sortHashtable(ByRef table As Hashtable)
@@ -71,7 +67,6 @@
         Return lstSortedSellBuyInfo
 
     End Function
-
     Function getBeforeAfterDate(ByVal val As Integer)
         Dim strStartDate As String
         Dim strStartY As String, strStartM As String, strStartD As String

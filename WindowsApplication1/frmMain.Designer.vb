@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -128,9 +128,15 @@ Partial Class frmMain
         Me.chkBizSunValue = New System.Windows.Forms.CheckBox()
         Me.chkBizValue = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button16 = New System.Windows.Forms.Button()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.txtAnalBunBong = New System.Windows.Forms.TextBox()
+        Me.Button18 = New System.Windows.Forms.Button()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.ddd = New System.Windows.Forms.Label()
         Me.Button17 = New System.Windows.Forms.Button()
+        Me.txtTradePrice = New System.Windows.Forms.TextBox()
+        Me.Button16 = New System.Windows.Forms.Button()
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.chartStock, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -229,7 +235,6 @@ Partial Class frmMain
         '
         'btnCmd1
         '
-        Me.btnCmd1.Enabled = False
         Me.btnCmd1.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btnCmd1.Location = New System.Drawing.Point(629, 628)
         Me.btnCmd1.Name = "btnCmd1"
@@ -455,10 +460,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend2)
+        ChartArea3.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend3)
         Me.chartStock.Location = New System.Drawing.Point(509, 93)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -712,9 +717,8 @@ Partial Class frmMain
         '
         'btnMinBong
         '
-        Me.btnMinBong.Enabled = False
         Me.btnMinBong.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnMinBong.Location = New System.Drawing.Point(729, 666)
+        Me.btnMinBong.Location = New System.Drawing.Point(954, 278)
         Me.btnMinBong.Name = "btnMinBong"
         Me.btnMinBong.Size = New System.Drawing.Size(88, 26)
         Me.btnMinBong.TabIndex = 49
@@ -819,7 +823,7 @@ Partial Class frmMain
         'Button14
         '
         Me.Button14.AutoSize = True
-        Me.Button14.Location = New System.Drawing.Point(6, 21)
+        Me.Button14.Location = New System.Drawing.Point(823, 628)
         Me.Button14.Margin = New System.Windows.Forms.Padding(2)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(90, 28)
@@ -829,18 +833,18 @@ Partial Class frmMain
         '
         'txtSignValue
         '
-        Me.txtSignValue.Location = New System.Drawing.Point(113, 27)
+        Me.txtSignValue.Location = New System.Drawing.Point(61, 49)
         Me.txtSignValue.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSignValue.Name = "txtSignValue"
-        Me.txtSignValue.Size = New System.Drawing.Size(48, 21)
+        Me.txtSignValue.Size = New System.Drawing.Size(46, 21)
         Me.txtSignValue.TabIndex = 60
-        Me.txtSignValue.Text = "5000"
+        Me.txtSignValue.Text = "3000"
         Me.txtSignValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(111, 14)
+        Me.Label12.Location = New System.Drawing.Point(4, 54)
         Me.Label12.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(41, 12)
@@ -1068,8 +1072,14 @@ Partial Class frmMain
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.TextBox1)
-        Me.GroupBox2.Controls.Add(Me.Button14)
+        Me.GroupBox2.Controls.Add(Me.Label23)
+        Me.GroupBox2.Controls.Add(Me.txtAnalBunBong)
+        Me.GroupBox2.Controls.Add(Me.Button18)
+        Me.GroupBox2.Controls.Add(Me.Label22)
+        Me.GroupBox2.Controls.Add(Me.Label21)
+        Me.GroupBox2.Controls.Add(Me.ddd)
+        Me.GroupBox2.Controls.Add(Me.Button17)
+        Me.GroupBox2.Controls.Add(Me.txtTradePrice)
         Me.GroupBox2.Controls.Add(Me.Label12)
         Me.GroupBox2.Controls.Add(Me.txtSignValue)
         Me.GroupBox2.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
@@ -1077,18 +1087,87 @@ Partial Class frmMain
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox2.Size = New System.Drawing.Size(172, 91)
+        Me.GroupBox2.Size = New System.Drawing.Size(156, 135)
         Me.GroupBox2.TabIndex = 64
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "체결정보찾기"
         '
-        'TextBox1
+        'Label23
         '
-        Me.TextBox1.Location = New System.Drawing.Point(79, 63)
-        Me.TextBox1.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(38, 21)
-        Me.TextBox1.TabIndex = 62
+        Me.Label23.AutoSize = True
+        Me.Label23.Location = New System.Drawing.Point(4, 105)
+        Me.Label23.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(53, 12)
+        Me.Label23.TabIndex = 72
+        Me.Label23.Text = "분봉개수"
+        '
+        'txtAnalBunBong
+        '
+        Me.txtAnalBunBong.Location = New System.Drawing.Point(61, 100)
+        Me.txtAnalBunBong.Name = "txtAnalBunBong"
+        Me.txtAnalBunBong.Size = New System.Drawing.Size(34, 21)
+        Me.txtAnalBunBong.TabIndex = 71
+        Me.txtAnalBunBong.Text = "390"
+        Me.txtAnalBunBong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Button18
+        '
+        Me.Button18.Location = New System.Drawing.Point(99, 19)
+        Me.Button18.Name = "Button18"
+        Me.Button18.Size = New System.Drawing.Size(53, 25)
+        Me.Button18.TabIndex = 70
+        Me.Button18.Text = "멈춤"
+        Me.Button18.UseVisualStyleBackColor = True
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(111, 54)
+        Me.Label22.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(17, 12)
+        Me.Label22.TabIndex = 69
+        Me.Label22.Text = "건"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(110, 79)
+        Me.Label21.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(29, 12)
+        Me.Label21.TabIndex = 68
+        Me.Label21.Text = "만원"
+        '
+        'ddd
+        '
+        Me.ddd.AutoSize = True
+        Me.ddd.Location = New System.Drawing.Point(4, 80)
+        Me.ddd.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.ddd.Name = "ddd"
+        Me.ddd.Size = New System.Drawing.Size(53, 12)
+        Me.ddd.TabIndex = 67
+        Me.ddd.Text = "거래대금"
+        '
+        'Button17
+        '
+        Me.Button17.Location = New System.Drawing.Point(5, 18)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(90, 27)
+        Me.Button17.TabIndex = 66
+        Me.Button17.Text = "신호등시작"
+        Me.Button17.UseVisualStyleBackColor = True
+        '
+        'txtTradePrice
+        '
+        Me.txtTradePrice.Location = New System.Drawing.Point(61, 74)
+        Me.txtTradePrice.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtTradePrice.Name = "txtTradePrice"
+        Me.txtTradePrice.Size = New System.Drawing.Size(46, 21)
+        Me.txtTradePrice.TabIndex = 62
+        Me.txtTradePrice.Text = "5000"
+        Me.txtTradePrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Button16
         '
@@ -1100,21 +1179,12 @@ Partial Class frmMain
         Me.Button16.Text = "PER"
         Me.Button16.UseVisualStyleBackColor = True
         '
-        'Button17
-        '
-        Me.Button17.Location = New System.Drawing.Point(1007, 317)
-        Me.Button17.Name = "Button17"
-        Me.Button17.Size = New System.Drawing.Size(90, 27)
-        Me.Button17.TabIndex = 66
-        Me.Button17.Text = "실시간 테스트"
-        Me.Button17.UseVisualStyleBackColor = True
-        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1281, 764)
-        Me.Controls.Add(Me.Button17)
+        Me.ClientSize = New System.Drawing.Size(1281, 730)
+        Me.Controls.Add(Me.Button14)
         Me.Controls.Add(Me.Button16)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -1298,6 +1368,12 @@ Partial Class frmMain
     Friend WithEvents txtEndPrice As System.Windows.Forms.TextBox
     Friend WithEvents txtStartPrice As System.Windows.Forms.TextBox
     Friend WithEvents Label19 As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents txtTradePrice As System.Windows.Forms.TextBox
     Friend WithEvents Button17 As System.Windows.Forms.Button
+    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents Label21 As System.Windows.Forms.Label
+    Friend WithEvents ddd As System.Windows.Forms.Label
+    Friend WithEvents Button18 As System.Windows.Forms.Button
+    Friend WithEvents Label23 As System.Windows.Forms.Label
+    Friend WithEvents txtAnalBunBong As System.Windows.Forms.TextBox
 End Class
