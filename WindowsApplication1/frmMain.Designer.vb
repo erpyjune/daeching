@@ -28,8 +28,8 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.lstMsg = New System.Windows.Forms.ListBox()
@@ -102,7 +102,7 @@ Partial Class frmMain
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button12 = New System.Windows.Forms.Button()
-        Me.Button13 = New System.Windows.Forms.Button()
+        Me.btnStockInitInfo = New System.Windows.Forms.Button()
         Me.txtSPToday = New System.Windows.Forms.TextBox()
         Me.Button14 = New System.Windows.Forms.Button()
         Me.txtSignValue = New System.Windows.Forms.TextBox()
@@ -460,10 +460,10 @@ Partial Class frmMain
         '
         'chartStock
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.chartStock.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.chartStock.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.chartStock.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.chartStock.Legends.Add(Legend1)
         Me.chartStock.Location = New System.Drawing.Point(509, 93)
         Me.chartStock.Name = "chartStock"
         Me.chartStock.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright
@@ -800,16 +800,15 @@ Partial Class frmMain
         Me.Button12.Text = "종목정보"
         Me.Button12.UseVisualStyleBackColor = True
         '
-        'Button13
+        'btnStockInitInfo
         '
-        Me.Button13.Enabled = False
-        Me.Button13.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Button13.Location = New System.Drawing.Point(275, 687)
-        Me.Button13.Name = "Button13"
-        Me.Button13.Size = New System.Drawing.Size(100, 21)
-        Me.Button13.TabIndex = 57
-        Me.Button13.Text = "주식기본정보"
-        Me.Button13.UseVisualStyleBackColor = True
+        Me.btnStockInitInfo.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btnStockInitInfo.Location = New System.Drawing.Point(954, 310)
+        Me.btnStockInitInfo.Name = "btnStockInitInfo"
+        Me.btnStockInitInfo.Size = New System.Drawing.Size(88, 26)
+        Me.btnStockInitInfo.TabIndex = 57
+        Me.btnStockInitInfo.Text = "주식기본정보"
+        Me.btnStockInitInfo.UseVisualStyleBackColor = True
         '
         'txtSPToday
         '
@@ -1189,7 +1188,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Button15)
-        Me.Controls.Add(Me.Button13)
+        Me.Controls.Add(Me.btnStockInitInfo)
         Me.Controls.Add(Me.Button12)
         Me.Controls.Add(Me.Button11)
         Me.Controls.Add(Me.Button10)
@@ -1341,7 +1340,7 @@ Partial Class frmMain
     Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents Button12 As System.Windows.Forms.Button
-    Friend WithEvents Button13 As System.Windows.Forms.Button
+    Friend WithEvents btnStockInitInfo As System.Windows.Forms.Button
     Friend WithEvents txtSPToday As System.Windows.Forms.TextBox
     Friend WithEvents Button14 As System.Windows.Forms.Button
     Friend WithEvents txtSignValue As System.Windows.Forms.TextBox

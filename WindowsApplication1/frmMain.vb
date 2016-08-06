@@ -349,7 +349,6 @@ Public Class frmMain
         Console.WriteLine("Recv count {0}, {1}, {2}", gRecvCommandCount, sName, CStr(listStockValueInfo.Count))
 
     End Sub
-
     Private Sub trProcTest(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim sDate As String
         Dim stockSellBuyInfoMain As StockSellBuyInfoMain
@@ -420,6 +419,20 @@ Public Class frmMain
         gHashScreenAndDate.Remove(eventArgs.sScrNo)
 
         System.Console.WriteLine(sDate + "| RecvCommandCount : " + CStr(gRecvCommandCount) + " | sScrNo : " + eventArgs.sScrNo + " | 결과개수 : " + CStr(nCnt))
+
+    End Sub
+    Private Sub trProcStockTradeValue(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+
+        Dim nCnt As Short, i As Short
+        Dim strItemValue As String
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
+        For i = 0 To (nCnt - 1)
+
+            strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "거래량")
+            Console.WriteLine("거래량 {0}", strItemValue)
+
+        Next
 
     End Sub
     Private Sub trProcSellBuyAnalDataTest(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
@@ -841,8 +854,58 @@ Public Class frmMain
 
         Next
     End Sub
-
     Private Sub trProcBunBong(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
+        Dim nCnt As Short, i As Short
+        Dim nProcCnt As Integer = 0
+        Dim strItemValue As String, sDate As String
+        Dim nMaxTradeValue As Integer = 0, nTradeValue As Integer
+        Dim comparison As StringComparison = StringComparison.InvariantCulture
+
+
+        nCnt = KHOpenAPI.GetRepeatCnt(eventArgs.sTrCode, eventArgs.sRQName)
+        For i = 0 To (nCnt - 1)
+            strItemValue = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "거래량"))
+            sDate = Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "체결시간"))
+
+            If sDate.EndsWith("153000") = False Then
+                nTradeValue = CInt(Trim(strItemValue))
+                If nMaxTradeValue < nTradeValue Then
+                    nMaxTradeValue = nTradeValue
+                    gsSPDate = sDate
+                    gnSPStartV = CInt(Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시가")))
+                    gnSPEndV = CInt(Trim(KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "현재가")))
+                End If
+            End If
+
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "체결시간")
+            'Console.WriteLine("체결시간 : " + strItemValue)
+
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "현재가")
+            'Console.WriteLine("현재가 : " + strItemValue)
+
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "시가")
+            'Console.WriteLine("시가 : " + strItemValue)
+
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "고가")
+            'Console.WriteLine("고가 : " + strItemValue)
+
+            'strItemValue = KHOpenAPI.GetCommData(eventArgs.sTrCode, eventArgs.sRQName, i, "저가")
+            'Console.WriteLine("저가 : " + strItemValue)
+
+            Application.DoEvents()
+
+            If gnBunBongAnalCount <= nProcCnt Then
+                Exit For
+            End If
+
+            nProcCnt += 1
+
+        Next
+
+        Console.WriteLine("분봉시작점날짜 {0}, 시가{1}, 종가{2}", gsSPDate, gnSPStartV, gnSPEndV)
+
+    End Sub
+    Private Sub trProcStartPointBunBong(sender As Object, eventArgs As AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent)
         Dim nCnt As Short, i As Short
         Dim nProcCnt As Integer = 0
         Dim strItemValue As String, sDate As String
@@ -1503,20 +1566,19 @@ Public Class frmMain
             Call trProcStartPointStockInfo(sender, eventArgs)
             KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
             Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
+        ElseIf eventArgs.sRQName = "주식거래량" Then
+            Call trProcStockTradeValue(sender, eventArgs)
+            KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
+            Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
+        ElseIf eventArgs.sRQName = "시작점분봉차트조회" Then
+            Call trProcStartPointBunBong(sender, eventArgs)
+            KHOpenAPI.DisconnectRealData(eventArgs.sScrNo)
+            Console.WriteLine("frmMain DisconnectRealData SrcNumber : " + eventArgs.sScrNo)
         End If
 
     End Sub
 
     Private Sub btnCmd1_Click(sender As Object, e As EventArgs) Handles btnCmd1.Click
-
-        Dim s As String
-        Dim d As String
-        Dim comparison As StringComparison = StringComparison.InvariantCulture
-
-        s = "153000"
-        d = "20160805153000"
-
-        MsgBox(d.EndsWith(s))
 
     End Sub
 
@@ -2222,7 +2284,7 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub btnMinBong_Click(sender As Object, e As EventArgs) Handles btnMinBong.Click
+    Public Sub btnMinBong_Click(sender As Object, e As EventArgs) Handles btnMinBong.Click
         If bLoginStatus = False Then
             MsgBox("로그인이 필요합니다!!")
             Return
@@ -2245,6 +2307,12 @@ Public Class frmMain
         KHOpenAPI.SetInputValue("틱범위", "10")
         KHOpenAPI.SetInputValue("수정주가구분", "1")
         KHOpenAPI.CommRqData("주식분봉차트조회요청", "OPT10080", CInt("0"), "4001")
+
+        Application.DoEvents()
+        Threading.Thread.Sleep(250)
+
+        KHOpenAPI.SetInputValue("종목코드", txtStockCode.Text)
+        KHOpenAPI.CommRqData("주식거래량", "opt10001", "0", 1000)
 
     End Sub
 
@@ -2371,9 +2439,9 @@ Public Class frmMain
         MsgBox(msg)
     End Sub
 
-    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+    Public Sub Button13_Click(sender As Object, e As EventArgs) Handles btnStockInitInfo.Click
         KHOpenAPI.SetInputValue("종목코드", txtStockCode.Text)
-        KHOpenAPI.CommRqData("주식기본정보테스트", "opt10001", "0", 1000)
+        KHOpenAPI.CommRqData("주식거래량", "opt10001", "0", 1000)
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
