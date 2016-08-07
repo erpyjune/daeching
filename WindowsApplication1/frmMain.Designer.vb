@@ -109,6 +109,8 @@ Partial Class frmMain
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Button15 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.txtSPTradeCount = New System.Windows.Forms.TextBox()
+        Me.Label33 = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.txtEndPrice = New System.Windows.Forms.TextBox()
         Me.txtStartPrice = New System.Windows.Forms.TextBox()
@@ -128,6 +130,22 @@ Partial Class frmMain
         Me.chkBizSunValue = New System.Windows.Forms.CheckBox()
         Me.chkBizValue = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.txtBunBongJupoSunCount = New System.Windows.Forms.TextBox()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.txtBunBongAnalEndDate = New System.Windows.Forms.TextBox()
+        Me.txtBunBongAnalStartDate = New System.Windows.Forms.TextBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.txtBunBongEndPrice = New System.Windows.Forms.TextBox()
+        Me.txtBunBongStartPrice = New System.Windows.Forms.TextBox()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.txtSignTradeValue = New System.Windows.Forms.TextBox()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.txtBunBongStartPer = New System.Windows.Forms.TextBox()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.txtAnalBunBong = New System.Windows.Forms.TextBox()
         Me.Button18 = New System.Windows.Forms.Button()
@@ -250,7 +268,7 @@ Partial Class frmMain
         Me.txtStartDate1.Name = "txtStartDate1"
         Me.txtStartDate1.Size = New System.Drawing.Size(82, 21)
         Me.txtStartDate1.TabIndex = 7
-        Me.txtStartDate1.Text = "20160620"
+        Me.txtStartDate1.Text = "20160101"
         Me.txtStartDate1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label2
@@ -718,7 +736,7 @@ Partial Class frmMain
         'btnMinBong
         '
         Me.btnMinBong.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnMinBong.Location = New System.Drawing.Point(954, 278)
+        Me.btnMinBong.Location = New System.Drawing.Point(1111, 288)
         Me.btnMinBong.Name = "btnMinBong"
         Me.btnMinBong.Size = New System.Drawing.Size(88, 26)
         Me.btnMinBong.TabIndex = 49
@@ -803,7 +821,7 @@ Partial Class frmMain
         'btnStockInitInfo
         '
         Me.btnStockInitInfo.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnStockInitInfo.Location = New System.Drawing.Point(954, 310)
+        Me.btnStockInitInfo.Location = New System.Drawing.Point(727, 658)
         Me.btnStockInitInfo.Name = "btnStockInitInfo"
         Me.btnStockInitInfo.Size = New System.Drawing.Size(88, 26)
         Me.btnStockInitInfo.TabIndex = 57
@@ -862,6 +880,8 @@ Partial Class frmMain
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.txtSPTradeCount)
+        Me.GroupBox1.Controls.Add(Me.Label33)
         Me.GroupBox1.Controls.Add(Me.Label20)
         Me.GroupBox1.Controls.Add(Me.txtEndPrice)
         Me.GroupBox1.Controls.Add(Me.txtStartPrice)
@@ -887,10 +907,28 @@ Partial Class frmMain
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(243, 208)
+        Me.GroupBox1.Size = New System.Drawing.Size(243, 233)
         Me.GroupBox1.TabIndex = 63
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "시작점찾기"
+        '
+        'txtSPTradeCount
+        '
+        Me.txtSPTradeCount.Location = New System.Drawing.Point(101, 203)
+        Me.txtSPTradeCount.Name = "txtSPTradeCount"
+        Me.txtSPTradeCount.Size = New System.Drawing.Size(63, 21)
+        Me.txtSPTradeCount.TabIndex = 77
+        Me.txtSPTradeCount.Text = "9000000"
+        Me.txtSPTradeCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Location = New System.Drawing.Point(13, 208)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(81, 12)
+        Me.Label33.TabIndex = 76
+        Me.Label33.Text = "기준날 거래량"
         '
         'Label20
         '
@@ -944,7 +982,7 @@ Partial Class frmMain
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(65, 12)
         Me.Label17.TabIndex = 71
-        Me.Label17.Text = "시자점근접"
+        Me.Label17.Text = "시작점근접"
         '
         'txtSPPer
         '
@@ -1071,6 +1109,22 @@ Partial Class frmMain
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.txtBunBongJupoSunCount)
+        Me.GroupBox2.Controls.Add(Me.Label32)
+        Me.GroupBox2.Controls.Add(Me.txtBunBongAnalEndDate)
+        Me.GroupBox2.Controls.Add(Me.txtBunBongAnalStartDate)
+        Me.GroupBox2.Controls.Add(Me.Label31)
+        Me.GroupBox2.Controls.Add(Me.Label30)
+        Me.GroupBox2.Controls.Add(Me.Label29)
+        Me.GroupBox2.Controls.Add(Me.txtBunBongEndPrice)
+        Me.GroupBox2.Controls.Add(Me.txtBunBongStartPrice)
+        Me.GroupBox2.Controls.Add(Me.Label28)
+        Me.GroupBox2.Controls.Add(Me.Label27)
+        Me.GroupBox2.Controls.Add(Me.txtSignTradeValue)
+        Me.GroupBox2.Controls.Add(Me.Label26)
+        Me.GroupBox2.Controls.Add(Me.Label25)
+        Me.GroupBox2.Controls.Add(Me.Label24)
+        Me.GroupBox2.Controls.Add(Me.txtBunBongStartPer)
         Me.GroupBox2.Controls.Add(Me.Label23)
         Me.GroupBox2.Controls.Add(Me.txtAnalBunBong)
         Me.GroupBox2.Controls.Add(Me.Button18)
@@ -1082,14 +1136,162 @@ Partial Class frmMain
         Me.GroupBox2.Controls.Add(Me.Label12)
         Me.GroupBox2.Controls.Add(Me.txtSignValue)
         Me.GroupBox2.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(767, 270)
+        Me.GroupBox2.Location = New System.Drawing.Point(758, 267)
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox2.Size = New System.Drawing.Size(156, 135)
+        Me.GroupBox2.Size = New System.Drawing.Size(192, 293)
         Me.GroupBox2.TabIndex = 64
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "체결정보찾기"
+        Me.GroupBox2.Text = "신호등"
+        '
+        'txtBunBongJupoSunCount
+        '
+        Me.txtBunBongJupoSunCount.Location = New System.Drawing.Point(115, 258)
+        Me.txtBunBongJupoSunCount.Name = "txtBunBongJupoSunCount"
+        Me.txtBunBongJupoSunCount.Size = New System.Drawing.Size(55, 21)
+        Me.txtBunBongJupoSunCount.TabIndex = 88
+        Me.txtBunBongJupoSunCount.Text = "1000000"
+        Me.txtBunBongJupoSunCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Location = New System.Drawing.Point(5, 263)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(103, 12)
+        Me.Label32.TabIndex = 87
+        Me.Label32.Text = "주포1 순매수 이상"
+        '
+        'txtBunBongAnalEndDate
+        '
+        Me.txtBunBongAnalEndDate.Location = New System.Drawing.Point(118, 232)
+        Me.txtBunBongAnalEndDate.Name = "txtBunBongAnalEndDate"
+        Me.txtBunBongAnalEndDate.Size = New System.Drawing.Size(65, 21)
+        Me.txtBunBongAnalEndDate.TabIndex = 86
+        Me.txtBunBongAnalEndDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txtBunBongAnalStartDate
+        '
+        Me.txtBunBongAnalStartDate.Location = New System.Drawing.Point(118, 205)
+        Me.txtBunBongAnalStartDate.Name = "txtBunBongAnalStartDate"
+        Me.txtBunBongAnalStartDate.Size = New System.Drawing.Size(65, 21)
+        Me.txtBunBongAnalStartDate.TabIndex = 85
+        Me.txtBunBongAnalStartDate.Text = "20160101"
+        Me.txtBunBongAnalStartDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = True
+        Me.Label31.Location = New System.Drawing.Point(5, 237)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(105, 12)
+        Me.Label31.TabIndex = 84
+        Me.Label31.Text = "주포분석 종료날짜"
+        '
+        'Label30
+        '
+        Me.Label30.AutoSize = True
+        Me.Label30.Location = New System.Drawing.Point(5, 210)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(105, 12)
+        Me.Label30.TabIndex = 83
+        Me.Label30.Text = "주포분석 시작날짜"
+        '
+        'Label29
+        '
+        Me.Label29.AutoSize = True
+        Me.Label29.Location = New System.Drawing.Point(89, 182)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(14, 12)
+        Me.Label29.TabIndex = 76
+        Me.Label29.Text = "~"
+        '
+        'txtBunBongEndPrice
+        '
+        Me.txtBunBongEndPrice.Location = New System.Drawing.Point(106, 177)
+        Me.txtBunBongEndPrice.Name = "txtBunBongEndPrice"
+        Me.txtBunBongEndPrice.Size = New System.Drawing.Size(51, 21)
+        Me.txtBunBongEndPrice.TabIndex = 82
+        Me.txtBunBongEndPrice.Text = "50000"
+        Me.txtBunBongEndPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txtBunBongStartPrice
+        '
+        Me.txtBunBongStartPrice.Location = New System.Drawing.Point(35, 178)
+        Me.txtBunBongStartPrice.Name = "txtBunBongStartPrice"
+        Me.txtBunBongStartPrice.Size = New System.Drawing.Size(51, 21)
+        Me.txtBunBongStartPrice.TabIndex = 81
+        Me.txtBunBongStartPrice.Text = "1000"
+        Me.txtBunBongStartPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Location = New System.Drawing.Point(4, 183)
+        Me.Label28.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(29, 12)
+        Me.Label28.TabIndex = 80
+        Me.Label28.Text = "주가"
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = True
+        Me.Label27.Location = New System.Drawing.Point(128, 157)
+        Me.Label27.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(29, 12)
+        Me.Label27.TabIndex = 79
+        Me.Label27.Text = "이상"
+        '
+        'txtSignTradeValue
+        '
+        Me.txtSignTradeValue.Location = New System.Drawing.Point(72, 152)
+        Me.txtSignTradeValue.Name = "txtSignTradeValue"
+        Me.txtSignTradeValue.Size = New System.Drawing.Size(52, 21)
+        Me.txtSignTradeValue.TabIndex = 78
+        Me.txtSignTradeValue.Text = "200000"
+        Me.txtSignTradeValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Location = New System.Drawing.Point(4, 157)
+        Me.Label26.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(65, 12)
+        Me.Label26.TabIndex = 77
+        Me.Label26.Text = "오늘거래량"
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.Location = New System.Drawing.Point(134, 131)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(15, 12)
+        Me.Label25.TabIndex = 76
+        Me.Label25.Text = "%"
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Location = New System.Drawing.Point(4, 131)
+        Me.Label24.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(89, 12)
+        Me.Label24.TabIndex = 74
+        Me.Label24.Text = "분봉시작점근접"
+        '
+        'txtBunBongStartPer
+        '
+        Me.txtBunBongStartPer.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txtBunBongStartPer.Location = New System.Drawing.Point(96, 126)
+        Me.txtBunBongStartPer.Name = "txtBunBongStartPer"
+        Me.txtBunBongStartPer.Size = New System.Drawing.Size(34, 22)
+        Me.txtBunBongStartPer.TabIndex = 73
+        Me.txtBunBongStartPer.Text = "2.1"
+        Me.txtBunBongStartPer.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
         '
@@ -1097,17 +1299,17 @@ Partial Class frmMain
         Me.Label23.Location = New System.Drawing.Point(4, 105)
         Me.Label23.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(53, 12)
+        Me.Label23.Size = New System.Drawing.Size(81, 12)
         Me.Label23.TabIndex = 72
-        Me.Label23.Text = "분봉개수"
+        Me.Label23.Text = "분석할 분봉수"
         '
         'txtAnalBunBong
         '
-        Me.txtAnalBunBong.Location = New System.Drawing.Point(61, 100)
+        Me.txtAnalBunBong.Location = New System.Drawing.Point(93, 100)
         Me.txtAnalBunBong.Name = "txtAnalBunBong"
-        Me.txtAnalBunBong.Size = New System.Drawing.Size(34, 21)
+        Me.txtAnalBunBong.Size = New System.Drawing.Size(46, 21)
         Me.txtAnalBunBong.TabIndex = 71
-        Me.txtAnalBunBong.Text = "390"
+        Me.txtAnalBunBong.Text = "500"
         Me.txtAnalBunBong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Button18
@@ -1182,7 +1384,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1281, 730)
+        Me.ClientSize = New System.Drawing.Size(1281, 577)
         Me.Controls.Add(Me.Button14)
         Me.Controls.Add(Me.Button16)
         Me.Controls.Add(Me.GroupBox2)
@@ -1375,4 +1577,22 @@ Partial Class frmMain
     Friend WithEvents Button18 As System.Windows.Forms.Button
     Friend WithEvents Label23 As System.Windows.Forms.Label
     Friend WithEvents txtAnalBunBong As System.Windows.Forms.TextBox
+    Friend WithEvents Label25 As System.Windows.Forms.Label
+    Friend WithEvents Label24 As System.Windows.Forms.Label
+    Friend WithEvents txtBunBongStartPer As System.Windows.Forms.TextBox
+    Friend WithEvents Label29 As System.Windows.Forms.Label
+    Friend WithEvents txtBunBongEndPrice As System.Windows.Forms.TextBox
+    Friend WithEvents txtBunBongStartPrice As System.Windows.Forms.TextBox
+    Friend WithEvents Label28 As System.Windows.Forms.Label
+    Friend WithEvents Label27 As System.Windows.Forms.Label
+    Friend WithEvents txtSignTradeValue As System.Windows.Forms.TextBox
+    Friend WithEvents Label26 As System.Windows.Forms.Label
+    Friend WithEvents txtBunBongJupoSunCount As System.Windows.Forms.TextBox
+    Friend WithEvents Label32 As System.Windows.Forms.Label
+    Friend WithEvents txtBunBongAnalEndDate As System.Windows.Forms.TextBox
+    Friend WithEvents txtBunBongAnalStartDate As System.Windows.Forms.TextBox
+    Friend WithEvents Label31 As System.Windows.Forms.Label
+    Friend WithEvents Label30 As System.Windows.Forms.Label
+    Friend WithEvents txtSPTradeCount As System.Windows.Forms.TextBox
+    Friend WithEvents Label33 As System.Windows.Forms.Label
 End Class

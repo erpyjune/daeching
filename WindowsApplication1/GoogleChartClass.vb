@@ -152,7 +152,7 @@
         Dim total As Integer = 0
         Dim nPrintStockCount As Integer = 0
 
-        Dim sDate As String, k As Integer
+        Dim sDate As String
         Dim nTotalChartIndex As Integer = 0
         Dim arrChartValue() As Long = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         Dim nLastData As Integer = 0
@@ -387,7 +387,7 @@
         Dim total As Integer = 0
         Dim nPrintStockCount As Integer = 0
 
-        Dim sDate As String, k As Integer
+        Dim sDate As String
         Dim nTotalChartIndex As Integer = 0
         Dim arrChartValue() As Long = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         Dim nLastData As Integer = 0

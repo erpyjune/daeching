@@ -34,22 +34,24 @@ Partial Class frmStartPoint
         Me.상장주식수 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.시가총액 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.영업이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.당기순이익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.당기순익 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.거래량 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.주가 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.KHOpenAPI = New AxKHOpenAPILib.AxKHOpenAPI()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lbMsg1 = New System.Windows.Forms.Label()
         Me.lbMsg2 = New System.Windows.Forms.Label()
+        Me.시작가 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lstViewStartPoint
         '
-        Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3, Me.상장주식수, Me.시가총액, Me.영업이익, Me.당기순이익})
+        Me.lstViewStartPoint.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.종목이름, Me.시작점날짜, Me.시작점유형, Me.종목상태, Me.주포1, Me.주포2, Me.주포3, Me.상장주식수, Me.시가총액, Me.영업이익, Me.당기순익, Me.거래량, Me.주가, Me.시작가})
         Me.lstViewStartPoint.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lstViewStartPoint.Location = New System.Drawing.Point(13, 100)
-        Me.lstViewStartPoint.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.lstViewStartPoint.Location = New System.Drawing.Point(9, 67)
         Me.lstViewStartPoint.Name = "lstViewStartPoint"
-        Me.lstViewStartPoint.Size = New System.Drawing.Size(1458, 608)
+        Me.lstViewStartPoint.Size = New System.Drawing.Size(1074, 407)
         Me.lstViewStartPoint.TabIndex = 0
         Me.lstViewStartPoint.UseCompatibleStateImageBehavior = False
         Me.lstViewStartPoint.View = System.Windows.Forms.View.Details
@@ -62,17 +64,17 @@ Partial Class frmStartPoint
         '시작점날짜
         '
         Me.시작점날짜.Text = "시작점날짜"
-        Me.시작점날짜.Width = 105
+        Me.시작점날짜.Width = 76
         '
         '시작점유형
         '
         Me.시작점유형.Text = "시작점유형"
-        Me.시작점유형.Width = 102
+        Me.시작점유형.Width = 75
         '
         '종목상태
         '
         Me.종목상태.Text = "종목상태"
-        Me.종목상태.Width = 169
+        Me.종목상태.Width = 151
         '
         '주포1
         '
@@ -92,7 +94,7 @@ Partial Class frmStartPoint
         '상장주식수
         '
         Me.상장주식수.Text = "상장주식수"
-        Me.상장주식수.Width = 76
+        Me.상장주식수.Width = 74
         '
         '시가총액
         '
@@ -101,37 +103,47 @@ Partial Class frmStartPoint
         '영업이익
         '
         Me.영업이익.Text = "영업이익"
+        Me.영업이익.Width = 61
         '
-        '당기순이익
+        '당기순익
         '
-        Me.당기순이익.Text = "당기순이익"
-        Me.당기순이익.Width = 80
+        Me.당기순익.Text = "당기순익"
+        Me.당기순익.Width = 63
+        '
+        '거래량
+        '
+        Me.거래량.Text = "거래량"
+        Me.거래량.Width = 68
+        '
+        '주가
+        '
+        Me.주가.Text = "주가"
+        Me.주가.Width = 66
         '
         'KHOpenAPI
         '
         Me.KHOpenAPI.Enabled = True
-        Me.KHOpenAPI.Location = New System.Drawing.Point(965, -1)
-        Me.KHOpenAPI.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.KHOpenAPI.Location = New System.Drawing.Point(788, 9)
         Me.KHOpenAPI.Name = "KHOpenAPI"
         Me.KHOpenAPI.OcxState = CType(resources.GetObject("KHOpenAPI.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.KHOpenAPI.Size = New System.Drawing.Size(148, 45)
+        Me.KHOpenAPI.Size = New System.Drawing.Size(76, 20)
         Me.KHOpenAPI.TabIndex = 1
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(13, 54)
-        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ProgressBar1.Location = New System.Drawing.Point(9, 36)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(1460, 38)
+        Me.ProgressBar1.Size = New System.Drawing.Size(1040, 25)
         Me.ProgressBar1.TabIndex = 2
         '
         'lbMsg1
         '
         Me.lbMsg1.AutoSize = True
         Me.lbMsg1.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbMsg1.Location = New System.Drawing.Point(11, 22)
+        Me.lbMsg1.Location = New System.Drawing.Point(8, 15)
+        Me.lbMsg1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lbMsg1.Name = "lbMsg1"
-        Me.lbMsg1.Size = New System.Drawing.Size(55, 20)
+        Me.lbMsg1.Size = New System.Drawing.Size(43, 14)
         Me.lbMsg1.TabIndex = 3
         Me.lbMsg1.Text = "Msg1"
         '
@@ -139,25 +151,30 @@ Partial Class frmStartPoint
         '
         Me.lbMsg2.AutoSize = True
         Me.lbMsg2.Font = New System.Drawing.Font("굴림", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbMsg2.Location = New System.Drawing.Point(340, 22)
+        Me.lbMsg2.Location = New System.Drawing.Point(238, 15)
+        Me.lbMsg2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lbMsg2.Name = "lbMsg2"
-        Me.lbMsg2.Size = New System.Drawing.Size(55, 20)
+        Me.lbMsg2.Size = New System.Drawing.Size(43, 14)
         Me.lbMsg2.TabIndex = 4
         Me.lbMsg2.Text = "Msg2"
         '
+        '시작가
+        '
+        Me.시작가.Text = "시작가"
+        Me.시작가.Width = 64
+        '
         'frmStartPoint
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 18.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1476, 720)
+        Me.ClientSize = New System.Drawing.Size(1084, 480)
         Me.Controls.Add(Me.lbMsg2)
         Me.Controls.Add(Me.lbMsg1)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.KHOpenAPI)
         Me.Controls.Add(Me.lstViewStartPoint)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "frmStartPoint"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "시작점"
         CType(Me.KHOpenAPI, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
@@ -176,8 +193,11 @@ Partial Class frmStartPoint
     Friend WithEvents 상장주식수 As System.Windows.Forms.ColumnHeader
     Friend WithEvents 시가총액 As System.Windows.Forms.ColumnHeader
     Friend WithEvents 영업이익 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents 당기순이익 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 당기순익 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents lbMsg1 As System.Windows.Forms.Label
     Friend WithEvents lbMsg2 As System.Windows.Forms.Label
+    Friend WithEvents 거래량 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 주가 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents 시작가 As System.Windows.Forms.ColumnHeader
 End Class
