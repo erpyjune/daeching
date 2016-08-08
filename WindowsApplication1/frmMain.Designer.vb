@@ -254,11 +254,11 @@ Partial Class frmMain
         'btnCmd1
         '
         Me.btnCmd1.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btnCmd1.Location = New System.Drawing.Point(629, 628)
+        Me.btnCmd1.Location = New System.Drawing.Point(1021, 351)
         Me.btnCmd1.Name = "btnCmd1"
-        Me.btnCmd1.Size = New System.Drawing.Size(86, 29)
+        Me.btnCmd1.Size = New System.Drawing.Size(107, 29)
         Me.btnCmd1.TabIndex = 6
-        Me.btnCmd1.Text = "보기1"
+        Me.btnCmd1.Text = "코스닥분봉로딩"
         Me.btnCmd1.UseVisualStyleBackColor = True
         '
         'txtStartDate1
@@ -1384,7 +1384,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1281, 577)
+        Me.ClientSize = New System.Drawing.Size(1281, 578)
         Me.Controls.Add(Me.Button14)
         Me.Controls.Add(Me.Button16)
         Me.Controls.Add(Me.GroupBox2)
